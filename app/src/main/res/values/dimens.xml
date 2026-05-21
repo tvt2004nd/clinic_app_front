@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="spacing_xs">4dp</dimen>
+    <dimen name="spacing_sm">8dp</dimen>
+    <dimen name="spacing_md">12dp</dimen>
+    <dimen name="spacing_lg">16dp</dimen>
+    <dimen name="spacing_xl">24dp</dimen>
+    <dimen name="spacing_2xl">32dp</dimen>
+    <dimen name="spacing_3xl">48dp</dimen>
+
+    <dimen name="radius_sm">12dp</dimen>
+    <dimen name="radius_md">20dp</dimen>
+    <dimen name="radius_lg">28dp</dimen>
+    <dimen name="radius_xl">32dp</dimen>
+    <dimen name="radius_pill">100dp</dimen>
+
+    <dimen name="elevation_card">2dp</dimen>
+    <dimen name="elevation_nav">12dp</dimen>
+
+    <dimen name="button_height">56dp</dimen>
+    <dimen name="search_height">60dp</dimen>
+    <dimen name="avatar_md">64dp</dimen>
+    <dimen name="avatar_lg">80dp</dimen>
+    <dimen name="login_header_height">200dp</dimen>
+
+    <!-- Specialty Card Dimensions -->
+    <dimen name="specialty_card_width">100dp</dimen>
+    <dimen name="specialty_card_height">120dp</dimen>
+
+    <!-- Calendar Day Dimensions -->
+    <dimen name="calendar_day_width">60dp</dimen>
+    <dimen name="calendar_day_height">84dp</dimen>
+</resources>

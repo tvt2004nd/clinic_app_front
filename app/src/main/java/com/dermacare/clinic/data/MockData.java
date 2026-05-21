@@ -1,0 +1,72 @@
+package com.dermacare.clinic.data;
+
+import com.dermacare.clinic.R;
+import com.dermacare.clinic.model.Doctor;
+
+import java.util.Arrays;
+import java.util.List;
+
+public final class MockData {
+    private MockData() {}
+
+    public static List<String> specialties() {
+        return Arrays.asList(
+                "Mụn & da dầu", "Nám & tàn nhang", "Dị ứng da", "Vảy nến",
+                "Nấm da", "Ung thư da", "Trẻ em", "Thẩm mỹ da"
+        );
+    }
+
+    public static List<Integer> specialtyIconResIds() {
+        return Arrays.asList(
+                R.drawable.ic_specialty_skin,
+                R.drawable.ic_specialty_sun,
+                R.drawable.ic_specialty_allergy,
+                R.drawable.ic_specialty_skin,
+                R.drawable.ic_specialty_allergy,
+                R.drawable.ic_specialty_sparkle,
+                R.drawable.ic_nav_profile,
+                R.drawable.ic_specialty_sparkle
+        );
+    }
+
+    public static List<Doctor> doctors() {
+        return Arrays.asList(
+                new Doctor("BS. Nguyễn Minh Anh", "Da liễu tổng quát", "4.9 (128)", true,
+                        "https://i.pravatar.cc/150?u=doctor1"),
+                new Doctor("BS. Trần Hoàng Long", "Nám & tàn nhang", "4.8 (96)", true,
+                        "https://i.pravatar.cc/150?u=doctor2"),
+                new Doctor("BS. Lê Thu Hà", "Da trẻ em", "4.95 (210)", false,
+                        "https://i.pravatar.cc/150?u=doctor3")
+        );
+    }
+
+    public static List<String[]> appointments() {
+        return Arrays.asList(
+                new String[]{"09:30", "BS. Nguyễn Minh Anh", "22/05/2026 — Sắp tới"},
+                new String[]{"14:00", "BS. Trần Hoàng Long", "10/05/2026 — Đã khám"}
+        );
+    }
+
+    public static List<String[]> medicalRecords() {
+        return Arrays.asList(
+                new String[]{"Melasma độ I", "10/05/2026 — BS. Trần Hoàng Long", "Có ảnh tổn thương"},
+                new String[]{"Viêm da tiếp xúc", "15/03/2026 — BS. Nguyễn Minh Anh", "Có ảnh tổn thương"}
+        );
+    }
+
+    public static List<String[]> doctorSchedule() {
+        return Arrays.asList(
+                new String[]{"08:00", "Nguyễn Văn A", "Khám mới"},
+                new String[]{"09:00", "Trần Thị B", "Tái khám"},
+                new String[]{"10:30", "Lê Văn C", "Khám mới"}
+        );
+    }
+
+    public static List<String[]> doctorPatients() {
+        return Arrays.asList(
+                new String[]{"Nguyễn Văn A", "32 tuổi — Mụn viêm", "19/05/2026"},
+                new String[]{"Trần Thị B", "45 tuổi — Nám da", "15/05/2026"},
+                new String[]{"Lê Văn C", "28 tuổi — Dị ứng", "12/05/2026"}
+        );
+    }
+}

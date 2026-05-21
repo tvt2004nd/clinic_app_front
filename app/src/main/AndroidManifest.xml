@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_logo_heart"
+        android:label="@string/app_name"
+        android:roundIcon="@drawable/ic_logo_heart"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.DermaCare"
+        android:usesCleartextTraffic="true">
+
+        <activity
+            android:name=".SplashActivity"
+            android:exported="true"
+            android:theme="@style/Theme.DermaCare.Splash">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".auth.OnboardingActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".auth.LoginActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".auth.RegisterActivity"
+            android:exported="false"
+            android:parentActivityName=".auth.LoginActivity" />
+
+        <activity
+            android:name=".auth.ForgotPasswordActivity"
+            android:exported="false"
+            android:parentActivityName=".auth.LoginActivity" />
+
+        <activity
+            android:name=".patient.PatientMainActivity"
+            android:exported="false" />
+ 
+        <activity
+            android:name=".doctor.DoctorMainActivity"
+            android:exported="false" />
+ 
+        <activity
+            android:name=".patient.EditProfileActivity"
+            android:exported="false"
+            android:label="Hồ sơ cá nhân" />
+ 
+        <activity
+            android:name=".patient.ChangePasswordActivity"
+            android:exported="false"
+            android:label="Đổi mật khẩu" />
+    </application>
+</manifest>
