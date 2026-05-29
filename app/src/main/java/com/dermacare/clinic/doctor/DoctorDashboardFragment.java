@@ -74,14 +74,44 @@ public class DoctorDashboardFragment extends Fragment {
 
     private void loadPendingAppointments() {
         ApiClient.getAppointmentService(requireContext())
-                .getDoctorAppointments("PENDING", null)
+                .getDoctorAppointments(null, null)
                 .enqueue(new retrofit2.Callback<List<AppointmentResponse>>() {
                     @Override
                     public void onResponse(retrofit2.Call<List<AppointmentResponse>> call,
                                            retrofit2.Response<List<AppointmentResponse>> response) {
                         if (!isAdded()) return;
                         if (response.isSuccessful() && response.body() != null) {
-                            adapter.setData(response.body());
+                            List<AppointmentResponse> allAppts = response.body();
+                            
+                            // Lọc ra danh sách cần hiển thị: PENDING hoặc CONFIRMED
+                            List<AppointmentResponse> displayAppts = new ArrayList<>();
+                            int todayCount = 0;
+                            int completedCount = 0;
+                            
+                            String todayStr = java.time.LocalDate.now().toString();
+                            
+                            for (AppointmentResponse a : allAppts) {
+                                if ("PENDING".equals(a.status) || "CONFIRMED".equals(a.status)) {
+                                    displayAppts.add(a);
+                                }
+                                if (todayStr.equals(a.date)) {
+                                    todayCount++;
+                                }
+                                if ("COMPLETED".equals(a.status)) {
+                                    completedCount++;
+                                }
+                            }
+                            
+                            adapter.setData(displayAppts);
+                            
+                            // Cập nhật số liệu thống kê
+                            View view = getView();
+                            if (view != null) {
+                                TextView tvToday = view.findViewById(R.id.tvTodayCount);
+                                TextView tvCompleted = view.findViewById(R.id.tvCompletedCount);
+                                if (tvToday != null) tvToday.setText(String.valueOf(todayCount));
+                                if (tvCompleted != null) tvCompleted.setText(String.valueOf(completedCount));
+                            }
                         }
                     }
 

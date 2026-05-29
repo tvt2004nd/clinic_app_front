@@ -2,6 +2,7 @@ package com.dermacare.clinic.data.api.model;
 
 public class AppointmentResponse {
     public Long appointmentId;
+    public Long patientId;
     public String appointmentCode;
     public String doctorName;
     public String patientName;

@@ -73,5 +73,10 @@
             android:name=".patient.ChangePasswordActivity"
             android:exported="false"
             android:label="Đổi mật khẩu" />
+            
+        <activity
+            android:name=".chat.ChatActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
     </application>
 </manifest>

@@ -20,6 +20,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DoctorPatientsFragment extends Fragment {
+    private PatientAdapter adapter;
+    private View layoutEmpty;
+    private RecyclerView rv;
+    private TextView tvPatientCount;
+
     public static DoctorPatientsFragment newInstance() {
         return new DoctorPatientsFragment();
     }
@@ -28,22 +33,62 @@ public class DoctorPatientsFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_list_simple, container, false);
+        return inflater.inflate(R.layout.fragment_doctor_patients, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        TextView tvTitle = view.findViewById(R.id.tvTitle);
-        tvTitle.setText(R.string.tab_patients);
 
-        List<String> lines = new ArrayList<>();
-        for (String[] row : MockData.doctorPatients()) {
-            lines.add(row[0] + "\n" + row[1] + "\n" + "Khám gần nhất: " + row[2]);
-        }
+        tvPatientCount = view.findViewById(R.id.tvPatientCount);
+        rv = view.findViewById(R.id.recyclerView);
+        layoutEmpty = view.findViewById(R.id.layoutEmpty);
 
-        RecyclerView rv = view.findViewById(R.id.recyclerView);
         rv.setLayoutManager(new LinearLayoutManager(requireContext()));
-        rv.setAdapter(new SimpleTextAdapter(lines));
+        adapter = new PatientAdapter(new ArrayList<>());
+        rv.setAdapter(adapter);
+
+        loadPatients();
+    }
+
+    private void loadPatients() {
+        com.dermacare.clinic.data.api.ApiClient.getAppointmentService(requireContext())
+                .getDoctorAppointments(null, null)
+                .enqueue(new retrofit2.Callback<List<com.dermacare.clinic.data.api.model.AppointmentResponse>>() {
+                    @Override
+                    public void onResponse(retrofit2.Call<List<com.dermacare.clinic.data.api.model.AppointmentResponse>> call,
+                                           retrofit2.Response<List<com.dermacare.clinic.data.api.model.AppointmentResponse>> response) {
+                        if (!isAdded()) return;
+                        if (response.isSuccessful() && response.body() != null) {
+                            java.util.Map<String, com.dermacare.clinic.data.api.model.AppointmentResponse> patients = new java.util.HashMap<>();
+                            for (com.dermacare.clinic.data.api.model.AppointmentResponse appt : response.body()) {
+                                if (appt.patientName != null && !patients.containsKey(appt.patientName)) {
+                                    patients.put(appt.patientName, appt);
+                                }
+                            }
+                            
+                            List<com.dermacare.clinic.data.api.model.AppointmentResponse> uniquePatients = new ArrayList<>(patients.values());
+                            
+                            if (uniquePatients.isEmpty()) {
+                                layoutEmpty.setVisibility(View.VISIBLE);
+                                rv.setVisibility(View.GONE);
+                                tvPatientCount.setText("0 bệnh nhân");
+                            } else {
+                                layoutEmpty.setVisibility(View.GONE);
+                                rv.setVisibility(View.VISIBLE);
+                                adapter.setData(uniquePatients);
+                                tvPatientCount.setText(uniquePatients.size() + " bệnh nhân");
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(retrofit2.Call<List<com.dermacare.clinic.data.api.model.AppointmentResponse>> call, Throwable t) {
+                        if (!isAdded()) return;
+                        layoutEmpty.setVisibility(View.VISIBLE);
+                        rv.setVisibility(View.GONE);
+                        tvPatientCount.setText("Lỗi kết nối");
+                    }
+                });
     }
 }

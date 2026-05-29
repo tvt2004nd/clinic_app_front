@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.dermacare.clinic.R;
+import com.dermacare.clinic.chat.ConversationListFragment;
 import com.dermacare.clinic.patient.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -29,6 +30,8 @@ public class DoctorMainActivity extends AppCompatActivity {
                 fragment = DoctorScheduleFragment.newInstance();
             } else if (id == R.id.nav_patients) {
                 fragment = DoctorPatientsFragment.newInstance();
+            } else if (id == R.id.nav_chat) {
+                fragment = ConversationListFragment.newInstance(true);
             } else {
                 fragment = ProfileFragment.newInstance(true);
             }
