@@ -67,4 +67,28 @@
     <string name="save">Lưu</string>
     <string name="cancel">Hủy</string>
     <string name="confirm">Xác nhận</string>
+
+    <!-- Admin -->
+    <string name="admin_title">Quản trị hệ thống</string>
+    <string name="tab_admin_dashboard">Tổng quan</string>
+    <string name="tab_clinics">Phòng khám</string>
+    <string name="tab_doctors">Bác sĩ</string>
+    <string name="tab_stats">Doanh thu</string>
+    <string name="clinic_management">Quản lý phòng khám</string>
+    <string name="doctor_management">Quản lý bác sĩ</string>
+    <string name="doctor_assignment">Phân công bác sĩ</string>
+    <string name="total_clinics">Tổng phòng khám</string>
+    <string name="total_doctors">Tổng bác sĩ</string>
+    <string name="total_appointments">Tổng ca khám</string>
+    <string name="revenue_chart">Biểu đồ doanh thu</string>
+    <string name="add_clinic">Thêm phòng khám</string>
+    <string name="edit_clinic">Sửa phòng khám</string>
+    <string name="delete_clinic">Xóa phòng khám</string>
+    <string name="clinic_name">Tên phòng khám</string>
+    <string name="address">Địa chỉ</string>
+    <string name="phone_number">Số điện thoại</string>
+    <string name="save_assignment">Lưu phân công</string>
+    <string name="select_clinic">Chọn phòng khám</string>
+    <string name="doctor_list">Danh sách bác sĩ</string>
+    <string name="confirm_delete_clinic">Bạn có chắc chắn muốn xóa phòng khám này?</string>
 </resources>

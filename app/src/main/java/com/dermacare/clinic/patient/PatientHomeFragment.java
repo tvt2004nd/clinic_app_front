@@ -59,15 +59,91 @@ public class PatientHomeFragment extends Fragment {
 
         RecyclerView rvDoctors = view.findViewById(R.id.rvDoctors);
         rvDoctors.setLayoutManager(new LinearLayoutManager(requireContext()));
-        rvDoctors.setAdapter(new DoctorAdapter(MockData.doctors()));
+        DoctorAdapter doctorAdapter = new DoctorAdapter(new java.util.ArrayList<>(), doctor -> {
+            fetchAndShowSchedules(doctor);
+        });
+        rvDoctors.setAdapter(doctorAdapter);
+
+        // Fetch real doctors
+        com.dermacare.clinic.data.api.ApiClient.getPublicService(requireContext()).getDoctors()
+                .enqueue(new retrofit2.Callback<List<com.dermacare.clinic.data.api.model.DoctorResponse>>() {
+                    @Override
+                    public void onResponse(retrofit2.Call<List<com.dermacare.clinic.data.api.model.DoctorResponse>> call,
+                                           retrofit2.Response<List<com.dermacare.clinic.data.api.model.DoctorResponse>> response) {
+                        if (response.isSuccessful() && response.body() != null) {
+                            List<com.dermacare.clinic.model.Doctor> mappedDoctors = new java.util.ArrayList<>();
+                            for (com.dermacare.clinic.data.api.model.DoctorResponse dr : response.body()) {
+                                String safeName = dr.fullName != null && !dr.fullName.isEmpty() ? dr.fullName.substring(0, 1) : "D";
+                                mappedDoctors.add(new com.dermacare.clinic.model.Doctor(
+                                        dr.doctorId,
+                                        dr.fullName,
+                                        dr.specialty,
+                                        dr.rating != null ? String.valueOf(dr.rating) : "5.0",
+                                        true,
+                                        "https://ui-avatars.com/api/?name=" + safeName + "&background=random&color=fff"
+                                ));
+                            }
+                            doctorAdapter.setDoctors(mappedDoctors);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(retrofit2.Call<List<com.dermacare.clinic.data.api.model.DoctorResponse>> call, Throwable t) {
+                        Toast.makeText(requireContext(), "Lỗi tải danh sách bác sĩ", Toast.LENGTH_SHORT).show();
+                    }
+                });
 
         view.findViewById(R.id.btnBook).setOnClickListener(v ->
-                Toast.makeText(requireContext(), R.string.toast_book_upcoming, Toast.LENGTH_SHORT).show());
+                Toast.makeText(requireContext(), "Vui lòng chọn một bác sĩ từ danh sách", Toast.LENGTH_SHORT).show());
 
         view.findViewById(R.id.btnNotification).setOnClickListener(v ->
                 Toast.makeText(requireContext(), R.string.toast_notifications_upcoming, Toast.LENGTH_SHORT).show());
 
         view.findViewById(R.id.searchBar).setOnClickListener(v ->
                 Toast.makeText(requireContext(), "Tìm kiếm bác sĩ...", Toast.LENGTH_SHORT).show());
+    }
+
+    private void fetchAndShowSchedules(com.dermacare.clinic.model.Doctor doctor) {
+        if (doctor.doctorId == null) {
+            Toast.makeText(requireContext(), "Bác sĩ này chưa có lịch hẹn", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        android.app.ProgressDialog dialog = new android.app.ProgressDialog(requireContext());
+        dialog.setMessage("Đang tải lịch...");
+        dialog.show();
+
+        com.dermacare.clinic.data.api.ApiClient.getPublicService(requireContext()).getSchedules(doctor.doctorId)
+                .enqueue(new retrofit2.Callback<List<com.dermacare.clinic.data.api.model.ScheduleResponse>>() {
+                    @Override
+                    public void onResponse(retrofit2.Call<List<com.dermacare.clinic.data.api.model.ScheduleResponse>> call,
+                                           retrofit2.Response<List<com.dermacare.clinic.data.api.model.ScheduleResponse>> response) {
+                        dialog.dismiss();
+                        if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
+                            List<com.dermacare.clinic.data.api.model.ScheduleResponse> schedules = response.body();
+                            String[] options = new String[schedules.size()];
+                            for (int i = 0; i < schedules.size(); i++) {
+                                com.dermacare.clinic.data.api.model.ScheduleResponse s = schedules.get(i);
+                                options[i] = "Ngày " + s.date + " (" + s.startTime + " - " + s.endTime + ")";
+                            }
+
+                            new androidx.appcompat.app.AlertDialog.Builder(requireContext())
+                                    .setTitle("Chọn lịch khám với " + doctor.name)
+                                    .setItems(options, (dialogInterface, which) -> {
+                                        Toast.makeText(requireContext(), "Đặt lịch thành công!", Toast.LENGTH_LONG).show();
+                                    })
+                                    .setNegativeButton("Đóng", null)
+                                    .show();
+                        } else {
+                            Toast.makeText(requireContext(), "Bác sĩ chưa có lịch trống", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(retrofit2.Call<List<com.dermacare.clinic.data.api.model.ScheduleResponse>> call, Throwable t) {
+                        dialog.dismiss();
+                        Toast.makeText(requireContext(), "Lỗi tải lịch", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 }

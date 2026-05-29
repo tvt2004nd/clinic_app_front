@@ -47,7 +47,18 @@
         <activity
             android:name=".doctor.DoctorMainActivity"
             android:exported="false" />
- 
+
+        <activity
+            android:name=".doctor.ExamineActivity"
+            android:exported="false"
+            android:theme="@style/Theme.DermaCare" />
+
+        <activity
+            android:name=".doctor.InvoiceActivity"
+            android:exported="false"
+            android:label="Thanh toán hóa đơn"
+            android:theme="@style/Theme.DermaCare" />
+
         <activity
             android:name=".patient.EditProfileActivity"
             android:exported="false"

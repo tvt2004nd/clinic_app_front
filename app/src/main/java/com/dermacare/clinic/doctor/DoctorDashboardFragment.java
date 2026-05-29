@@ -1,11 +1,11 @@
 package com.dermacare.clinic.doctor;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -36,10 +36,10 @@ public class DoctorDashboardFragment extends Fragment {
         RecyclerView rv = view.findViewById(R.id.rvSchedule);
         rv.setLayoutManager(new LinearLayoutManager(requireContext()));
         
-        // Cập nhật listener đúng với interface OnExamineClick
+        // Mở màn hình khám bệnh khi nhấn nút "Khám"
         rv.setAdapter(new AppointmentAdapter(MockData.doctorSchedule(), position -> {
-            String patientName = MockData.doctorSchedule().get(position)[1];
-            Toast.makeText(requireContext(), "Đang chuẩn bị hồ sơ cho: " + patientName, Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(requireContext(), ExamineActivity.class);
+            startActivity(intent);
         }));
         
         // Thêm hiệu ứng click cho các thẻ thống kê

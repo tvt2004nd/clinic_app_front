@@ -16,10 +16,21 @@ import com.dermacare.clinic.model.Doctor;
 import java.util.List;
 
 public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.Holder> {
-    private final List<Doctor> doctors;
+    private List<Doctor> doctors;
+    private OnDoctorClickListener listener;
 
-    public DoctorAdapter(List<Doctor> doctors) {
+    public interface OnDoctorClickListener {
+        void onDoctorClick(Doctor doctor);
+    }
+
+    public DoctorAdapter(List<Doctor> doctors, OnDoctorClickListener listener) {
         this.doctors = doctors;
+        this.listener = listener;
+    }
+
+    public void setDoctors(List<Doctor> doctors) {
+        this.doctors = doctors;
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -41,6 +52,10 @@ public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.Holder> {
                 .load(d.avatarUrl)
                 .circleCrop()
                 .into(holder.imgAvatar);
+
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) listener.onDoctorClick(d);
+        });
     }
 
     @Override

@@ -54,4 +54,16 @@ public class ApiClient {
     public static UserService getUserService(Context context) {
         return getClient(context).create(UserService.class);
     }
+
+    public static ExaminationService getExaminationService(Context context) {
+        return getClient(context).create(ExaminationService.class);
+    }
+
+    public static InvoiceService getInvoiceService(Context context) {
+        return getClient(context).create(InvoiceService.class);
+    }
+
+    public static PublicService getPublicService(Context context) {
+        return getClient(context).create(PublicService.class);
+    }
 }
