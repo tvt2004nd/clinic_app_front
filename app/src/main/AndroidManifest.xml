@@ -43,6 +43,11 @@
         <activity
             android:name=".patient.PatientMainActivity"
             android:exported="false" />
+
+        <activity
+            android:name=".patient.BookingActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
  
         <activity
             android:name=".doctor.DoctorMainActivity"

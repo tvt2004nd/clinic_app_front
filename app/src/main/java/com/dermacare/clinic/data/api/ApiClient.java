@@ -66,4 +66,8 @@ public class ApiClient {
     public static PublicService getPublicService(Context context) {
         return getClient(context).create(PublicService.class);
     }
+
+    public static AppointmentService getAppointmentService(Context context) {
+        return getClient(context).create(AppointmentService.class);
+    }
 }

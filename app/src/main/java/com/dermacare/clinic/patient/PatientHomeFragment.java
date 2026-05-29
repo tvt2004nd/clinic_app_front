@@ -109,41 +109,25 @@ public class PatientHomeFragment extends Fragment {
             return;
         }
 
-        android.app.ProgressDialog dialog = new android.app.ProgressDialog(requireContext());
-        dialog.setMessage("Đang tải lịch...");
-        dialog.show();
+        // Build initials
+        String initials = "";
+        if (doctor.name != null && !doctor.name.isEmpty()) {
+            String[] parts = doctor.name.trim().split("\\s+");
+            if (parts.length >= 2) {
+                initials = String.valueOf(parts[parts.length - 2].charAt(0))
+                        + parts[parts.length - 1].charAt(0);
+            } else {
+                initials = doctor.name.substring(0, Math.min(2, doctor.name.length()));
+            }
+        }
 
-        com.dermacare.clinic.data.api.ApiClient.getPublicService(requireContext()).getSchedules(doctor.doctorId)
-                .enqueue(new retrofit2.Callback<List<com.dermacare.clinic.data.api.model.ScheduleResponse>>() {
-                    @Override
-                    public void onResponse(retrofit2.Call<List<com.dermacare.clinic.data.api.model.ScheduleResponse>> call,
-                                           retrofit2.Response<List<com.dermacare.clinic.data.api.model.ScheduleResponse>> response) {
-                        dialog.dismiss();
-                        if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
-                            List<com.dermacare.clinic.data.api.model.ScheduleResponse> schedules = response.body();
-                            String[] options = new String[schedules.size()];
-                            for (int i = 0; i < schedules.size(); i++) {
-                                com.dermacare.clinic.data.api.model.ScheduleResponse s = schedules.get(i);
-                                options[i] = "Ngày " + s.date + " (" + s.startTime + " - " + s.endTime + ")";
-                            }
-
-                            new androidx.appcompat.app.AlertDialog.Builder(requireContext())
-                                    .setTitle("Chọn lịch khám với " + doctor.name)
-                                    .setItems(options, (dialogInterface, which) -> {
-                                        Toast.makeText(requireContext(), "Đặt lịch thành công!", Toast.LENGTH_LONG).show();
-                                    })
-                                    .setNegativeButton("Đóng", null)
-                                    .show();
-                        } else {
-                            Toast.makeText(requireContext(), "Bác sĩ chưa có lịch trống", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(retrofit2.Call<List<com.dermacare.clinic.data.api.model.ScheduleResponse>> call, Throwable t) {
-                        dialog.dismiss();
-                        Toast.makeText(requireContext(), "Lỗi tải lịch", Toast.LENGTH_SHORT).show();
-                    }
-                });
+        android.content.Intent intent = new android.content.Intent(requireContext(), BookingActivity.class);
+        intent.putExtra(BookingActivity.EXTRA_DOCTOR_ID, doctor.doctorId);
+        intent.putExtra(BookingActivity.EXTRA_DOCTOR_NAME, doctor.name);
+        intent.putExtra(BookingActivity.EXTRA_SPECIALTY, doctor.specialty);
+        intent.putExtra(BookingActivity.EXTRA_AVATAR_URL, doctor.avatarUrl);
+        intent.putExtra(BookingActivity.EXTRA_INITIALS, initials.toUpperCase());
+        startActivity(intent);
     }
 }
+

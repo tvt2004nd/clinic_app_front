@@ -3,11 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="24dp"
-    android:layout_marginBottom="14dp"
+    android:layout_marginBottom="12dp"
     app:cardBackgroundColor="@color/white"
-    app:cardCornerRadius="24dp"
-    app:cardElevation="4dp"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="3dp"
     app:strokeWidth="0dp">
 
     <LinearLayout
@@ -15,59 +14,48 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="16dp">
+        android:padding="14dp">
 
-        <!-- Avatar placeholder with initials -->
+        <!-- Avatar with initials -->
         <FrameLayout
-            android:layout_width="76dp"
-            android:layout_height="76dp">
+            android:layout_width="68dp"
+            android:layout_height="68dp">
 
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="76dp"
-                android:layout_height="76dp"
-                app:cardCornerRadius="22dp"
-                app:cardElevation="0dp"
-                app:strokeWidth="0dp">
-
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/imgAvatar"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/surface_variant"
-                    android:scaleType="centerCrop"
-                    app:shapeAppearanceOverlay="@style/ShapeAppearance.DermaCare.Medium" />
-            </com.google.android.material.card.MaterialCardView>
-
-            <!-- Initials placeholder, hidden when image loads -->
+            <!-- Gradient initials background -->
             <TextView
                 android:id="@+id/tvAvatarInitials"
-                android:layout_width="76dp"
-                android:layout_height="76dp"
+                android:layout_width="68dp"
+                android:layout_height="68dp"
                 android:background="@drawable/bg_avatar_gradient"
                 android:gravity="center"
                 android:textColor="@color/white"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                android:visibility="visible" />
+                android:textSize="22sp"
+                android:textStyle="bold" />
 
-            <!-- Available badge -->
-            <com.google.android.material.card.MaterialCardView
+            <!-- Real image on top -->
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/imgAvatar"
+                android:layout_width="68dp"
+                android:layout_height="68dp"
+                android:scaleType="centerCrop"
+                app:shapeAppearanceOverlay="@style/ShapeAppearance.DermaCare.Medium" />
+
+            <!-- Online dot badge -->
+            <View
                 android:id="@+id/badgeAvailable"
-                android:layout_width="16dp"
-                android:layout_height="16dp"
+                android:layout_width="14dp"
+                android:layout_height="14dp"
                 android:layout_gravity="bottom|end"
-                android:layout_margin="2dp"
-                app:cardBackgroundColor="#22C55E"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="2dp"
-                app:strokeColor="@color/white"
-                app:strokeWidth="2dp" />
+                android:layout_margin="1dp"
+                android:background="@drawable/badge_online"
+                android:visibility="gone" />
         </FrameLayout>
 
+        <!-- Info column -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="14dp"
             android:layout_weight="1"
             android:orientation="vertical">
 
@@ -75,79 +63,77 @@
                 android:id="@+id/tvDoctorName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:textColor="@color/text_primary"
-                android:textSize="16sp"
+                android:textSize="15sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tvSpecialty"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
+                android:layout_marginTop="2dp"
                 android:textColor="@color/text_secondary"
                 android:textSize="13sp" />
 
-            <!-- Rating + Experience row -->
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="8dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
-                <!-- Rating chip -->
-                <LinearLayout
+                <!-- Star + Rating -->
+                <ImageView
+                    android:layout_width="13dp"
+                    android:layout_height="13dp"
+                    android:src="@drawable/ic_star"
+                    app:tint="#F59E0B" />
+
+                <TextView
+                    android:id="@+id/tvRating"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_chip_rating"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingHorizontal="8dp"
-                    android:paddingVertical="4dp">
+                    android:layout_marginStart="4dp"
+                    android:textColor="#92400E"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
 
-                    <ImageView
-                        android:layout_width="12dp"
-                        android:layout_height="12dp"
-                        android:src="@drawable/ic_star"
-                        app:tint="#F59E0B" />
+                <!-- Dot separator -->
+                <View
+                    android:layout_width="4dp"
+                    android:layout_height="4dp"
+                    android:layout_marginHorizontal="8dp"
+                    android:background="@drawable/bg_logo_circle"
+                    android:backgroundTint="@color/text_muted" />
 
-                    <TextView
-                        android:id="@+id/tvRating"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="4dp"
-                        android:textColor="#B45309"
-                        android:textSize="12sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-
-                <!-- Availability badge -->
+                <!-- Available text -->
                 <TextView
                     android:id="@+id/tvAvailable"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:background="@drawable/bg_chip_available"
-                    android:paddingHorizontal="8dp"
-                    android:paddingVertical="4dp"
-                    android:text="@string/available"
+                    android:text="Còn lịch"
                     android:textColor="#16A34A"
-                    android:textSize="11sp"
-                    android:textStyle="bold" />
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
             </LinearLayout>
         </LinearLayout>
 
-        <!-- Book button -->
+        <!-- Arrow button -->
         <com.google.android.material.card.MaterialCardView
-            android:layout_width="44dp"
-            android:layout_height="44dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="8dp"
             app:cardBackgroundColor="@color/primary"
-            app:cardCornerRadius="14dp"
-            app:cardElevation="4dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="2dp"
             app:strokeWidth="0dp">
+
             <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
                 android:layout_gravity="center"
                 android:src="@drawable/ic_nav_calendar"
                 app:tint="@color/white" />
