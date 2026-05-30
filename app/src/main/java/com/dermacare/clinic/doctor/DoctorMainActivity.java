@@ -46,4 +46,11 @@ public class DoctorMainActivity extends AppCompatActivity {
                 .replace(R.id.nav_host_doctor, fragment)
                 .commit();
     }
+
+    public void navigateToTab(int tabId) {
+        BottomNavigationView bottomNav = findViewById(R.id.bottomNavDoctor);
+        if (bottomNav != null) {
+            bottomNav.setSelectedItemId(tabId);
+        }
+    }
 }

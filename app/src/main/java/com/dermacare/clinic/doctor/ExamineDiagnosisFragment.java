@@ -4,15 +4,31 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
 import com.dermacare.clinic.R;
 
-public class ExamineDiagnosisFragment extends Fragment {
+public class ExamineDiagnosisFragment extends Fragment implements ExamineStep {
+    private EditText edtDiseaseName;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_examine_diagnosis, container, false);
+        View view = inflater.inflate(R.layout.fragment_examine_diagnosis, container, false);
+        edtDiseaseName = view.findViewById(R.id.edtDiseaseName);
+        return view;
+    }
+
+    @Override
+    public boolean isValid() {
+        return edtDiseaseName != null && edtDiseaseName.getText().toString().trim().length() > 0;
+    }
+
+    public String getDiagnosisText() {
+        return edtDiseaseName != null ? edtDiseaseName.getText().toString().trim() : "";
     }
 }

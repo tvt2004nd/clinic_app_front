@@ -51,6 +51,23 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
             }
         }
         holder.tvAvatar.setText(initials.toUpperCase());
+
+        Object lastMsg = item.get("lastMessage");
+        if (lastMsg != null) {
+            holder.tvLastMessage.setText(String.valueOf(lastMsg));
+        } else {
+            holder.tvLastMessage.setText("Chưa có tin nhắn");
+        }
+
+        Object lastTime = item.get("lastMessageTime");
+        if (lastTime != null) {
+            String timeStr = String.valueOf(lastTime);
+            String time = timeStr.length() >= 16 ? timeStr.substring(11, 16) : timeStr;
+            holder.tvTime.setText(time);
+        } else {
+            holder.tvTime.setText("");
+        }
+
         holder.itemView.setOnClickListener(v -> listener.onClick(item));
     }
 

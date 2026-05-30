@@ -2,6 +2,8 @@ package com.dermacare.clinic.data.api;
 
 import com.google.gson.JsonObject;
 
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -13,6 +15,9 @@ public interface InvoiceService {
 
     @POST("api/invoices")
     Call<JsonObject> createInvoice(@Body JsonObject request);
+
+    @GET("api/invoices/doctor")
+    Call<List<JsonObject>> getDoctorInvoices();
 
     @GET("api/invoices/record/{recordId}")
     Call<JsonObject> getInvoiceByRecord(@Path("recordId") Long recordId);

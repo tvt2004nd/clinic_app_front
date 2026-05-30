@@ -10,9 +10,9 @@
         android:layout_height="wrap_content"
         android:background="@drawable/bg_header_gradient"
         android:gravity="center_vertical"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:paddingHorizontal="20dp"
-        android:paddingBottom="24dp"
+        android:paddingBottom="28dp"
         android:paddingTop="52dp">
 
         <TextView
@@ -20,8 +20,18 @@
             android:layout_height="wrap_content"
             android:text="Tin nhắn"
             android:textColor="@color/white"
-            android:textSize="22sp"
-            android:textStyle="bold" />
+            android:textSize="26sp"
+            android:textStyle="bold"
+            android:letterSpacing="-0.02" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Trò chuyện với bác sĩ của bạn"
+            android:textColor="#CCFFFFFF"
+            android:textSize="14sp" />
+
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -29,16 +39,45 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
+        android:paddingHorizontal="4dp"
+        android:paddingTop="8dp"
         android:paddingBottom="80dp" />
 
-    <TextView
+    <LinearLayout
         android:id="@+id/tvEmpty"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:text="Chưa có cuộc trò chuyện nào\nSau khi bác sĩ xác nhận lịch hẹn, bạn có thể chat với nhau"
-        android:textAlignment="center"
-        android:textColor="@color/text_muted"
-        android:textSize="14sp"
-        android:visibility="gone" />
+        android:orientation="vertical"
+        android:paddingHorizontal="40dp"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/bg_circle_primary"
+            android:gravity="center"
+            android:text="💬"
+            android:textSize="36sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Chưa có cuộc trò chuyện nào"
+            android:textColor="@color/text_primary"
+            android:textSize="17sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:text="Sau khi bác sĩ xác nhận lịch hẹn,\nbạn có thể trò chuyện ngay tại đây"
+            android:textColor="@color/text_muted"
+            android:textSize="14sp" />
+    </LinearLayout>
+
 </LinearLayout>

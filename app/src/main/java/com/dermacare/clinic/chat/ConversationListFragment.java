@@ -31,7 +31,7 @@ public class ConversationListFragment extends Fragment {
     private final List<Map<String, Object>> conversations = new ArrayList<>();
     private ConversationAdapter adapter;
     private boolean doctorMode;
-    private TextView tvEmpty;
+    private View tvEmpty;
 
     public static ConversationListFragment newInstance(boolean doctorMode) {
         ConversationListFragment fragment = new ConversationListFragment();

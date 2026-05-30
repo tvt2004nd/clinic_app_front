@@ -26,9 +26,6 @@ public interface ExaminationService {
     @PUT("api/examinations/records/{recordId}/symptoms")
     Call<JsonObject> updateSymptoms(@Path("recordId") Long recordId, @Body JsonObject request);
 
-    @PUT("api/examinations/records/{recordId}/ai-reference")
-    Call<JsonObject> updateAiReference(@Path("recordId") Long recordId, @Body JsonObject request);
-
     @PUT("api/examinations/records/{recordId}/final-diagnosis")
     Call<JsonObject> updateFinalDiagnosis(@Path("recordId") Long recordId, @Body JsonObject request);
 
@@ -37,6 +34,15 @@ public interface ExaminationService {
 
     @POST("api/examinations/records/{recordId}/follow-up")
     Call<JsonObject> scheduleFollowUp(@Path("recordId") Long recordId, @Body JsonObject request);
+
+    @POST("api/examinations/records/{recordId}/complete")
+    Call<JsonObject> completeVisit(@Path("recordId") Long recordId);
+
+    @GET("api/examinations/my-records")
+    Call<List<JsonObject>> getMyRecords();
+
+    @GET("api/examinations/doctor/history")
+    Call<List<JsonObject>> getDoctorHistory();
 
     @GET("api/examinations/references/medications")
     Call<List<JsonObject>> searchMedications(@Query("keyword") String keyword);

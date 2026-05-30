@@ -85,8 +85,13 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             ReceivedMessageHolder h = (ReceivedMessageHolder) holder;
             h.tvMessage.setText(content);
             h.tvTime.setText(time);
+
             Object nameObj = msg.get("senderName");
-            h.tvSenderName.setText(nameObj != null ? String.valueOf(nameObj) : "");
+            String name = nameObj != null ? String.valueOf(nameObj) : "";
+            h.tvSenderName.setText(name);
+
+            String initial = name != null && !name.isEmpty() ? name.substring(0, 1).toUpperCase() : "?";
+            h.tvAvatarInitial.setText(initial);
         }
     }
 
@@ -105,12 +110,13 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     static class ReceivedMessageHolder extends RecyclerView.ViewHolder {
-        TextView tvMessage, tvTime, tvSenderName;
+        TextView tvMessage, tvTime, tvSenderName, tvAvatarInitial;
         ReceivedMessageHolder(View itemView) {
             super(itemView);
             tvMessage = itemView.findViewById(R.id.tvMessage);
             tvTime = itemView.findViewById(R.id.tvTime);
             tvSenderName = itemView.findViewById(R.id.tvSenderName);
+            tvAvatarInitial = itemView.findViewById(R.id.tvAvatarInitial);
         }
     }
 }

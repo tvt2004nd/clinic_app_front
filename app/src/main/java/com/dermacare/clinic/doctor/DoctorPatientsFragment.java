@@ -13,11 +13,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dermacare.clinic.R;
-import com.dermacare.clinic.adapter.SimpleTextAdapter;
-import com.dermacare.clinic.data.MockData;
+import com.dermacare.clinic.data.api.ApiClient;
+import com.dermacare.clinic.data.api.model.DoctorPatientResponse;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class DoctorPatientsFragment extends Fragment {
     private PatientAdapter adapter;
@@ -51,39 +55,37 @@ public class DoctorPatientsFragment extends Fragment {
         loadPatients();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadPatients();
+    }
+
     private void loadPatients() {
-        com.dermacare.clinic.data.api.ApiClient.getAppointmentService(requireContext())
-                .getDoctorAppointments(null, null)
-                .enqueue(new retrofit2.Callback<List<com.dermacare.clinic.data.api.model.AppointmentResponse>>() {
+        ApiClient.getDoctorService(requireContext())
+                .getMyPatients()
+                .enqueue(new Callback<List<DoctorPatientResponse>>() {
                     @Override
-                    public void onResponse(retrofit2.Call<List<com.dermacare.clinic.data.api.model.AppointmentResponse>> call,
-                                           retrofit2.Response<List<com.dermacare.clinic.data.api.model.AppointmentResponse>> response) {
+                    public void onResponse(Call<List<DoctorPatientResponse>> call,
+                                           Response<List<DoctorPatientResponse>> response) {
                         if (!isAdded()) return;
                         if (response.isSuccessful() && response.body() != null) {
-                            java.util.Map<String, com.dermacare.clinic.data.api.model.AppointmentResponse> patients = new java.util.HashMap<>();
-                            for (com.dermacare.clinic.data.api.model.AppointmentResponse appt : response.body()) {
-                                if (appt.patientName != null && !patients.containsKey(appt.patientName)) {
-                                    patients.put(appt.patientName, appt);
-                                }
-                            }
-                            
-                            List<com.dermacare.clinic.data.api.model.AppointmentResponse> uniquePatients = new ArrayList<>(patients.values());
-                            
-                            if (uniquePatients.isEmpty()) {
+                            List<DoctorPatientResponse> list = response.body();
+                            if (list.isEmpty()) {
                                 layoutEmpty.setVisibility(View.VISIBLE);
                                 rv.setVisibility(View.GONE);
                                 tvPatientCount.setText("0 bệnh nhân");
                             } else {
                                 layoutEmpty.setVisibility(View.GONE);
                                 rv.setVisibility(View.VISIBLE);
-                                adapter.setData(uniquePatients);
-                                tvPatientCount.setText(uniquePatients.size() + " bệnh nhân");
+                                adapter.setData(list);
+                                tvPatientCount.setText(list.size() + " bệnh nhân");
                             }
                         }
                     }
 
                     @Override
-                    public void onFailure(retrofit2.Call<List<com.dermacare.clinic.data.api.model.AppointmentResponse>> call, Throwable t) {
+                    public void onFailure(Call<List<DoctorPatientResponse>> call, Throwable t) {
                         if (!isAdded()) return;
                         layoutEmpty.setVisibility(View.VISIBLE);
                         rv.setVisibility(View.GONE);

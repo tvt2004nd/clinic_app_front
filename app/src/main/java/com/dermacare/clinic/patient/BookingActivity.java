@@ -31,6 +31,7 @@ public class BookingActivity extends AppCompatActivity {
     public static final String EXTRA_SPECIALTY = "specialty";
     public static final String EXTRA_AVATAR_URL = "avatar_url";
     public static final String EXTRA_INITIALS = "initials";
+    public static final String EXTRA_FEE = "fee";
 
     private ViewFlipper viewFlipper;
     private ScheduleAdapter scheduleAdapter;
@@ -53,14 +54,17 @@ public class BookingActivity extends AppCompatActivity {
         String specialty = getIntent().getStringExtra(EXTRA_SPECIALTY);
         String avatarUrl = getIntent().getStringExtra(EXTRA_AVATAR_URL);
         String initials = getIntent().getStringExtra(EXTRA_INITIALS);
+        double fee = getIntent().getDoubleExtra(EXTRA_FEE, 150000);
 
         // Setup header
         TextView tvName = findViewById(R.id.tvBookingDoctorName);
         TextView tvSpec = findViewById(R.id.tvBookingSpecialty);
+        TextView tvFee = findViewById(R.id.tvBookingFee);
         TextView tvInitials = findViewById(R.id.tvDoctorHeaderInitials);
         ShapeableImageView imgHeader = findViewById(R.id.imgDoctorHeader);
         tvName.setText(doctorName);
         tvSpec.setText(specialty);
+        tvFee.setText(String.format("Phí khám: %,.0f₫", fee));
         tvInitials.setText(initials);
 
         if (avatarUrl != null && !avatarUrl.isEmpty()) {
@@ -199,7 +203,17 @@ public class BookingActivity extends AppCompatActivity {
                         } else {
                             btnConfirmBooking.setEnabled(true);
                             btnConfirmBooking.setText("Xác nhận đặt lịch");
-                            Toast.makeText(BookingActivity.this, "Đặt lịch thất bại, vui lòng thử lại", Toast.LENGTH_SHORT).show();
+                            String msg = "Đặt lịch thất bại";
+                            try {
+                                if (response.errorBody() != null) {
+                                    String errBody = response.errorBody().string();
+                                    com.google.gson.JsonObject err = new com.google.gson.Gson().fromJson(errBody, com.google.gson.JsonObject.class);
+                                    if (err != null && err.has("message")) {
+                                        msg = err.get("message").getAsString();
+                                    }
+                                }
+                            } catch (Exception ignored) {}
+                            Toast.makeText(BookingActivity.this, msg, Toast.LENGTH_LONG).show();
                         }
                     }
 

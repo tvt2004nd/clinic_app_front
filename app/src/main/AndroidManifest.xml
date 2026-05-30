@@ -78,5 +78,10 @@
             android:name=".chat.ChatActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".patient.RecordDetailActivity"
+            android:exported="false"
+            android:theme="@style/Theme.DermaCare" />
     </application>
 </manifest>

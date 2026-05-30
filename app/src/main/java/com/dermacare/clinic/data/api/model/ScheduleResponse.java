@@ -6,4 +6,7 @@ public class ScheduleResponse {
     public String startTime;
     public String endTime;
     public String status;
+    public int bookedCount;
+    public int maxPatients;
+    public boolean isFull;
 }

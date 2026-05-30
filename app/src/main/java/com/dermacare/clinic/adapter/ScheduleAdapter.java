@@ -7,7 +7,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dermacare.clinic.R;
@@ -48,6 +47,7 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.Holder
     public void onBindViewHolder(@NonNull Holder holder, int position) {
         ScheduleResponse s = schedules.get(position);
         boolean isSelected = position == selectedPosition;
+        boolean isBooked = s.isFull || "FULL".equals(s.status) || "CANCELLED".equals(s.status);
 
         // Parse date "yyyy-MM-dd"
         String[] parts = s.date != null ? s.date.split("-") : new String[]{"", "", ""};
@@ -62,9 +62,16 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.Holder
         int startH = s.startTime != null ? Integer.parseInt(s.startTime.substring(0, 2)) : 8;
         holder.tvLabel.setText(startH < 12 ? "Buổi sáng" : "Buổi chiều");
 
+        // Booked badge
+        if (isBooked) {
+            holder.tvFullBadge.setVisibility(View.VISIBLE);
+        } else {
+            holder.tvFullBadge.setVisibility(View.GONE);
+        }
+
         // Selected state
         if (isSelected) {
-            holder.card.setCardBackgroundColor(0xFF6366F1); // primary
+            holder.card.setCardBackgroundColor(0xFF6366F1);
             holder.card.setStrokeWidth(0);
             holder.tvDay.setTextColor(0xFFFFFFFF);
             holder.tvMonth.setTextColor(0xCCFFFFFF);
@@ -73,9 +80,21 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.Holder
             holder.tvLabel.setTextColor(0xCCFFFFFF);
             holder.selectIndicator.setCardBackgroundColor(0x33FFFFFF);
             holder.ivCheck.setVisibility(View.VISIBLE);
+        } else if (isBooked) {
+            holder.card.setCardBackgroundColor(0xFFFEF2F2);
+            holder.card.setStrokeWidth(1);
+            holder.card.setStrokeColor(android.content.res.ColorStateList.valueOf(0xFFFCA5A5));
+            holder.tvDay.setTextColor(0xFFDC2626);
+            holder.tvMonth.setTextColor(0xFFDC2626);
+            holder.dateBlock.setCardBackgroundColor(0xFFFEE2E2);
+            holder.tvTime.setTextColor(0xFF991B1B);
+            holder.tvLabel.setTextColor(0xFFB91C1C);
+            holder.selectIndicator.setCardBackgroundColor(0xFFFEE2E2);
+            holder.ivCheck.setVisibility(View.GONE);
         } else {
             holder.card.setCardBackgroundColor(0xFFFFFFFF);
-            holder.card.setStrokeWidth(3);
+            holder.card.setStrokeWidth(1);
+            holder.card.setStrokeColor(android.content.res.ColorStateList.valueOf(0xFFE2E8F0));
             holder.tvDay.setTextColor(0xFF6366F1);
             holder.tvMonth.setTextColor(0xFF6366F1);
             holder.dateBlock.setCardBackgroundColor(0xFFEEF2FF);
@@ -86,6 +105,9 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.Holder
         }
 
         holder.itemView.setOnClickListener(v -> {
+            if (isBooked) {
+                return;
+            }
             int prev = selectedPosition;
             selectedPosition = position;
             notifyItemChanged(prev);
@@ -102,20 +124,19 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.Holder
     static class Holder extends RecyclerView.ViewHolder {
         final com.google.android.material.card.MaterialCardView card;
         final com.google.android.material.card.MaterialCardView dateBlock;
-        final TextView tvDay, tvMonth, tvTime, tvLabel;
+        final TextView tvDay, tvMonth, tvTime, tvLabel, tvFullBadge;
         final com.google.android.material.card.MaterialCardView selectIndicator;
         final ImageView ivCheck;
 
         Holder(@NonNull View itemView) {
             super(itemView);
             card = (com.google.android.material.card.MaterialCardView) itemView;
-            dateBlock = itemView.findViewById(R.id.tvScheduleDay).getParent() instanceof View
-                    ? (com.google.android.material.card.MaterialCardView) ((View) itemView.findViewById(R.id.tvScheduleDay).getParent()).getParent()
-                    : null;
+            dateBlock = itemView.findViewById(R.id.scheduleDateBlock);
             tvDay = itemView.findViewById(R.id.tvScheduleDay);
             tvMonth = itemView.findViewById(R.id.tvScheduleMonth);
             tvTime = itemView.findViewById(R.id.tvScheduleTime);
             tvLabel = itemView.findViewById(R.id.tvScheduleLabel);
+            tvFullBadge = itemView.findViewById(R.id.tvFullBadge);
             selectIndicator = itemView.findViewById(R.id.scheduleSelectIndicator);
             ivCheck = itemView.findViewById(R.id.ivSelectCheck);
         }
