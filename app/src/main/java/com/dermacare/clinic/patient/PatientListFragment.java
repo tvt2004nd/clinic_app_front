@@ -252,8 +252,9 @@ public class PatientListFragment extends Fragment {
         // Medical history (records) adapter for the history section
         rvHistory.setLayoutManager(new LinearLayoutManager(requireContext()));
         historyRecordsAdapter = new PatientRecordsAdapter(historyRecords, recordId -> {
+            if (recordId == null) return;
             Intent intent = new Intent(requireContext(), RecordDetailActivity.class);
-            intent.putExtra("recordId", recordId);
+            intent.putExtra("recordId", recordId.longValue());
             startActivity(intent);
         });
         rvHistory.setAdapter(historyRecordsAdapter);

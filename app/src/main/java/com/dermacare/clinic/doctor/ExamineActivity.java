@@ -1,5 +1,6 @@
 package com.dermacare.clinic.doctor;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -16,7 +17,17 @@ import com.dermacare.clinic.data.api.ApiClient;
 import com.google.android.material.button.MaterialButton;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+
+import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -28,12 +39,13 @@ public class ExamineActivity extends AppCompatActivity {
     private LinearLayout stepIndicator;
     private TextView tvStepTitle;
     private Long recordId = -1L;
+    private long appointmentId = -1L;
     private boolean isLoading = true;
     private long consultationFeeAmount = 0L;
 
     private final String[] titles = {
         "Tiếp nhận bệnh nhân",
-        "Ghi nhận triệu chứng",
+        "Khám tổn thương da",
         "Chẩn đoán cuối cùng",
         "Kê đơn thuốc",
         "Lịch tái khám"
@@ -51,6 +63,11 @@ public class ExamineActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setTitle("Quy trình khám");
+        }
         toolbar.setNavigationOnClickListener(v -> finish());
 
         buildStepIndicator();
@@ -88,7 +105,7 @@ public class ExamineActivity extends AppCompatActivity {
             }
         });
 
-        long appointmentId = getIntent().getLongExtra("appointmentId", -1L);
+        appointmentId = getIntent().getLongExtra("appointmentId", -1L);
         if (appointmentId == -1L) {
             Toast.makeText(this, "Lỗi: không tìm thấy lịch hẹn", Toast.LENGTH_SHORT).show();
             finish();
@@ -146,10 +163,11 @@ public class ExamineActivity extends AppCompatActivity {
         Call<JsonObject> call = null;
 
         switch (step) {
-            case 1: // Symptoms
-                if (fragment instanceof ExamineSymptomsFragment) {
-                    body.addProperty("symptoms", ((ExamineSymptomsFragment) fragment).getCombinedSymptoms());
+            case 1: // Skin lesion examination
+                if (fragment instanceof ExamineSkinLesionFragment) {
+                    body.addProperty("symptoms", ((ExamineSkinLesionFragment) fragment).getCombinedExaminationData());
                     call = ApiClient.getExaminationService(this).updateSymptoms(recordId, body);
+                    saveExamPhotos(((ExamineSkinLesionFragment) fragment).getPhotoBitmaps());
                 }
                 break;
             case 2: // Diagnosis
@@ -196,6 +214,34 @@ public class ExamineActivity extends AppCompatActivity {
         }
     }
 
+    private void saveExamPhotos(List<Bitmap> bitmaps) {
+        if (bitmaps == null || bitmaps.isEmpty()) return;
+        List<MultipartBody.Part> parts = new ArrayList<>();
+        for (int i = 0; i < bitmaps.size(); i++) {
+            Bitmap bm = bitmaps.get(i);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bm.compress(Bitmap.CompressFormat.JPEG, 80, baos);
+            RequestBody fileBody = RequestBody.create(MediaType.parse("image/jpeg"), baos.toByteArray());
+            parts.add(MultipartBody.Part.createFormData("files", "photo_" + recordId + "_" + i + ".jpg", fileBody));
+        }
+        ApiClient.getExaminationService(this).uploadPhotos(recordId, parts).enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if (!response.isSuccessful()) {
+                    String errMsg = "Upload ảnh thất bại: " + response.code();
+                    try {
+                        if (response.errorBody() != null) errMsg += " - " + response.errorBody().string();
+                    } catch (Exception ignored) {}
+                    Toast.makeText(ExamineActivity.this, errMsg, Toast.LENGTH_LONG).show();
+                }
+            }
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Toast.makeText(ExamineActivity.this, "Lỗi upload ảnh: " + t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
     void completeExamination() {
         if (recordId == -1L) {
             Toast.makeText(this, "Lỗi: không tìm thấy hồ sơ khám", Toast.LENGTH_SHORT).show();
@@ -233,6 +279,7 @@ public class ExamineActivity extends AppCompatActivity {
 
         JsonObject body = new JsonObject();
         body.addProperty("followUpDate", isoDate);
+        body.addProperty("createAppointment", false);
         if (!reason.isEmpty()) {
             body.addProperty("reason", reason);
         }
@@ -256,6 +303,8 @@ public class ExamineActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 if (response.isSuccessful()) {
+                    // Mark appointment as completed so it disappears from doctor's schedule
+                    markAppointmentCompleted();
                     // After completing the visit, create the invoice automatically
                     createInvoiceAfterComplete();
                 } else {
@@ -335,29 +384,53 @@ public class ExamineActivity extends AppCompatActivity {
         });
     }
 
+    private void markAppointmentCompleted() {
+        if (appointmentId == -1L) return;
+        ApiClient.getAppointmentService(this).completeAppointment(appointmentId).enqueue(new Callback<Map<String, Object>>() {
+            @Override
+            public void onResponse(Call<Map<String, Object>> call, Response<Map<String, Object>> response) {
+            }
+
+            @Override
+            public void onFailure(Call<Map<String, Object>> call, Throwable t) {
+            }
+        });
+    }
+
+    private int dp2px(int dp) {
+        return (int) (dp * getResources().getDisplayMetrics().density + 0.5f);
+    }
+
     private void buildStepIndicator() {
         stepIndicator.removeAllViews();
+        int circleSize = dp2px(40);
         for (int i = 0; i < titles.length; i++) {
             TextView circle = new TextView(this);
-            circle.setLayoutParams(new LinearLayout.LayoutParams(96, 96));
-            circle.setPadding(0, 0, 0, 0);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(circleSize, circleSize);
+            params.gravity = android.view.Gravity.CENTER_VERTICAL;
+            circle.setLayoutParams(params);
             circle.setText(String.valueOf(i + 1));
             circle.setGravity(android.view.Gravity.CENTER);
             circle.setTextSize(16);
             circle.setTypeface(null, android.graphics.Typeface.BOLD);
             circle.setTextColor(ContextCompat.getColor(this, R.color.white));
             circle.setBackground(ContextCompat.getDrawable(this, R.drawable.bg_step_inactive));
+            circle.setElevation(dp2px(2));
 
             stepIndicator.addView(circle);
 
             if (i < titles.length - 1) {
                 View line = new View(this);
-                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(0, 4, 1);
-                lp.setMargins(8, 0, 8, 0);
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(0, dp2px(3), 1);
+                lp.setMargins(dp2px(6), 0, dp2px(6), 0);
                 lp.gravity = android.view.Gravity.CENTER_VERTICAL;
                 line.setLayoutParams(lp);
-                line.setBackgroundColor(ContextCompat.getColor(this, R.color.white));
-                line.setAlpha(0.25f);
+                android.graphics.drawable.GradientDrawable gd = new android.graphics.drawable.GradientDrawable();
+                gd.setShape(android.graphics.drawable.GradientDrawable.RECTANGLE);
+                gd.setCornerRadius(dp2px(2));
+                gd.setColor(ContextCompat.getColor(this, R.color.white));
+                gd.setAlpha((int) (0.25f * 255));
+                line.setBackground(gd);
                 stepIndicator.addView(line);
             }
         }
@@ -377,7 +450,7 @@ public class ExamineActivity extends AppCompatActivity {
                 args.putLong("recordId", recordId);
                 fragment.setArguments(args);
                 break;
-            case 1: fragment = new ExamineSymptomsFragment(); break;
+            case 1: fragment = new ExamineSkinLesionFragment(); break;
             case 2: fragment = new ExamineDiagnosisFragment(); break;
             case 3:
                 fragment = new ExaminePrescriptionFragment();
@@ -406,18 +479,22 @@ public class ExamineActivity extends AppCompatActivity {
             View child = stepIndicator.getChildAt(i);
             if (child instanceof TextView) {
                 TextView circle = (TextView) child;
-                if (i / 2 < currentStep) {
+                int stepIndex = i / 2;
+                if (stepIndex < currentStep) {
                     circle.setText("✓");
                     circle.setBackground(ContextCompat.getDrawable(this, R.drawable.bg_step_active));
                     circle.setTextColor(ContextCompat.getColor(this, R.color.primary));
-                } else if (i / 2 == currentStep) {
-                    circle.setText(String.valueOf((i / 2) + 1));
+                    circle.setElevation(dp2px(3));
+                } else if (stepIndex == currentStep) {
+                    circle.setText(String.valueOf(stepIndex + 1));
                     circle.setBackground(ContextCompat.getDrawable(this, R.drawable.bg_step_active));
                     circle.setTextColor(ContextCompat.getColor(this, R.color.primary));
+                    circle.setElevation(dp2px(3));
                 } else {
-                    circle.setText(String.valueOf((i / 2) + 1));
+                    circle.setText(String.valueOf(stepIndex + 1));
                     circle.setBackground(ContextCompat.getDrawable(this, R.drawable.bg_step_inactive));
                     circle.setTextColor(ContextCompat.getColor(this, R.color.white));
+                    circle.setElevation(0);
                 }
             } else if (child instanceof View && child != stepIndicator) {
                 View line = child;
@@ -430,13 +507,17 @@ public class ExamineActivity extends AppCompatActivity {
                 }
                 if (lineIndex != -1) {
                     int stepBeforeLine = lineIndex / 2;
+                    android.graphics.drawable.GradientDrawable gd = new android.graphics.drawable.GradientDrawable();
+                    gd.setShape(android.graphics.drawable.GradientDrawable.RECTANGLE);
+                    gd.setCornerRadius(dp2px(2));
                     if (stepBeforeLine < currentStep) {
-                        line.setBackgroundColor(ContextCompat.getColor(this, R.color.primary));
-                        line.setAlpha(1.0f);
+                        gd.setColor(ContextCompat.getColor(this, R.color.primary));
+                        gd.setAlpha(255);
                     } else {
-                        line.setBackgroundColor(ContextCompat.getColor(this, R.color.white));
-                        line.setAlpha(0.25f);
+                        gd.setColor(ContextCompat.getColor(this, R.color.white));
+                        gd.setAlpha((int) (0.25f * 255));
                     }
+                    line.setBackground(gd);
                 }
             }
         }

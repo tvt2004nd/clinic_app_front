@@ -34,7 +34,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class DoctorScheduleFragment extends Fragment {
-    private PendingAppointmentAdapter adapter;
+    private DoctorDashboardAppointmentAdapter adapter;
     private View layoutEmpty;
     private RecyclerView rv;
     private LocalDate selectedDate;
@@ -70,8 +70,8 @@ public class DoctorScheduleFragment extends Fragment {
 
         rv.setLayoutManager(new LinearLayoutManager(requireContext()));
 
-        adapter = new PendingAppointmentAdapter(new ArrayList<>(),
-                new PendingAppointmentAdapter.ActionListener() {
+        adapter = new DoctorDashboardAppointmentAdapter(new ArrayList<>(),
+                new DoctorDashboardAppointmentAdapter.ActionListener() {
                     @Override
                     public void onConfirm(AppointmentResponse appt) {
                         confirmAppointment(appt);
@@ -82,6 +82,17 @@ public class DoctorScheduleFragment extends Fragment {
                         android.content.Intent intent = new android.content.Intent(requireContext(), ExamineActivity.class);
                         intent.putExtra("appointmentId", appt.appointmentId);
                         startActivity(intent);
+                    }
+
+                    @Override
+                    public void onViewRecord(AppointmentResponse appt) {
+                        if (appt.recordId != null) {
+                            android.content.Intent intent = new android.content.Intent(requireContext(), com.dermacare.clinic.patient.RecordDetailActivity.class);
+                            intent.putExtra("recordId", appt.recordId.longValue());
+                            startActivity(intent);
+                        } else {
+                            Toast.makeText(requireContext(), "Không tìm thấy hồ sơ bệnh án", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
         rv.setAdapter(adapter);
@@ -238,8 +249,7 @@ public class DoctorScheduleFragment extends Fragment {
                             List<AppointmentResponse> list = new ArrayList<>();
                             for (AppointmentResponse a : response.body()) {
                                 if ("PENDING".equals(a.status)
-                                        || "CONFIRMED".equals(a.status)
-                                        || "CHECKED_IN".equals(a.status)) {
+                                        || "CONFIRMED".equals(a.status)) {
                                     list.add(a);
                                 }
                             }

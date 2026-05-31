@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -18,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.dermacare.clinic.R;
 import com.dermacare.clinic.data.api.ApiClient;
 import com.dermacare.clinic.data.api.model.AppointmentResponse;
+import com.dermacare.clinic.patient.RecordDetailActivity;
 import com.dermacare.clinic.util.SessionManager;
 
 import java.time.LocalDate;
@@ -88,6 +90,23 @@ public class DoctorDashboardFragment extends Fragment {
                         Intent intent = new Intent(requireContext(), ExamineActivity.class);
                         intent.putExtra("appointmentId", appt.appointmentId);
                         startActivity(intent);
+                    }
+
+                    @Override
+                    public void onViewRecord(AppointmentResponse appt) {
+                        try {
+                            if (appt.recordId != null) {
+                                Log.d("DASHBOARD", "Viewing record: " + appt.recordId + " for " + appt.patientName);
+                                Intent intent = new Intent(requireContext(), RecordDetailActivity.class);
+                                intent.putExtra("recordId", appt.recordId.longValue());
+                                startActivity(intent);
+                            } else {
+                                Toast.makeText(requireContext(), "Không tìm thấy hồ sơ bệnh án", Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (Exception e) {
+                            Log.e("DASHBOARD", "Error viewing record", e);
+                            Toast.makeText(requireContext(), "Lỗi: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                        }
                     }
                 });
         rv.setAdapter(adapter);
@@ -193,7 +212,7 @@ public class DoctorDashboardFragment extends Fragment {
                         if (response.isSuccessful() && response.body() != null) {
                             allAppointments = response.body();
 
-                            // Only show CONFIRMED appointments in "Lịch khám hôm nay"
+                            // Show PENDING/CONFIRMED + today's COMPLETED
                             List<AppointmentResponse> confirmedAppts = new ArrayList<>();
                             int todayCount = 0;
                             int pendingCount = 0;
@@ -202,9 +221,8 @@ public class DoctorDashboardFragment extends Fragment {
                             String todayStr = LocalDate.now().toString();
 
                             for (AppointmentResponse a : allAppointments) {
-                                // Show today's appointments or pending appointments in dashboard
-                                boolean isPendingOrConfirmed = "PENDING".equals(a.status) || "CONFIRMED".equals(a.status) || "CHECKED_IN".equals(a.status);
-                                if (isPendingOrConfirmed && ("PENDING".equals(a.status) || todayStr.equals(a.date))) {
+                                boolean isActive = "PENDING".equals(a.status) || "CONFIRMED".equals(a.status) || (a.date != null && a.date.equals(todayStr) && "COMPLETED".equals(a.status));
+                                if (isActive) {
                                     confirmedAppts.add(a);
                                 }
                                 if (todayStr.equals(a.date)) {

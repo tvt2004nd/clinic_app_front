@@ -12,4 +12,5 @@ public class AppointmentResponse {
     public String time;
     public String status;
     public String reason;
+    public Long recordId;
 }

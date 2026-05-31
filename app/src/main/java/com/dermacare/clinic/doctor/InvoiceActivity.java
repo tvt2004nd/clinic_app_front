@@ -54,7 +54,7 @@ public class InvoiceActivity extends AppCompatActivity {
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     JsonObject data = response.body();
-                    NumberFormat fmt = NumberFormat.getNumberInstance(Locale.GERMANY);
+                    NumberFormat fmt = NumberFormat.getNumberInstance(new Locale("vi", "VN"));
 
                     tvInvoiceCode.setText("Mã HD: " + getStr(data, "invoiceCode"));
                     tvPatientName.setText("Bệnh nhân: " + getStr(data, "patientName"));

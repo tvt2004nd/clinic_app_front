@@ -34,6 +34,9 @@ public interface AppointmentService {
     @PUT("/api/appointments/{id}/cancel")
     Call<Map<String, Object>> cancelAppointment(@Path("id") Long id, @Body Map<String, String> body);
 
+    @PUT("/api/appointments/{id}/complete")
+    Call<Map<String, Object>> completeAppointment(@Path("id") Long id);
+
     @GET("/api/chat/conversation")
     Call<Map<String, Object>> getConversation(
             @Query("doctorId") Long doctorId,

@@ -35,7 +35,7 @@ public class ApiClient {
  
             // Logging Interceptor for HTTP Traffic inspection
             HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-            logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+            logging.setLevel(HttpLoggingInterceptor.Level.BASIC);
             httpClient.addInterceptor(logging);
  
             retrofit = new Retrofit.Builder()

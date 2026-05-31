@@ -15,11 +15,10 @@ import com.dermacare.clinic.R;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputEditText;
 
-import java.util.Locale;
 
 public class ExamineDiagnosisFragment extends Fragment implements ExamineStep {
 
-    private TextInputEditText edtDiseaseName, edtIcdCode, edtTreatmentPlan, edtDiagnosisNote;
+    private TextInputEditText edtDiseaseName, edtTreatmentPlan, edtDiagnosisNote;
     private MaterialAutoCompleteTextView actDiagnosisType;
 
     @Nullable
@@ -28,7 +27,6 @@ public class ExamineDiagnosisFragment extends Fragment implements ExamineStep {
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_examine_diagnosis, container, false);
         edtDiseaseName = view.findViewById(R.id.edtDiseaseName);
-        edtIcdCode = view.findViewById(R.id.edtIcdCode);
         edtTreatmentPlan = view.findViewById(R.id.edtTreatmentPlan);
         edtDiagnosisNote = view.findViewById(R.id.edtDiagnosisNote);
         actDiagnosisType = view.findViewById(R.id.actDiagnosisType);
@@ -46,14 +44,9 @@ public class ExamineDiagnosisFragment extends Fragment implements ExamineStep {
                 && edtDiseaseName.getText().toString().trim().length() > 0;
     }
 
-    /** Gộp tên bệnh, ICD, loại chẩn đoán, ghi chú vào finalDiagnosis. */
     public String getFinalDiagnosisText() {
         StringBuilder sb = new StringBuilder();
         appendLine(sb, textOf(edtDiseaseName));
-        String icd = textOf(edtIcdCode);
-        if (!TextUtils.isEmpty(icd)) {
-            sb.append(" (ICD-10: ").append(icd).append(")");
-        }
         String type = textOf(actDiagnosisType);
         if (!TextUtils.isEmpty(type)) {
             sb.append("\nLoại: ").append(type);

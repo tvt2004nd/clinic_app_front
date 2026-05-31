@@ -102,6 +102,28 @@ public class PatientHomeFragment extends Fragment {
 
         view.findViewById(R.id.searchBar).setOnClickListener(v ->
                 Toast.makeText(requireContext(), "Tìm kiếm bác sĩ...", Toast.LENGTH_SHORT).show());
+
+        view.findViewById(R.id.btnQuickAppointments).setOnClickListener(v ->
+                navigateToTab(R.id.nav_appointments));
+
+        view.findViewById(R.id.btnQuickInvoices).setOnClickListener(v -> {
+            if (getActivity() != null) {
+                getActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.nav_host_patient, new PatientInvoicesFragment())
+                        .addToBackStack("invoices")
+                        .commit();
+            }
+        });
+
+        view.findViewById(R.id.btnQuickAI).setOnClickListener(v ->
+                navigateToTab(R.id.nav_ai));
+    }
+
+    private void navigateToTab(int tabId) {
+        if (getActivity() instanceof PatientMainActivity) {
+            ((PatientMainActivity) getActivity()).selectTab(tabId);
+        }
     }
 
     private void fetchAndShowSchedules(com.dermacare.clinic.model.Doctor doctor) {
