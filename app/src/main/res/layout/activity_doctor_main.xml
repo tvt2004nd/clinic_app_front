@@ -15,22 +15,26 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.card.MaterialCardView
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginBottom="24dp"
-        app:cardCornerRadius="100dp"
-        app:cardElevation="20dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="20dp"
         app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="28dp"
+        app:cardElevation="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:strokeWidth="0dp">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:strokeColor="#E8EEF4"
+        app:strokeWidth="1dp">
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottomNavDoctor"
             style="@style/Widget.DermaCare.BottomNav"
             android:layout_width="match_parent"
-            android:layout_height="72dp"
-            app:itemIconSize="26dp"
+            android:layout_height="60dp"
+            app:itemIconSize="24dp"
+            app:itemIconTint="@color/bottom_nav_icon_color"
             app:labelVisibilityMode="unlabeled"
             app:menu="@menu/menu_doctor_bottom" />
     </com.google.android.material.card.MaterialCardView>

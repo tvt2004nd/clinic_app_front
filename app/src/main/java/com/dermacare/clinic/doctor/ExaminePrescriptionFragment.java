@@ -31,7 +31,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ExaminePrescriptionFragment extends Fragment implements ExamineStep {
-    private TextInputEditText edtConsultationFee;
+    private TextView tvConsultationFee;
+    private long consultationFeeAmount;
     private ListView lvPrescription;
     private List<PrescriptionItem> prescriptionItems = new ArrayList<>();
     private PrescriptionAdapter prescriptionAdapter;
@@ -61,7 +62,7 @@ public class ExaminePrescriptionFragment extends Fragment implements ExamineStep
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_examine_prescription, container, false);
-        edtConsultationFee = view.findViewById(R.id.edtConsultationFee);
+        tvConsultationFee = view.findViewById(R.id.tvConsultationFee);
         MaterialButton btnAddMedicine = view.findViewById(R.id.btnAddMedicine);
         lvPrescription = view.findViewById(R.id.lvPrescription);
 
@@ -70,7 +71,22 @@ public class ExaminePrescriptionFragment extends Fragment implements ExamineStep
 
         btnAddMedicine.setOnClickListener(v -> showAddMedicineDialog());
 
+        if (getActivity() instanceof ExamineActivity) {
+            setConsultationFee(((ExamineActivity) getActivity()).getConsultationFeeAmount());
+        }
+
         return view;
+    }
+
+    public void setConsultationFee(long amount) {
+        consultationFeeAmount = amount;
+        if (tvConsultationFee != null) {
+            if (amount > 0) {
+                tvConsultationFee.setText(String.format("%,d ₫", amount));
+            } else {
+                tvConsultationFee.setText("—");
+            }
+        }
     }
 
     private void showAddMedicineDialog() {
@@ -233,11 +249,11 @@ public class ExaminePrescriptionFragment extends Fragment implements ExamineStep
 
     @Override
     public boolean isValid() {
-        return edtConsultationFee != null && edtConsultationFee.getText().toString().trim().length() > 0;
+        return consultationFeeAmount > 0;
     }
 
     public String getConsultationFee() {
-        return edtConsultationFee != null ? edtConsultationFee.getText().toString().trim() : "";
+        return consultationFeeAmount > 0 ? String.valueOf(consultationFeeAmount) : "";
     }
 
     public JsonArray getPrescriptionItemsJson() {

@@ -20,7 +20,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Thêm thuốc và nhập giá khám"
+        android:text="Thêm thuốc — phí khám lấy theo bảng giá của bạn"
         android:textColor="@color/text_muted"
         android:textSize="14sp"
         android:layout_marginBottom="16dp"/>
@@ -43,32 +43,46 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Phí khám bệnh *"
-                android:textSize="15sp"
-                android:textStyle="bold"
+                android:layout_marginBottom="4dp"
+                android:text="Phí khám bệnh"
                 android:textColor="@color/text_primary"
-                android:layout_marginBottom="10dp"/>
+                android:textSize="15sp"
+                android:textStyle="bold" />
 
-            <com.google.android.material.textfield.TextInputLayout
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:text="Tự động theo giá đặt của bác sĩ đang khám"
+                android:textColor="@color/text_muted"
+                android:textSize="12sp" />
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:boxStrokeColor="@color/primary"
-                app:boxStrokeWidth="1dp"
-                app:boxStrokeWidthFocused="2dp"
-                app:hintTextColor="@color/primary"
-                app:boxBackgroundColor="@color/background"
-                app:shapeAppearanceOverlay="@style/ShapeAppearance.DermaCare.Medium"
-                app:prefixText="VNĐ">
+                android:background="@color/primary_soft"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="14dp">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edtConsultationFee"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:hint="Nhập giá khám"
-                    android:inputType="number"
-                    android:textColor="@color/text_primary"
-                    android:textSize="15sp" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_weight="1"
+                    android:text="Phí khám"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/tvConsultationFee"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="—"
+                    android:textColor="@color/primary"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 

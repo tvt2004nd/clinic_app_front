@@ -82,10 +82,12 @@
     </style>
 
     <style name="Widget.DermaCare.BottomNav" parent="Widget.Material3.BottomNavigationView">
-        <item name="android:background">@color/surface</item>
-        <item name="itemIconTint">@color/primary</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="itemIconTint">@color/bottom_nav_icon_color</item>
         <item name="itemTextColor">@color/text_secondary</item>
-        <item name="itemRippleColor">@color/primary_container</item>
+        <item name="itemRippleColor">@color/primary_soft</item>
+        <item name="itemPaddingTop">8dp</item>
+        <item name="itemPaddingBottom">8dp</item>
     </style>
 
     <!-- Typography -->

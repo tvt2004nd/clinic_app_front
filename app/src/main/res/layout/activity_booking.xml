@@ -104,6 +104,15 @@
                     android:layout_marginTop="2dp"
                     android:textColor="#CCE0F2F1"
                     android:textSize="13sp" />
+
+                <TextView
+                    android:id="@+id/tvBookingFee"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:textColor="@color/accent_gold"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

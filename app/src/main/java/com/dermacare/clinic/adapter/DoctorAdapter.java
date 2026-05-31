@@ -50,6 +50,7 @@ public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.Holder> {
         holder.tvRating.setText(d.rating);
         holder.tvAvailable.setVisibility(d.availableToday ? View.VISIBLE : View.GONE);
         holder.badgeAvailable.setVisibility(d.availableToday ? View.VISIBLE : View.GONE);
+        holder.tvFee.setText(String.format("%,.0f₫", d.fee));
 
         // Build initials from name
         String initials = "";
@@ -108,6 +109,7 @@ public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.Holder> {
         final TextView tvRating;
         final TextView tvAvailable;
         final TextView tvAvatarInitials;
+        final TextView tvFee;
         final View badgeAvailable;
 
         Holder(@NonNull View itemView) {
@@ -118,6 +120,7 @@ public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.Holder> {
             tvRating = itemView.findViewById(R.id.tvRating);
             tvAvailable = itemView.findViewById(R.id.tvAvailable);
             tvAvatarInitials = itemView.findViewById(R.id.tvAvatarInitials);
+            tvFee = itemView.findViewById(R.id.tvFee);
             badgeAvailable = itemView.findViewById(R.id.badgeAvailable);
         }
     }

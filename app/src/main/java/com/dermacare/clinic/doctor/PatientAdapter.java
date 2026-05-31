@@ -9,19 +9,20 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dermacare.clinic.R;
-import com.dermacare.clinic.data.api.model.AppointmentResponse;
+import com.dermacare.clinic.data.api.ApiClient;
+import com.dermacare.clinic.data.api.model.DoctorPatientResponse;
 
 import java.util.List;
 
 public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.Holder> {
 
-    private List<AppointmentResponse> items;
+    private List<DoctorPatientResponse> items;
 
-    public PatientAdapter(List<AppointmentResponse> items) {
+    public PatientAdapter(List<DoctorPatientResponse> items) {
         this.items = items;
     }
 
-    public void setData(List<AppointmentResponse> data) {
+    public void setData(List<DoctorPatientResponse> data) {
         this.items = data;
         notifyDataSetChanged();
     }
@@ -36,17 +37,16 @@ public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.Holder> 
 
     @Override
     public void onBindViewHolder(@NonNull Holder holder, int position) {
-        AppointmentResponse appt = items.get(position);
+        DoctorPatientResponse patient = items.get(position);
 
-        String name = appt.patientName != null ? appt.patientName : "Bệnh nhân";
+        String name = patient.fullName != null ? patient.fullName : "Bệnh nhân";
         holder.tvName.setText(name);
 
-        String phone = appt.patientPhone != null && !appt.patientPhone.isEmpty() ? appt.patientPhone : "Chưa cập nhật";
+        String phone = patient.phone != null && !patient.phone.isEmpty() ? patient.phone : "Chưa cập nhật";
         holder.tvPhone.setText(phone);
-        
-        holder.tvRecentVisit.setText(appt.date != null ? appt.date : "--");
 
-        // Generate initials
+        holder.tvRecentVisit.setText(patient.lastVisitDate != null ? patient.lastVisitDate : "--");
+
         String initials = "";
         String[] parts = name.trim().split("\\s+");
         if (parts.length >= 2) {
@@ -59,10 +59,8 @@ public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.Holder> 
         holder.tvInitials.setText(initials.toUpperCase());
 
         holder.btnChat.setOnClickListener(v -> {
-            // Need to fetch or create conversation first via API, but for MVP we can start ChatActivity
-            // and let ChatActivity fetch the conversationId, or we can fetch it here.
-            com.dermacare.clinic.data.api.ApiClient.getAppointmentService(v.getContext())
-                    .getConversation(null, appt.patientId)
+            ApiClient.getAppointmentService(v.getContext())
+                    .getConversation(null, patient.patientId)
                     .enqueue(new retrofit2.Callback<java.util.Map<String, Object>>() {
                         @Override
                         public void onResponse(retrofit2.Call<java.util.Map<String, Object>> call, retrofit2.Response<java.util.Map<String, Object>> response) {

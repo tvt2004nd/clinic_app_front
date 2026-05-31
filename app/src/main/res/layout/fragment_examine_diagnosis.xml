@@ -73,24 +73,47 @@
                         android:textSize="15sp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:boxStrokeColor="@color/primary"
-                    app:boxStrokeWidth="1dp"
-                    app:boxStrokeWidthFocused="2dp"
-                    app:hintTextColor="@color/primary"
-                    app:boxBackgroundColor="@color/background"
-                    app:shapeAppearanceOverlay="@style/ShapeAppearance.DermaCare.Medium">
+                    android:orientation="horizontal">
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/edtDiagnosisType"
-                        android:layout_width="match_parent"
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:hint="Loại chẩn đoán (Chính / Phụ)"
-                        android:textColor="@color/text_primary"
-                        android:textSize="15sp" />
-                </com.google.android.material.textfield.TextInputLayout>
+                        android:layout_marginEnd="8dp"
+                        android:layout_weight="1"
+                        app:boxBackgroundColor="@color/background"
+                        app:boxStrokeColor="@color/primary"
+                        app:shapeAppearanceOverlay="@style/ShapeAppearance.DermaCare.Medium">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/edtIcdCode"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Mã ICD-10"
+                            android:textSize="15sp" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_weight="1"
+                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                        app:boxBackgroundColor="@color/background"
+                        app:boxStrokeColor="@color/primary"
+                        app:shapeAppearanceOverlay="@style/ShapeAppearance.DermaCare.Medium"
+                        android:hint="Loại chẩn đoán">
+
+                        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                            android:id="@+id/actDiagnosisType"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="none"
+                            android:textSize="15sp" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 

@@ -31,10 +31,10 @@ public final class MockData {
 
     public static List<Doctor> doctors() {
         return Arrays.asList(
-                new Doctor(1L, "BS. Nguyễn Trí Đức", "Chuyên khoa Da liễu", "4.8", true, "https://ui-avatars.com/api/?name=ND&background=0D8ABC&color=fff"),
-                new Doctor(2L, "BS. Trần Lê Quyên", "Da liễu Thẩm mỹ", "4.9", true, "https://ui-avatars.com/api/?name=TQ&background=FFB6C1&color=fff"),
-                new Doctor(3L, "BS. Lê Quang Minh", "Bệnh lý Da liễu", "4.7", false, "https://ui-avatars.com/api/?name=LM&background=2E8B57&color=fff"),
-                new Doctor(4L, "BS. Phạm Thu Thủy", "Laser & Phục hồi", "5.0", true, "https://ui-avatars.com/api/?name=PT&background=9370DB&color=fff")
+                new Doctor(1L, "BS. Nguyễn Trí Đức", "Chuyên khoa Da liễu", "4.8", true, "https://ui-avatars.com/api/?name=ND&background=0D8ABC&color=fff", 150000),
+                new Doctor(2L, "BS. Trần Lê Quyên", "Da liễu Thẩm mỹ", "4.9", true, "https://ui-avatars.com/api/?name=TQ&background=FFB6C1&color=fff", 200000),
+                new Doctor(3L, "BS. Lê Quang Minh", "Bệnh lý Da liễu", "4.7", false, "https://ui-avatars.com/api/?name=LM&background=2E8B57&color=fff", 150000),
+                new Doctor(4L, "BS. Phạm Thu Thủy", "Laser & Phục hồi", "5.0", true, "https://ui-avatars.com/api/?name=PT&background=9370DB&color=fff", 250000)
         );
     }
 

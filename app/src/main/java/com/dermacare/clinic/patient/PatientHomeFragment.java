@@ -80,7 +80,8 @@ public class PatientHomeFragment extends Fragment {
                                         dr.specialty,
                                         dr.rating != null ? String.valueOf(dr.rating) : "5.0",
                                         true,
-                                        "https://ui-avatars.com/api/?name=" + safeName + "&background=random&color=fff"
+                                        "https://ui-avatars.com/api/?name=" + safeName + "&background=random&color=fff",
+                                        dr.fee != null ? dr.fee : 150000
                                 ));
                             }
                             doctorAdapter.setDoctors(mappedDoctors);
@@ -127,6 +128,7 @@ public class PatientHomeFragment extends Fragment {
         intent.putExtra(BookingActivity.EXTRA_SPECIALTY, doctor.specialty);
         intent.putExtra(BookingActivity.EXTRA_AVATAR_URL, doctor.avatarUrl);
         intent.putExtra(BookingActivity.EXTRA_INITIALS, initials.toUpperCase());
+        intent.putExtra(BookingActivity.EXTRA_FEE, doctor.fee);
         startActivity(intent);
     }
 }

@@ -7,13 +7,15 @@ public class Doctor {
     public final String rating;
     public final boolean availableToday;
     public final String avatarUrl;
+    public final double fee;
 
-    public Doctor(Long doctorId, String name, String specialty, String rating, boolean availableToday, String avatarUrl) {
+    public Doctor(Long doctorId, String name, String specialty, String rating, boolean availableToday, String avatarUrl, double fee) {
         this.doctorId = doctorId;
         this.name = name;
         this.specialty = specialty;
         this.rating = rating;
         this.availableToday = availableToday;
         this.avatarUrl = avatarUrl;
+        this.fee = fee;
     }
 }

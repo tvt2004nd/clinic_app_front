@@ -100,22 +100,37 @@
                     android:textColor="@color/text_primary"
                     android:layout_marginBottom="14dp"/>
 
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="14dp"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    app:boxStrokeColor="@color/primary"
+                    app:boxBackgroundColor="@color/background"
+                    app:shapeAppearanceOverlay="@style/ShapeAppearance.DermaCare.Medium"
+                    android:hint="Kiểu khởi phát">
+
+                    <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                        android:id="@+id/actOnsetType"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="none"
+                        android:textSize="15sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="14dp">
+                    android:layout_marginBottom="14dp"
+                    android:orientation="horizontal">
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:layout_marginEnd="8dp"
-                        app:boxStrokeColor="@color/primary"
-                        app:boxStrokeWidth="1dp"
-                        app:boxStrokeWidthFocused="2dp"
-                        app:hintTextColor="@color/primary"
+                        android:layout_weight="1"
                         app:boxBackgroundColor="@color/background"
+                        app:boxStrokeColor="@color/primary"
                         app:shapeAppearanceOverlay="@style/ShapeAppearance.DermaCare.Medium">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -123,20 +138,16 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="Vị trí tổn thương"
-                            android:textColor="@color/text_primary"
-                            android:textSize="15sp"/>
+                            android:textSize="15sp" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:layout_marginStart="8dp"
-                        app:boxStrokeColor="@color/primary"
-                        app:boxStrokeWidth="1dp"
-                        app:boxStrokeWidthFocused="2dp"
-                        app:hintTextColor="@color/primary"
+                        android:layout_weight="1"
                         app:boxBackgroundColor="@color/background"
+                        app:boxStrokeColor="@color/primary"
                         app:shapeAppearanceOverlay="@style/ShapeAppearance.DermaCare.Medium">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -144,8 +155,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="Thời gian mắc"
-                            android:textColor="@color/text_primary"
-                            android:textSize="15sp"/>
+                            android:textSize="15sp" />
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
 
@@ -153,41 +163,51 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="14dp"
-                    app:boxStrokeColor="@color/primary"
-                    app:boxStrokeWidth="1dp"
-                    app:boxStrokeWidthFocused="2dp"
-                    app:hintTextColor="@color/primary"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                     app:boxBackgroundColor="@color/background"
-                    app:shapeAppearanceOverlay="@style/ShapeAppearance.DermaCare.Medium">
+                    app:boxStrokeColor="@color/primary"
+                    app:shapeAppearanceOverlay="@style/ShapeAppearance.DermaCare.Medium"
+                    android:hint="Mức độ">
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/edtSeverity"
+                    <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                        android:id="@+id/actSeverity"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Mức độ (Nhẹ / Trung bình / Nặng)"
-                        android:textColor="@color/text_primary"
-                        android:textSize="15sp"/>
+                        android:inputType="none"
+                        android:textSize="15sp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:boxStrokeColor="@color/primary"
-                    app:boxStrokeWidth="1dp"
-                    app:boxStrokeWidthFocused="2dp"
-                    app:hintTextColor="@color/primary"
+                    android:layout_marginBottom="14dp"
                     app:boxBackgroundColor="@color/background"
+                    app:boxStrokeColor="@color/primary"
+                    app:shapeAppearanceOverlay="@style/ShapeAppearance.DermaCare.Medium">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtTriggers"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Yếu tố kích thích (ánh nắng, mỹ phẩm...)"
+                        android:textSize="15sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:boxBackgroundColor="@color/background"
+                    app:boxStrokeColor="@color/primary"
                     app:shapeAppearanceOverlay="@style/ShapeAppearance.DermaCare.Medium">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/edtPreviousTreatment"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:gravity="top|start"
                         android:hint="Đã điều trị trước đây?"
                         android:minLines="2"
-                        android:gravity="top|start"
-                        android:textColor="@color/text_primary"
-                        android:textSize="15sp"/>
+                        android:textSize="15sp" />
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>

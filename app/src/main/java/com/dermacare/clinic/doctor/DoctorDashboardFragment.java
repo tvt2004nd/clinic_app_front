@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,7 +21,6 @@ import com.dermacare.clinic.data.api.model.AppointmentResponse;
 import com.dermacare.clinic.util.SessionManager;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,9 +29,9 @@ import java.util.Map;
 
 public class DoctorDashboardFragment extends Fragment {
 
-    private PendingAppointmentAdapter adapter;
+    private DoctorDashboardAppointmentAdapter adapter;
     private RecyclerView rv;
-    private TextView tvTodayCount, tvCompletedCount, tvPendingCount, tvDoctorName, tvGreeting, tvCurrentDate, tvApptCount;
+    private TextView tvTodayCount, tvCompletedCount, tvPendingCount, tvDoctorName, tvGreeting, tvCurrentDate, tvApptCount, tvDoctorInitials;
     private View layoutEmpty;
     private List<AppointmentResponse> allAppointments = new ArrayList<>();
 
@@ -48,20 +48,27 @@ public class DoctorDashboardFragment extends Fragment {
         SessionManager session = new SessionManager(requireContext());
 
         tvDoctorName = view.findViewById(R.id.tvDoctorName);
-        tvDoctorName.setText(session.getName());
+        String doctorName = session.getName();
+        if (doctorName != null && !doctorName.isEmpty() && !doctorName.regionMatches(true, 0, "BS.", 0, 3)) {
+            doctorName = "BS. " + doctorName;
+        }
+        tvDoctorName.setText(doctorName);
+
+        tvDoctorInitials = view.findViewById(R.id.tvDoctorInitials);
+        tvDoctorInitials.setText(getInitials(session.getName()));
 
         tvGreeting = view.findViewById(R.id.tvGreeting);
         tvGreeting.setText(getGreeting());
 
         tvCurrentDate = view.findViewById(R.id.tvCurrentDate);
-        LocalDate today = LocalDate.now();
-        String dayOfWeek = today.getDayOfWeek().getDisplayName(TextStyle.FULL, new Locale("vi", "VN"));
-        String formatted = today.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-        tvCurrentDate.setText(dayOfWeek + ", " + formatted);
+        tvCurrentDate.setText(formatVietnameseDate(LocalDate.now()));
 
-        tvTodayCount = view.findViewById(R.id.tvTodayCount);
-        tvCompletedCount = view.findViewById(R.id.tvCompletedCount);
-        tvPendingCount = view.findViewById(R.id.tvPendingCount);
+        tvTodayCount = bindStatCard(view, R.id.cardStatToday,
+                R.drawable.bg_stat_icon_teal, R.drawable.ic_nav_calendar, 0xFF0D9488, "Hôm nay");
+        tvPendingCount = bindStatCard(view, R.id.cardStatPending,
+                R.drawable.bg_stat_icon_amber, R.drawable.ic_clock, 0xFFD97706, "Chờ duyệt");
+        tvCompletedCount = bindStatCard(view, R.id.cardStatCompleted,
+                R.drawable.bg_stat_icon_green, R.drawable.ic_check_circle, 0xFF059669, "Hoàn tất");
         tvApptCount = view.findViewById(R.id.tvApptCount);
         layoutEmpty = view.findViewById(R.id.layoutEmpty);
 
@@ -69,8 +76,8 @@ public class DoctorDashboardFragment extends Fragment {
         rv.setLayoutManager(new LinearLayoutManager(requireContext()));
         rv.setNestedScrollingEnabled(false);
 
-        adapter = new PendingAppointmentAdapter(new ArrayList<>(),
-                new PendingAppointmentAdapter.ActionListener() {
+        adapter = new DoctorDashboardAppointmentAdapter(new ArrayList<>(),
+                new DoctorDashboardAppointmentAdapter.ActionListener() {
                     @Override
                     public void onConfirm(AppointmentResponse appt) {
                         confirmAppointment(appt);
@@ -109,9 +116,37 @@ public class DoctorDashboardFragment extends Fragment {
 
     private String getGreeting() {
         int hour = java.util.Calendar.getInstance().get(java.util.Calendar.HOUR_OF_DAY);
-        if (hour < 12) return "Chào buổi sáng,";
-        if (hour < 18) return "Chào buổi chiều,";
-        return "Chào buổi tối,";
+        if (hour < 12) return "Chào buổi sáng ☀️";
+        if (hour < 18) return "Chào buổi chiều 🌤️";
+        return "Chào buổi tối 🌙";
+    }
+
+    private static String formatVietnameseDate(LocalDate date) {
+        String dayOfWeek = date.getDayOfWeek().getDisplayName(TextStyle.FULL, new Locale("vi", "VN"));
+        dayOfWeek = dayOfWeek.substring(0, 1).toUpperCase(Locale.ROOT) + dayOfWeek.substring(1);
+        return dayOfWeek + ", " + date.getDayOfMonth() + " Tháng " + date.getMonthValue();
+    }
+
+    private static TextView bindStatCard(View root, int cardId, int iconBgRes, int iconRes,
+                                         int iconTint, String label) {
+        View card = root.findViewById(cardId);
+        card.findViewById(R.id.iconContainer).setBackgroundResource(iconBgRes);
+        ImageView icon = card.findViewById(R.id.ivStatIcon);
+        icon.setImageResource(iconRes);
+        icon.setColorFilter(iconTint);
+        TextView tvLabel = card.findViewById(R.id.tvStatLabel);
+        tvLabel.setText(label);
+        return card.findViewById(R.id.tvStatCount);
+    }
+
+    private static String getInitials(String name) {
+        if (name == null || name.isBlank()) return "?";
+        String cleaned = name.replace("BS.", "").replace("Bs.", "").trim();
+        String[] parts = cleaned.split("\\s+");
+        if (parts.length == 1) {
+            return parts[0].substring(0, Math.min(2, parts[0].length())).toUpperCase(Locale.ROOT);
+        }
+        return ("" + parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase(Locale.ROOT);
     }
 
     private void showNewPatients() {
@@ -119,8 +154,8 @@ public class DoctorDashboardFragment extends Fragment {
         // For simplicity, navigate to the patients tab in DoctorMainActivity
         if (getActivity() instanceof DoctorMainActivity) {
             DoctorMainActivity activity = (DoctorMainActivity) getActivity();
-            activity.navigateToTab(R.id.nav_patients);
-            Toast.makeText(requireContext(), "Xem danh sách bệnh nhân chờ xác nhận",
+            activity.navigateToTab(R.id.nav_schedule);
+            Toast.makeText(requireContext(), "Xem lịch trình để quản lý và xác nhận lịch hẹn",
                     Toast.LENGTH_SHORT).show();
         }
     }
@@ -167,7 +202,9 @@ public class DoctorDashboardFragment extends Fragment {
                             String todayStr = LocalDate.now().toString();
 
                             for (AppointmentResponse a : allAppointments) {
-                                if ("CONFIRMED".equals(a.status)) {
+                                // Show today's appointments or pending appointments in dashboard
+                                boolean isPendingOrConfirmed = "PENDING".equals(a.status) || "CONFIRMED".equals(a.status) || "CHECKED_IN".equals(a.status);
+                                if (isPendingOrConfirmed && ("PENDING".equals(a.status) || todayStr.equals(a.date))) {
                                     confirmedAppts.add(a);
                                 }
                                 if (todayStr.equals(a.date)) {
@@ -186,7 +223,7 @@ public class DoctorDashboardFragment extends Fragment {
                             if (tvTodayCount != null) tvTodayCount.setText(String.valueOf(todayCount));
                             if (tvPendingCount != null) tvPendingCount.setText(String.valueOf(pendingCount));
                             if (tvCompletedCount != null) tvCompletedCount.setText(String.valueOf(completedCount));
-                            if (tvApptCount != null) tvApptCount.setText(confirmedAppts.size() + " lịch hẹn");
+                            if (tvApptCount != null) tvApptCount.setText(todayCount + " lịch hẹn");
 
                             if (layoutEmpty != null) {
                                 layoutEmpty.setVisibility(confirmedAppts.isEmpty() ? View.VISIBLE : View.GONE);

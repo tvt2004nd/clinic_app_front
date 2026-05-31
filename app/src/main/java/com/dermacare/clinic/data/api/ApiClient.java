@@ -74,4 +74,12 @@ public class ApiClient {
     public static ChatService getChatService(Context context) {
         return getClient(context).create(ChatService.class);
     }
+
+    public static DoctorService getDoctorService(Context context) {
+        return getClient(context).create(DoctorService.class);
+    }
+
+    public static PatientService getPatientService(Context context) {
+        return getClient(context).create(PatientService.class);
+    }
 }

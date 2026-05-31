@@ -29,7 +29,7 @@ public class ExamineActivity extends AppCompatActivity {
     private TextView tvStepTitle;
     private Long recordId = -1L;
     private boolean isLoading = true;
-    private String consultationFee = "0";
+    private long consultationFeeAmount = 0L;
 
     private final String[] titles = {
         "Tiếp nhận bệnh nhân",
@@ -67,7 +67,11 @@ public class ExamineActivity extends AppCompatActivity {
 
             Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.examine_container);
             if (currentFragment instanceof ExamineStep && !((ExamineStep) currentFragment).isValid()) {
-                Toast.makeText(this, "Vui lòng điền đầy đủ thông tin", Toast.LENGTH_SHORT).show();
+                String msg = "Vui lòng điền đầy đủ thông tin";
+                if (currentStep == 3 && consultationFeeAmount <= 0) {
+                    msg = "Không lấy được phí khám của bác sĩ. Vui lòng thử lại hoặc liên hệ quản trị.";
+                }
+                Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -107,6 +111,12 @@ public class ExamineActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     JsonObject data = response.body();
                     recordId = data.get("recordId").getAsLong();
+                    if (data.has("doctor") && data.get("doctor").isJsonObject()) {
+                        com.google.gson.JsonObject doctor = data.getAsJsonObject("doctor");
+                        if (doctor.has("consultationFee") && !doctor.get("consultationFee").isJsonNull()) {
+                            consultationFeeAmount = (long) doctor.get("consultationFee").getAsDouble();
+                        }
+                    }
                     isLoading = false;
                     btnNext.setEnabled(true);
                     btnNext.setText("Tiếp tục");
@@ -138,20 +148,30 @@ public class ExamineActivity extends AppCompatActivity {
         switch (step) {
             case 1: // Symptoms
                 if (fragment instanceof ExamineSymptomsFragment) {
-                    body.addProperty("symptoms", ((ExamineSymptomsFragment) fragment).getSymptomsText());
+                    body.addProperty("symptoms", ((ExamineSymptomsFragment) fragment).getCombinedSymptoms());
                     call = ApiClient.getExaminationService(this).updateSymptoms(recordId, body);
                 }
                 break;
             case 2: // Diagnosis
                 if (fragment instanceof ExamineDiagnosisFragment) {
-                    body.addProperty("finalDiagnosis", ((ExamineDiagnosisFragment) fragment).getDiagnosisText());
+                    ExamineDiagnosisFragment df = (ExamineDiagnosisFragment) fragment;
+                    body.addProperty("finalDiagnosis", df.getFinalDiagnosisText());
+                    String plan = df.getTreatmentPlan();
+                    if (plan != null && !plan.isEmpty()) {
+                        body.addProperty("treatmentPlan", plan);
+                    }
                     call = ApiClient.getExaminationService(this).updateFinalDiagnosis(recordId, body);
                 }
                 break;
             case 3: // Prescription
                 if (fragment instanceof ExaminePrescriptionFragment) {
                     ExaminePrescriptionFragment pf = (ExaminePrescriptionFragment) fragment;
-                    consultationFee = pf.getConsultationFee();
+                    if (pf.getConsultationFee() != null && !pf.getConsultationFee().isEmpty()) {
+                        try {
+                            consultationFeeAmount = Long.parseLong(pf.getConsultationFee().replaceAll("[^0-9]", ""));
+                        } catch (NumberFormatException ignored) {
+                        }
+                    }
                     JsonArray items = pf.getPrescriptionItemsJson();
                     body.add("items", items);
                     call = ApiClient.getExaminationService(this).updatePrescription(recordId, body);
@@ -275,10 +295,9 @@ public class ExamineActivity extends AppCompatActivity {
     private void createInvoiceAfterComplete() {
         JsonObject body = new JsonObject();
         body.addProperty("recordId", recordId);
-        try {
-            long fee = Long.parseLong(consultationFee.replaceAll("[^0-9]", ""));
-            body.addProperty("consultationFee", fee);
-        } catch (Exception e) {
+        if (consultationFeeAmount > 0) {
+            body.addProperty("consultationFee", consultationFeeAmount);
+        } else {
             body.addProperty("consultationFee", 150000);
         }
 
@@ -360,7 +379,9 @@ public class ExamineActivity extends AppCompatActivity {
                 break;
             case 1: fragment = new ExamineSymptomsFragment(); break;
             case 2: fragment = new ExamineDiagnosisFragment(); break;
-            case 3: fragment = new ExaminePrescriptionFragment(); break;
+            case 3:
+                fragment = new ExaminePrescriptionFragment();
+                break;
             case 4: fragment = new ExamineFollowUpFragment(); break;
             default: fragment = new ExamineAdmissionFragment();
         }
@@ -374,6 +395,10 @@ public class ExamineActivity extends AppCompatActivity {
                 .commit();
 
         updateStepIndicator();
+    }
+
+    public long getConsultationFeeAmount() {
+        return consultationFeeAmount;
     }
 
     private void updateStepIndicator() {
