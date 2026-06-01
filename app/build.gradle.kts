@@ -77,4 +77,15 @@ dependencies {
 
     // Stripe
     implementation("com.stripe:stripe-android:20.49.0")
+
+    // PDF generation support
+    implementation("com.itextpdf:kernel:7.2.5") {
+        exclude(group = "org.bouncycastle", module = "bcprov-jdk15on")
+    }
+    implementation("com.itextpdf:layout:7.2.5") {
+        exclude(group = "org.bouncycastle", module = "bcprov-jdk15on")
+    }
+    implementation("com.itextpdf:io:7.2.5") {
+        exclude(group = "org.bouncycastle", module = "bcprov-jdk15on")
+    }
 }

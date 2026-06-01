@@ -2,12 +2,16 @@ package com.dermacare.clinic.data;
 
 import com.dermacare.clinic.R;
 import com.dermacare.clinic.model.Doctor;
+import com.dermacare.clinic.model.Patient;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public final class MockData {
     private MockData() {}
+
+    private static final List<Patient> PATIENTS = new ArrayList<>();
 
     public static List<String> specialties() {
         return Arrays.asList(
@@ -66,5 +70,13 @@ public final class MockData {
                 new String[]{"Trần Thị B", "45 tuổi — Nám da", "15/05/2026"},
                 new String[]{"Lê Văn C", "28 tuổi — Dị ứng", "12/05/2026"}
         );
+    }
+
+    public static void addPatient(Patient patient) {
+        PATIENTS.add(patient);
+    }
+
+    public static List<Patient> getPatients() {
+        return new ArrayList<>(PATIENTS);
     }
 }
