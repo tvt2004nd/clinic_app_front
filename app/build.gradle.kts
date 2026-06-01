@@ -69,4 +69,12 @@ dependencies {
  
     // Google Authentication
     implementation(libs.play.services.auth)
+
+    // STOMP over WebSocket for Real-time Chat
+    implementation("com.github.NaikSoftware:StompProtocolAndroid:1.6.6")
+    implementation("io.reactivex.rxjava2:rxjava:2.2.21")
+    implementation("io.reactivex.rxjava2:rxandroid:2.1.1")
+
+    // Stripe
+    implementation("com.stripe:stripe-android:20.49.0")
 }

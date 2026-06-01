@@ -59,15 +59,99 @@ public class PatientHomeFragment extends Fragment {
 
         RecyclerView rvDoctors = view.findViewById(R.id.rvDoctors);
         rvDoctors.setLayoutManager(new LinearLayoutManager(requireContext()));
-        rvDoctors.setAdapter(new DoctorAdapter(MockData.doctors()));
+        DoctorAdapter doctorAdapter = new DoctorAdapter(new java.util.ArrayList<>(), doctor -> {
+            fetchAndShowSchedules(doctor);
+        });
+        rvDoctors.setAdapter(doctorAdapter);
+
+        // Fetch real doctors
+        com.dermacare.clinic.data.api.ApiClient.getPublicService(requireContext()).getDoctors()
+                .enqueue(new retrofit2.Callback<List<com.dermacare.clinic.data.api.model.DoctorResponse>>() {
+                    @Override
+                    public void onResponse(retrofit2.Call<List<com.dermacare.clinic.data.api.model.DoctorResponse>> call,
+                                           retrofit2.Response<List<com.dermacare.clinic.data.api.model.DoctorResponse>> response) {
+                        if (response.isSuccessful() && response.body() != null) {
+                            List<com.dermacare.clinic.model.Doctor> mappedDoctors = new java.util.ArrayList<>();
+                            for (com.dermacare.clinic.data.api.model.DoctorResponse dr : response.body()) {
+                                String safeName = dr.fullName != null && !dr.fullName.isEmpty() ? dr.fullName.substring(0, 1) : "D";
+                                mappedDoctors.add(new com.dermacare.clinic.model.Doctor(
+                                        dr.doctorId,
+                                        dr.fullName,
+                                        dr.specialty,
+                                        dr.rating != null ? String.valueOf(dr.rating) : "5.0",
+                                        true,
+                                        "https://ui-avatars.com/api/?name=" + safeName + "&background=random&color=fff",
+                                        dr.fee != null ? dr.fee : 150000
+                                ));
+                            }
+                            doctorAdapter.setDoctors(mappedDoctors);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(retrofit2.Call<List<com.dermacare.clinic.data.api.model.DoctorResponse>> call, Throwable t) {
+                        Toast.makeText(requireContext(), "Lỗi tải danh sách bác sĩ", Toast.LENGTH_SHORT).show();
+                    }
+                });
 
         view.findViewById(R.id.btnBook).setOnClickListener(v ->
-                Toast.makeText(requireContext(), R.string.toast_book_upcoming, Toast.LENGTH_SHORT).show());
+                Toast.makeText(requireContext(), "Vui lòng chọn một bác sĩ từ danh sách", Toast.LENGTH_SHORT).show());
 
         view.findViewById(R.id.btnNotification).setOnClickListener(v ->
                 Toast.makeText(requireContext(), R.string.toast_notifications_upcoming, Toast.LENGTH_SHORT).show());
 
         view.findViewById(R.id.searchBar).setOnClickListener(v ->
                 Toast.makeText(requireContext(), "Tìm kiếm bác sĩ...", Toast.LENGTH_SHORT).show());
+
+        view.findViewById(R.id.btnQuickAppointments).setOnClickListener(v ->
+                navigateToTab(R.id.nav_appointments));
+
+        view.findViewById(R.id.btnQuickInvoices).setOnClickListener(v -> {
+            if (getActivity() != null) {
+                getActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.nav_host_patient, new PatientInvoicesFragment())
+                        .addToBackStack("invoices")
+                        .commit();
+            }
+        });
+
+        view.findViewById(R.id.btnQuickAI).setOnClickListener(v ->
+                navigateToTab(R.id.nav_ai));
+    }
+
+    private void navigateToTab(int tabId) {
+        if (getActivity() instanceof PatientMainActivity) {
+            ((PatientMainActivity) getActivity()).selectTab(tabId);
+        }
+    }
+
+    private void fetchAndShowSchedules(com.dermacare.clinic.model.Doctor doctor) {
+        if (doctor.doctorId == null) {
+            Toast.makeText(requireContext(), "Bác sĩ này chưa có lịch hẹn", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Build initials
+        String initials = "";
+        if (doctor.name != null && !doctor.name.isEmpty()) {
+            String[] parts = doctor.name.trim().split("\\s+");
+            if (parts.length >= 2) {
+                initials = String.valueOf(parts[parts.length - 2].charAt(0))
+                        + parts[parts.length - 1].charAt(0);
+            } else {
+                initials = doctor.name.substring(0, Math.min(2, doctor.name.length()));
+            }
+        }
+
+        android.content.Intent intent = new android.content.Intent(requireContext(), BookingActivity.class);
+        intent.putExtra(BookingActivity.EXTRA_DOCTOR_ID, doctor.doctorId);
+        intent.putExtra(BookingActivity.EXTRA_DOCTOR_NAME, doctor.name);
+        intent.putExtra(BookingActivity.EXTRA_SPECIALTY, doctor.specialty);
+        intent.putExtra(BookingActivity.EXTRA_AVATAR_URL, doctor.avatarUrl);
+        intent.putExtra(BookingActivity.EXTRA_INITIALS, initials.toUpperCase());
+        intent.putExtra(BookingActivity.EXTRA_FEE, doctor.fee);
+        startActivity(intent);
     }
 }
+

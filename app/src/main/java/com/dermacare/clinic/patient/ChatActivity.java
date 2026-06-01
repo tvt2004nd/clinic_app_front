@@ -13,9 +13,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dermacare.clinic.R;
-import com.dermacare.clinic.adapter.ChatAdapter;
+import com.dermacare.clinic.adapter.AiChatAdapter;
+import com.dermacare.clinic.data.api.AiChatService;
 import com.dermacare.clinic.data.api.ApiClient;
-import com.dermacare.clinic.data.api.ChatService;
 import com.dermacare.clinic.data.api.model.ChatRequest;
 import com.dermacare.clinic.data.api.model.ChatResponse;
 import com.dermacare.clinic.model.ChatMessage;
@@ -38,20 +38,20 @@ public class ChatActivity extends AppCompatActivity {
     private ImageButton btnSend;
     private ProgressBar progressBarChat;
     
-    private ChatAdapter chatAdapter;
+    private AiChatAdapter chatAdapter;
     private List<ChatMessage> messageList;
-    private ChatService chatService;
+    private AiChatService chatService;
     private String sessionUuid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_chat);
+        setContentView(R.layout.activity_ai_chat);
 
         initViews();
         setupRecyclerView();
         
-        chatService = ApiClient.getChatService(this);
+        chatService = ApiClient.getAiChatService(this);
         sessionUuid = UUID.randomUUID().toString(); // Generate unique session for chat
 
         btnSend.setOnClickListener(v -> sendMessage());
@@ -77,7 +77,7 @@ public class ChatActivity extends AppCompatActivity {
 
     private void setupRecyclerView() {
         messageList = new ArrayList<>();
-        chatAdapter = new ChatAdapter(messageList);
+        chatAdapter = new AiChatAdapter(messageList);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setStackFromEnd(true);
         rvChat.setLayoutManager(layoutManager);

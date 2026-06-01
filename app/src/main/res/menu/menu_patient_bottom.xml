@@ -17,6 +17,10 @@
         android:icon="@drawable/ic_nav_ai"
         android:title="@string/tab_ai" />
     <item
+        android:id="@+id/nav_chat"
+        android:icon="@drawable/ic_nav_chat"
+        android:title="@string/tab_chat" />
+    <item
         android:id="@+id/nav_profile"
         android:icon="@drawable/ic_nav_profile"
         android:title="@string/tab_profile" />

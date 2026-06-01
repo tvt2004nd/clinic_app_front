@@ -31,12 +31,10 @@ public final class MockData {
 
     public static List<Doctor> doctors() {
         return Arrays.asList(
-                new Doctor("BS. Nguyễn Minh Anh", "Da liễu tổng quát", "4.9 (128)", true,
-                        "https://i.pravatar.cc/150?u=doctor1"),
-                new Doctor("BS. Trần Hoàng Long", "Nám & tàn nhang", "4.8 (96)", true,
-                        "https://i.pravatar.cc/150?u=doctor2"),
-                new Doctor("BS. Lê Thu Hà", "Da trẻ em", "4.95 (210)", false,
-                        "https://i.pravatar.cc/150?u=doctor3")
+                new Doctor(1L, "BS. Nguyễn Trí Đức", "Chuyên khoa Da liễu", "4.8", true, "https://ui-avatars.com/api/?name=ND&background=0D8ABC&color=fff", 150000),
+                new Doctor(2L, "BS. Trần Lê Quyên", "Da liễu Thẩm mỹ", "4.9", true, "https://ui-avatars.com/api/?name=TQ&background=FFB6C1&color=fff", 200000),
+                new Doctor(3L, "BS. Lê Quang Minh", "Bệnh lý Da liễu", "4.7", false, "https://ui-avatars.com/api/?name=LM&background=2E8B57&color=fff", 150000),
+                new Doctor(4L, "BS. Phạm Thu Thủy", "Laser & Phục hồi", "5.0", true, "https://ui-avatars.com/api/?name=PT&background=9370DB&color=fff", 250000)
         );
     }
 

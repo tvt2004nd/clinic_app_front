@@ -2,8 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
+        android:name=".DermaCareApp"
         android:allowBackup="true"
         android:icon="@drawable/ic_logo_heart"
         android:label="@string/app_name"
@@ -43,17 +45,33 @@
         <activity
             android:name=".patient.PatientMainActivity"
             android:exported="false" />
-            
+
         <activity
             android:name=".patient.ChatActivity"
             android:exported="false"
             android:theme="@style/Theme.DermaCare"
             android:windowSoftInputMode="adjustResize" />
-            
+
+        <activity
+            android:name=".patient.BookingActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
         <activity
             android:name=".doctor.DoctorMainActivity"
             android:exported="false" />
- 
+
+        <activity
+            android:name=".doctor.ExamineActivity"
+            android:exported="false"
+            android:theme="@style/Theme.DermaCare" />
+
+        <activity
+            android:name=".doctor.InvoiceActivity"
+            android:exported="false"
+            android:label="Thanh toán hóa đơn"
+            android:theme="@style/Theme.DermaCare" />
+
         <activity
             android:name=".patient.EditProfileActivity"
             android:exported="false"
@@ -63,5 +81,20 @@
             android:name=".patient.ChangePasswordActivity"
             android:exported="false"
             android:label="Đổi mật khẩu" />
+            
+        <activity
+            android:name=".chat.ChatActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".patient.RecordDetailActivity"
+            android:exported="false"
+            android:theme="@style/Theme.DermaCare" />
+
+        <activity
+            android:name=".patient.PatientInvoiceDetailActivity"
+            android:exported="false"
+            android:theme="@style/Theme.DermaCare" />
     </application>
 </manifest>
