@@ -84,6 +84,14 @@
                         android:text="Chụp hoặc tải ảnh tổn thương da để nhận gợi ý sơ bộ từ mô hình AI."
                         android:textSize="14sp" />
 
+                    <ImageView
+                        android:id="@+id/ivSelectedImage"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:layout_marginTop="16dp"
+                        android:scaleType="centerCrop"
+                        android:visibility="gone" />
+
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnUploadImage"
                         style="@style/Widget.DermaCare.Button.Primary"
@@ -93,6 +101,38 @@
                         android:text="Bắt đầu phân tích"
                         app:icon="@android:drawable/ic_menu_add"
                         app:iconGravity="textStart" />
+
+                    <ProgressBar
+                        android:id="@+id/pbLoading"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:visibility="gone" />
+
+                    <LinearLayout
+                        android:id="@+id/llResultContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginTop="16dp"
+                        android:visibility="gone">
+                        
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Kết quả chẩn đoán sơ bộ:"
+                            android:textStyle="bold"
+                            android:textColor="@color/primary"
+                            android:textSize="16sp" />
+                            
+                        <TextView
+                            android:id="@+id/tvPrediction"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:textSize="16sp"
+                            android:textColor="@color/text_primary" />
+                    </LinearLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 

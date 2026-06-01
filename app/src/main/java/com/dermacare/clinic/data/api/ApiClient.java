@@ -54,4 +54,12 @@ public class ApiClient {
     public static UserService getUserService(Context context) {
         return getClient(context).create(UserService.class);
     }
+
+    public static AiDiagnosisService getAiDiagnosisService(Context context) {
+        return getClient(context).create(AiDiagnosisService.class);
+    }
+
+    public static ChatService getChatService(Context context) {
+        return getClient(context).create(ChatService.class);
+    }
 }

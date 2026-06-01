@@ -43,7 +43,13 @@
         <activity
             android:name=".patient.PatientMainActivity"
             android:exported="false" />
- 
+            
+        <activity
+            android:name=".patient.ChatActivity"
+            android:exported="false"
+            android:theme="@style/Theme.DermaCare"
+            android:windowSoftInputMode="adjustResize" />
+            
         <activity
             android:name=".doctor.DoctorMainActivity"
             android:exported="false" />
