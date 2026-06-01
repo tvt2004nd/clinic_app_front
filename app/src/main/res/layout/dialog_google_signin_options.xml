@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/surface"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <!-- Top Drag Handle -->
+    <View
+        android:layout_width="48dp"
+        android:layout_height="4dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="20dp"
+        android:background="@color/border" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Lựa chọn Google Sign-In"
+        android:textColor="@color/text_primary"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="24dp"
+        android:text="Chọn phương thức đăng nhập bằng Google phù hợp với thiết bị của bạn"
+        android:textColor="@color/text_secondary"
+        android:textSize="14sp" />
+
+    <!-- Real Google Sign-In Button -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnRealGoogle"
+        style="@style/Widget.DermaCare.Button.Primary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Google Sign-In Thực tế"
+        app:icon="@drawable/ic_google"
+        app:iconGravity="textStart"
+        app:iconPadding="12dp"
+        app:iconTint="@color/white" />
+
+    <!-- Mock Google Sign-In Button -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnMockGoogle"
+        style="@style/Widget.DermaCare.Button.Outlined.Social"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="Google Sign-In Mock (Demo)"
+        app:icon="@drawable/ic_google"
+        app:iconGravity="textStart"
+        app:iconPadding="12dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:text="Lưu ý: Đăng nhập Mock không yêu cầu cấu hình SHA-1 hay tài khoản Google thật, thích hợp chạy ngay trên máy ảo."
+        android:textColor="@color/text_muted"
+        android:textSize="12sp" />
+</LinearLayout>

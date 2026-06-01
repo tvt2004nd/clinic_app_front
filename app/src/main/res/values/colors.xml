@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary">#0D9488</color>
+    <color name="primary_light">#2DD4BF</color>
+    <color name="primary_soft">#F0FDFA</color>
+    <color name="secondary">#6366F1</color>
+    <color name="secondary_soft">#EEF2FF</color>
+    <color name="accent_gold">#F59E0B</color>
+    <color name="accent_gold_soft">#FFFBEB</color>
+    <color name="background">#F8FAFC</color>
+    <color name="surface">#FFFFFF</color>
+    <color name="text_primary">#0F172A</color>
+    <color name="text_secondary">#475569</color>
+    <color name="text_muted">#94A3B8</color>
+    <color name="border">#F1F5F9</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="transparent">#00000000</color>
+
+    <!-- Gradient Colors -->
+    <color name="gradient_start">#0D9488</color>
+    <color name="gradient_end">#2DD4BF</color>
+
+    <!-- Additional Palette -->
+    <color name="accent_blue">#E0F2FE</color>
+    <color name="on_accent_blue">#0369A1</color>
+    <color name="accent_purple">#F5F3FF</color>
+    <color name="on_accent_purple">#6D28D9</color>
+    <color name="surface_variant">#F1F5F9</color>
+    <color name="primary_container">#CCFBF1</color>
+    <color name="on_primary_container">#115E59</color>
+    <color name="error">#EF4444</color>
+    <color name="success">#10B981</color>
+    <color name="primary_muted">#CCFBF1</color>
+    <color name="accent_orange">#FB923C</color>
+</resources>
