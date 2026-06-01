@@ -16,7 +16,23 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+
     buildTypes {
+
+    signingConfigs {
+        getByName("debug") {
+            storeFile = file("debug.keystore")
+            storePassword = "android"
+            keyAlias = "androiddebugkey"
+            keyPassword = "android"
+        }
+    }
+
+    buildTypes {
+        debug {
+            signingConfig = signingConfigs.getByName("debug")
+        }
+
         release {
             isMinifyEnabled = false
             proguardFiles(
@@ -57,4 +73,11 @@ dependencies {
  
     // Google Authentication
     implementation(libs.play.services.auth)
+
+
+    // PDF Export
+    implementation(libs.itext7.core)
+    implementation(libs.itext7.kernel)
+    implementation(libs.itext7.layout)
+
 }

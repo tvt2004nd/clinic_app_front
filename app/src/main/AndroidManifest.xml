@@ -4,6 +4,9 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+
+        android:name=".DermaCareApplication"
+
         android:allowBackup="true"
         android:icon="@drawable/ic_logo_heart"
         android:label="@string/app_name"
@@ -57,5 +60,26 @@
             android:name=".patient.ChangePasswordActivity"
             android:exported="false"
             android:label="Đổi mật khẩu" />
+
+
+        <activity
+            android:name=".MedicalRecordActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".doctor.AddPatientActivity"
+            android:exported="false"
+            android:label="Thêm bệnh nhân" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
     </application>
 </manifest>
