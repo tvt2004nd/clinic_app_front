@@ -4,14 +4,31 @@ import com.dermacare.clinic.R;
 import com.dermacare.clinic.model.Doctor;
 import com.dermacare.clinic.model.Patient;
 
+
 import java.util.ArrayList;
+
+import com.dermacare.clinic.model.Patient;
+
+import java.util.ArrayList;
+
+
 import java.util.Arrays;
 import java.util.List;
 
 public final class MockData {
     private MockData() {}
 
+
     private static final List<Patient> PATIENTS = new ArrayList<>();
+
+
+    private static final List<Patient> PATIENT_LIST = new ArrayList<>(Arrays.asList(
+            new Patient("Nguyễn Văn A", "32 tuổi — Mụn viêm", "19/05/2026"),
+            new Patient("Trần Thị B", "45 tuổi — Nám da", "15/05/2026"),
+            new Patient("Lê Văn C", "28 tuổi — Dị ứng", "12/05/2026")
+    ));
+
+
 
     public static List<String> specialties() {
         return Arrays.asList(
@@ -52,7 +69,12 @@ public final class MockData {
     public static List<String[]> medicalRecords() {
         return Arrays.asList(
                 new String[]{"Melasma độ I", "10/05/2026 — BS. Trần Hoàng Long", "Có ảnh tổn thương"},
+
                 new String[]{"Viêm da tiếp xúc", "15/03/2026 — BS. Nguyễn Minh Anh", "Có ảnh tổn thương"}
+
+                new String[]{"Viêm da tiếp xúc", "15/03/2026 — BS. Nguyễn Minh Anh", "Có ảnh tổn thương"},
+                new String[]{"Mụn trứng cá bọc", "20/04/2026 — BS. Lê Thu Hà", "Có ảnh tổn thương"}
+
         );
     }
 
@@ -64,12 +86,21 @@ public final class MockData {
         );
     }
 
+
     public static List<String[]> doctorPatients() {
         return Arrays.asList(
                 new String[]{"Nguyễn Văn A", "32 tuổi — Mụn viêm", "19/05/2026"},
                 new String[]{"Trần Thị B", "45 tuổi — Nám da", "15/05/2026"},
                 new String[]{"Lê Văn C", "28 tuổi — Dị ứng", "12/05/2026"}
         );
+
+    public static List<Patient> doctorPatients() {
+        return PATIENT_LIST;
+    }
+
+    public static void addPatient(Patient patient) {
+        PATIENT_LIST.add(0, patient);
+
     }
 
     public static void addPatient(Patient patient) {

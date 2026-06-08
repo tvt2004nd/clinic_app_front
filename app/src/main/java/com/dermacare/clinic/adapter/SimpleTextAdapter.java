@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.dermacare.clinic.R;
 
+
 import java.util.List;
 
 public class SimpleTextAdapter extends RecyclerView.Adapter<SimpleTextAdapter.Holder> {
@@ -17,6 +18,36 @@ public class SimpleTextAdapter extends RecyclerView.Adapter<SimpleTextAdapter.Ho
 
     public SimpleTextAdapter(List<String> items) {
         this.items = items;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import android.content.Intent;
+import com.dermacare.clinic.MedicalRecordActivity;
+
+public class SimpleTextAdapter extends RecyclerView.Adapter<SimpleTextAdapter.Holder> {
+    private List<String> items;
+    private List<String> fullList;
+
+    public SimpleTextAdapter(List<String> items) {
+        this.items = new ArrayList<>(items);
+        this.fullList = new ArrayList<>(items);
+    }
+
+    public void filter(String query) {
+        items.clear();
+        if (query.isEmpty()) {
+            items.addAll(fullList);
+        } else {
+            String lowerQuery = query.toLowerCase();
+            for (String item : fullList) {
+                if (item.toLowerCase().contains(lowerQuery)) {
+                    items.add(item);
+                }
+            }
+        }
+        notifyDataSetChanged();
+>>>>>>> 7363d80 (update)
     }
 
     @NonNull
@@ -30,6 +61,14 @@ public class SimpleTextAdapter extends RecyclerView.Adapter<SimpleTextAdapter.Ho
     @Override
     public void onBindViewHolder(@NonNull Holder holder, int position) {
         holder.tvContent.setText(items.get(position));
+
+        
+        // Thêm sự kiện Click để mở màn hình chi tiết
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(v.getContext(), MedicalRecordActivity.class);
+            v.getContext().startActivity(intent);
+        });
+
     }
 
     @Override

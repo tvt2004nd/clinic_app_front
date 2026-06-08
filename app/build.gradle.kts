@@ -16,6 +16,11 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+
+
+    buildTypes {
+
+
     signingConfigs {
         getByName("debug") {
             storeFile = file("debug.keystore")
@@ -70,6 +75,14 @@ dependencies {
     // Google Authentication
     implementation(libs.play.services.auth)
 
+
+
+    // PDF Export
+    implementation(libs.itext7.core)
+    implementation(libs.itext7.kernel)
+    implementation(libs.itext7.layout)
+
+
     // STOMP over WebSocket for Real-time Chat
     implementation("com.github.NaikSoftware:StompProtocolAndroid:1.6.6")
     implementation("io.reactivex.rxjava2:rxjava:2.2.21")
@@ -77,6 +90,7 @@ dependencies {
 
     // Stripe
     implementation("com.stripe:stripe-android:20.49.0")
+
 
     // PDF generation support
     implementation("com.itextpdf:kernel:7.2.5") {
@@ -88,4 +102,6 @@ dependencies {
     implementation("com.itextpdf:io:7.2.5") {
         exclude(group = "org.bouncycastle", module = "bcprov-jdk15on")
     }
+
+
 }
