@@ -1,5 +1,6 @@
 package com.dermacare.clinic.patient;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import com.dermacare.clinic.R;
 import com.dermacare.clinic.chat.ConversationListFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class PatientMainActivity extends AppCompatActivity {
     @Override
@@ -16,9 +18,17 @@ public class PatientMainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_patient_main);
 
         BottomNavigationView bottomNav = findViewById(R.id.bottomNavPatient);
+        FloatingActionButton fabChat = findViewById(R.id.fabChat);
+        
         if (savedInstanceState == null) {
             showFragment(new PatientHomeFragment());
         }
+
+        // Launch ChatActivity when FAB is clicked
+        fabChat.setOnClickListener(v -> {
+            Intent intent = new Intent(PatientMainActivity.this, ChatActivity.class);
+            startActivity(intent);
+        });
 
         bottomNav.setOnItemSelectedListener(item -> {
             Fragment fragment;

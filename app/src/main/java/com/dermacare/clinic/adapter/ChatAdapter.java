@@ -19,7 +19,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int TYPE_RECEIVED = 2;
 
     private List<Map<String, Object>> messages;
-    private Long currentUserId;
+    private final Long currentUserId;
 
     public ChatAdapter(List<Map<String, Object>> messages, Long currentUserId) {
         this.messages = messages;
@@ -28,8 +28,11 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public void addMessage(Map<String, Object> msg) {
         Object newId = msg.get("messageId");
-        for (Map<String, Object> m : messages) {
-            if (m.get("messageId").equals(newId)) return;
+        for (Map<String, Object> message : messages) {
+            Object existingId = message.get("messageId");
+            if (existingId != null && existingId.equals(newId)) {
+                return;
+            }
         }
         messages.add(msg);
         notifyItemInserted(messages.size() - 1);
@@ -51,11 +54,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             senderId = Long.parseLong((String) senderIdObj);
         }
 
-        if (senderId != null && senderId.equals(currentUserId)) {
-            return TYPE_SENT;
-        } else {
-            return TYPE_RECEIVED;
-        }
+        return senderId != null && senderId.equals(currentUserId) ? TYPE_SENT : TYPE_RECEIVED;
     }
 
     @NonNull
@@ -64,10 +63,10 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         if (viewType == TYPE_SENT) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_chat_sent, parent, false);
             return new SentMessageHolder(view);
-        } else {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_chat_received, parent, false);
-            return new ReceivedMessageHolder(view);
         }
+
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_chat_received, parent, false);
+        return new ReceivedMessageHolder(view);
     }
 
     @Override
@@ -78,21 +77,22 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         String time = timeStr != null && timeStr.length() >= 16 ? timeStr.substring(11, 16) : timeStr != null ? timeStr : "";
 
         if (holder.getItemViewType() == TYPE_SENT) {
-            SentMessageHolder h = (SentMessageHolder) holder;
-            h.tvMessage.setText(content);
-            h.tvTime.setText(time);
-        } else {
-            ReceivedMessageHolder h = (ReceivedMessageHolder) holder;
-            h.tvMessage.setText(content);
-            h.tvTime.setText(time);
-
-            Object nameObj = msg.get("senderName");
-            String name = nameObj != null ? String.valueOf(nameObj) : "";
-            h.tvSenderName.setText(name);
-
-            String initial = name != null && !name.isEmpty() ? name.substring(0, 1).toUpperCase() : "?";
-            h.tvAvatarInitial.setText(initial);
+            SentMessageHolder sentHolder = (SentMessageHolder) holder;
+            sentHolder.tvMessage.setText(content);
+            sentHolder.tvTime.setText(time);
+            return;
         }
+
+        ReceivedMessageHolder receivedHolder = (ReceivedMessageHolder) holder;
+        receivedHolder.tvMessage.setText(content);
+        receivedHolder.tvTime.setText(time);
+
+        Object nameObj = msg.get("senderName");
+        String name = nameObj != null ? String.valueOf(nameObj) : "";
+        receivedHolder.tvSenderName.setText(name);
+
+        String initial = !name.isEmpty() ? name.substring(0, 1).toUpperCase() : "?";
+        receivedHolder.tvAvatarInitial.setText(initial);
     }
 
     @Override
@@ -102,6 +102,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     static class SentMessageHolder extends RecyclerView.ViewHolder {
         TextView tvMessage, tvTime;
+
         SentMessageHolder(View itemView) {
             super(itemView);
             tvMessage = itemView.findViewById(R.id.tvMessage);
@@ -111,6 +112,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     static class ReceivedMessageHolder extends RecyclerView.ViewHolder {
         TextView tvMessage, tvTime, tvSenderName, tvAvatarInitial;
+
         ReceivedMessageHolder(View itemView) {
             super(itemView);
             tvMessage = itemView.findViewById(R.id.tvMessage);

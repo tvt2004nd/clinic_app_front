@@ -30,7 +30,7 @@
             android:layout_centerVertical="true"
             android:layout_marginStart="8dp"
             android:layout_toEndOf="@id/btnBack"
-            android:text="Đang kết nối..."
+            android:text="Dang ket noi..."
             android:textColor="@color/white"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -43,7 +43,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="2dp"
             android:layout_toEndOf="@id/btnBack"
-            android:text="Đang hoạt động"
+            android:text="Dang hoat dong"
             android:textColor="#CCFFFFFF"
             android:textSize="12sp" />
 
@@ -80,7 +80,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/bg_input_chat"
-            android:hint="Nhập tin nhắn..."
+            android:hint="Nhap tin nhan..."
             android:imeOptions="actionSend"
             android:inputType="textCapSentences|textMultiLine"
             android:maxLines="4"
@@ -103,10 +103,10 @@
                 android:id="@+id/btnSend"
                 android:layout_width="46dp"
                 android:layout_height="46dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true"
                 android:focusable="true"
                 android:padding="11dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
                 android:src="@drawable/ic_send" />
 
         </com.google.android.material.card.MaterialCardView>

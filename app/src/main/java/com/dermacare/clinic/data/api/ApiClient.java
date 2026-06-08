@@ -56,9 +56,19 @@ public class ApiClient {
     }
 
 
+    public static AiDiagnosisService getAiDiagnosisService(Context context) {
+        return getClient(context).create(AiDiagnosisService.class);
+    }
+
+    public static AiChatService getAiChatService(Context context) {
+        return getClient(context).create(AiChatService.class);
+    }
+
+
     public static MedicalRecordService getMedicalRecordService(Context context) {
         return getClient(context).create(MedicalRecordService.class);
     }
+
 
 
     public static ExaminationService getExaminationService(Context context) {
@@ -88,5 +98,7 @@ public class ApiClient {
     public static PatientService getPatientService(Context context) {
         return getClient(context).create(PatientService.class);
     }
+
+
 
 }
