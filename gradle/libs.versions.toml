@@ -15,6 +15,7 @@ glide = "4.16.0"
 retrofit = "2.9.0"
 okhttp = "4.12.0"
 playServicesAuth = "20.7.0"
+googleServices = "4.4.2"
 
 googleServices = "4.4.2"
 
@@ -42,6 +43,7 @@ play-services-auth = { group = "com.google.android.gms", name = "play-services-a
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
+google-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }
 
 itext7-core = { group = "com.itextpdf", name = "itext7-core", version.ref = "itext7" }
 itext7-kernel = { group = "com.itextpdf", name = "kernel", version.ref = "itext7" }

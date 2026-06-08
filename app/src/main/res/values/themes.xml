@@ -12,7 +12,7 @@
         <item name="android:statusBarColor">@color/primary</item>
         <item name="android:navigationBarColor">@color/surface</item>
         <item name="android:windowBackground">@color/background</item>
-        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:fontFamily">@font/momo_trust_sans</item>
         <item name="materialButtonStyle">@style/Widget.DermaCare.Button.Primary</item>
     </style>
 
@@ -82,10 +82,12 @@
     </style>
 
     <style name="Widget.DermaCare.BottomNav" parent="Widget.Material3.BottomNavigationView">
-        <item name="android:background">@color/surface</item>
-        <item name="itemIconTint">@color/primary</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="itemIconTint">@color/bottom_nav_icon_color</item>
         <item name="itemTextColor">@color/text_secondary</item>
-        <item name="itemRippleColor">@color/primary_container</item>
+        <item name="itemRippleColor">@color/primary_soft</item>
+        <item name="itemPaddingTop">8dp</item>
+        <item name="itemPaddingBottom">8dp</item>
     </style>
 
     <!-- Typography -->

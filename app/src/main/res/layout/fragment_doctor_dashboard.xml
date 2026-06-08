@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background">
+    android:background="#F8FAFC"
+    android:clipChildren="false">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -11,181 +12,464 @@
         android:background="@android:color/transparent"
         app:elevation="0dp">
 
-        <LinearLayout
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_header_gradient"
-            android:orientation="vertical"
-            android:paddingHorizontal="24dp"
-            android:paddingTop="56dp"
-            android:paddingBottom="56dp">
+            app:layout_scrollFlags="noScroll">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="268dp"
+                android:background="@drawable/bg_header_gradient" />
+
+            <!-- Circle trang trí góc trên phải -->
+            <View
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_gravity="end|top"
+                android:layout_marginTop="-60dp"
+                android:layout_marginEnd="-60dp"
+                android:alpha="0.06"
+                android:background="@drawable/bg_circle_white" />
+
+            <!-- Circle trang trí góc dưới trái -->
+            <View
+                android:layout_width="140dp"
+                android:layout_height="140dp"
+                android:layout_gravity="start|bottom"
+                android:layout_marginStart="-40dp"
+                android:layout_marginBottom="30dp"
+                android:alpha="0.04"
+                android:background="@drawable/bg_circle_white" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:orientation="vertical"
+                android:paddingHorizontal="24dp"
+                android:paddingTop="52dp"
+                android:paddingBottom="56dp">
 
+                <!-- Row: tên bác sĩ + avatar -->
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
-                    <TextView
-                        style="@style/TextAppearance.DermaCare.Subtitle"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="@string/hello"
-                        android:textColor="#CCFFFFFF"
-                        android:textSize="16sp" />
+                        android:layout_weight="1"
+                        android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/tvDoctorName"
-                        style="@style/TextAppearance.DermaCare.Headline"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="BS. Nguyễn Minh Anh"
-                        android:textColor="@color/white"
-                        android:textSize="24sp" />
+                        <TextView
+                            android:id="@+id/tvGreeting"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Chào buổi sáng ☀️"
+                            android:textColor="#BAE6FD"
+                            android:textSize="13sp"
+                            android:fontFamily="@font/open_sans" />
+
+                        <TextView
+                            android:id="@+id/tvDoctorName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="BS. Nguyễn Minh Anh"
+                            android:textColor="@color/white"
+                            android:textStyle="bold"
+                            android:textSize="22sp"
+                            android:letterSpacing="-0.02"
+                            android:fontFamily="@font/momo_trust_sans" />
+
+                        <!-- Date chip -->
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:background="@drawable/bg_chip_white_translucent"
+                            android:paddingHorizontal="10dp"
+                            android:paddingVertical="4dp">
+
+                            <ImageView
+                                android:layout_width="12dp"
+                                android:layout_height="12dp"
+                                android:src="@drawable/ic_nav_calendar"
+                                app:tint="#E0F2FE" />
+
+                            <TextView
+                                android:id="@+id/tvCurrentDate"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="5dp"
+                                android:text="Thứ Hai, 22 Tháng 5"
+                                android:textColor="#E0F2FE"
+                                android:textSize="11sp"
+                                android:fontFamily="sans-serif-medium" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- Avatar initials -->
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="52dp"
+                        android:layout_height="52dp"
+                        app:cardCornerRadius="26dp"
+                        app:cardElevation="8dp"
+                        app:strokeWidth="2dp"
+                        app:strokeColor="#66FFFFFF"
+                        app:cardBackgroundColor="@color/primary">
+
+                        <TextView
+                            android:id="@+id/tvDoctorInitials"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="NA"
+                            android:textColor="@color/white"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:fontFamily="@font/momo_trust_sans" />
+                    </com.google.android.material.card.MaterialCardView>
                 </LinearLayout>
 
+                <!-- Search bar với nền blur-style -->
                 <com.google.android.material.card.MaterialCardView
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
-                    app:cardCornerRadius="28dp"
-                    app:cardElevation="4dp"
-                    app:strokeWidth="2dp"
-                    app:strokeColor="#66FFFFFF">
+                    android:layout_width="match_parent"
+                    android:layout_height="46dp"
+                    android:layout_marginTop="18dp"
+                    app:cardBackgroundColor="#33FFFFFF"
+                    app:cardCornerRadius="23dp"
+                    app:cardElevation="0dp"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="#1FFFFFFF">
 
-                    <ImageView
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/ic_nav_profile" />
+                        android:gravity="center_vertical"
+                        android:paddingHorizontal="16dp">
+
+                        <ImageView
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:src="@drawable/ic_search"
+                            app:tint="#99FFFFFF" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:text="Tìm bệnh nhân hoặc bệnh án..."
+                            android:textColor="#99FFFFFF"
+                            android:textSize="13sp" />
+                    </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
             </LinearLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:alpha="0.9"
-                android:text="Hôm nay, 19/05/2026"
-                android:textColor="#E0F2F1"
-                android:textSize="14sp" />
-        </LinearLayout>
+        </FrameLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="-32dp"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_marginTop="-44dp"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:paddingBottom="96dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingHorizontal="20dp">
+            android:clipChildren="false"
+            android:orientation="vertical">
 
+            <!-- Thẻ thống kê nổi trên header -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:baselineAligned="false"
+                android:clipChildren="false"
                 android:orientation="horizontal"
-                android:paddingTop="8dp">
+                android:paddingHorizontal="20dp">
 
-                <com.google.android.material.card.MaterialCardView
-                    style="@style/Widget.DermaCare.Card"
+                <include
+                    android:id="@+id/cardStatToday"
+                    layout="@layout/include_dashboard_stat_card"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
-                    android:layout_weight="1"
-                    app:cardBackgroundColor="@color/accent_blue"
-                    app:cardElevation="0dp"
-                    app:strokeWidth="0dp">
+                    android:layout_weight="1" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:padding="20dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="8"
-                            android:textColor="@color/on_accent_blue"
-                            android:textSize="32sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            style="@style/TextAppearance.DermaCare.Caption"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:text="Lịch hôm nay"
-                            android:textColor="@color/on_accent_blue" />
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-
-                <com.google.android.material.card.MaterialCardView
-                    style="@style/Widget.DermaCare.Card"
+                <include
+                    android:id="@+id/cardStatPending"
+                    layout="@layout/include_dashboard_stat_card"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_weight="1"
-                    app:cardBackgroundColor="@color/accent_purple"
-                    app:cardElevation="0dp"
-                    app:strokeWidth="0dp">
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="1" />
+
+                <include
+                    android:id="@+id/cardStatCompleted"
+                    layout="@layout/include_dashboard_stat_card"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+            <!-- Sheet nội dung bo góc -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/bg_dashboard_sheet"
+                android:orientation="vertical"
+                android:paddingHorizontal="20dp"
+                android:paddingTop="24dp"
+                android:paddingBottom="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tiện ích nhanh"
+                android:textSize="16sp"
+                android:textColor="#0F172A"
+                android:textStyle="bold"
+                android:fontFamily="@font/momo_trust_sans" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="2dp"
+                app:strokeColor="#E8EEF4"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:baselineAligned="false"
+                    android:orientation="horizontal"
+                    android:paddingVertical="18dp">
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:id="@+id/btnQuickNewExam"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
+                        android:layout_weight="1"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:gravity="center_horizontal"
                         android:orientation="vertical"
-                        android:padding="20dp">
+                        android:paddingHorizontal="4dp">
+
+                        <FrameLayout
+                            android:layout_width="52dp"
+                            android:layout_height="52dp"
+                            android:background="@drawable/bg_quick_icon_teal">
+
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_gravity="center"
+                                android:contentDescription="@null"
+                                android:src="@drawable/ic_nav_calendar"
+                                app:tint="@color/primary" />
+                        </FrameLayout>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="3"
-                            android:textColor="@color/on_accent_purple"
-                            android:textSize="32sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            style="@style/TextAppearance.DermaCare.Caption"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:text="Đã khám"
-                            android:textColor="@color/on_accent_purple" />
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="@font/open_sans"
+                            android:gravity="center"
+                            android:text="Lịch khám"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="12sp" />
                     </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/btnQuickHistory"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical"
+                        android:paddingHorizontal="4dp">
+
+                        <FrameLayout
+                            android:layout_width="52dp"
+                            android:layout_height="52dp"
+                            android:background="@drawable/bg_quick_icon_red">
+
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_gravity="center"
+                                android:contentDescription="@null"
+                                android:src="@drawable/ic_history"
+                                app:tint="#DC2626" />
+                        </FrameLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="@font/open_sans"
+                            android:gravity="center"
+                            android:text="Lịch sử"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/btnQuickInvoice"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical"
+                        android:paddingHorizontal="4dp">
+
+                        <FrameLayout
+                            android:layout_width="52dp"
+                            android:layout_height="52dp"
+                            android:background="@drawable/bg_quick_icon_orange">
+
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_gravity="center"
+                                android:contentDescription="@null"
+                                android:src="@drawable/ic_receipt"
+                                app:tint="#EA580C" />
+                        </FrameLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="@font/open_sans"
+                            android:gravity="center"
+                            android:text="Hóa đơn"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- ===== LỊCH KHÁM HÔM NAY ===== -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Lịch khám hôm nay"
+                    android:textSize="16sp"
+                    android:textColor="#0F172A"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/momo_trust_sans" />
+
+                <!-- Badge số lịch hẹn -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="0dp"
+                    app:cardBackgroundColor="@color/primary_soft">
+                    <TextView
+                        android:id="@+id/tvApptCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingHorizontal="12dp"
+                        android:paddingVertical="4dp"
+                        android:text="0 lịch hẹn"
+                        android:textColor="@color/primary"
+                        android:textSize="11sp"
+                        android:fontFamily="@font/open_sans" />
                 </com.google.android.material.card.MaterialCardView>
             </LinearLayout>
 
-            <TextView
-                style="@style/TextAppearance.DermaCare.Section"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:text="Lịch khám tiếp theo" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvSchedule"
+            <!-- RecyclerView danh sách lịch hẹn -->
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:nestedScrollingEnabled="false"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+                android:layout_marginTop="12dp">
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="100dp" />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvSchedule"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+                <!-- Empty state -->
+                <LinearLayout
+                    android:id="@+id/layoutEmpty"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingTop="32dp"
+                    android:paddingBottom="64dp"
+                    android:visibility="gone">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="72dp"
+                        android:layout_height="72dp"
+                        app:cardCornerRadius="36dp"
+                        app:cardElevation="0dp"
+                        app:cardBackgroundColor="#F8FAFC"
+                        app:strokeWidth="1dp"
+                        app:strokeColor="#E2E8F0">
+
+                        <ImageView
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_nav_calendar"
+                            app:tint="#CBD5E1" />
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="Hôm nay không có lịch hẹn"
+                        android:textColor="#334155"
+                        android:textSize="15sp"
+                        android:fontFamily="sans-serif-medium" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:text="Bạn có một ngày làm việc thoải mái!"
+                        android:textColor="#94A3B8"
+                        android:textSize="13sp" />
+                </LinearLayout>
+            </FrameLayout>
+
+            </LinearLayout>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

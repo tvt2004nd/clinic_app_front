@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="symptom_severity_levels">
+        <item>Nhẹ</item>
+        <item>Trung bình</item>
+        <item>Nặng</item>
+    </string-array>
+    <string-array name="diagnosis_types">
+        <item>Chẩn đoán chính</item>
+        <item>Chẩn đoán phụ</item>
+        <item>Nghi ngờ</item>
+    </string-array>
+    <string-array name="symptom_onset_types">
+        <item>Cấp tính</item>
+        <item>Mạn tính</item>
+        <item>Tái phát</item>
+    </string-array>
+    <string-array name="diagnosis_severity">
+        <item>Nhẹ</item>
+        <item>Trung bình</item>
+        <item>Nặng</item>
+        <item>Đe dọa tính mạng</item>
+    </string-array>
+
+    <!-- Dermatology examination arrays -->
+    <string-array name="itching_levels">
+        <item>Không ngứa</item>
+        <item>Ngứa nhẹ</item>
+        <item>Ngứa vừa</item>
+        <item>Ngứa nhiều</item>
+        <item>Ngứa dữ dội</item>
+    </string-array>
+
+    <string-array name="associated_sensations">
+        <item>Không có</item>
+        <item>Đau</item>
+        <item>Rát</item>
+        <item>Châm chích</item>
+        <item>Tê</item>
+        <item>Căng da</item>
+        <item>Khác</item>
+    </string-array>
+
+    <string-array name="lesion_types">
+        <item>Sẩn (Papule)</item>
+        <item>Mụn nước (Vesicle)</item>
+        <item>Bọng nước (Bulla)</item>
+        <item>Mụn mủ (Pustule)</item>
+        <item>Mảng (Plaque)</item>
+        <item>Vảy (Scale)</item>
+        <item>Vết loét (Ulcer)</item>
+        <item>Nốt (Nodule)</item>
+        <item>U cục (Tumor)</item>
+        <item>Mày đay (Wheal)</item>
+        <item>Sẹo (Scar)</item>
+        <item>Tăng sắc tố (Hyperpigmentation)</item>
+        <item>Giảm sắc tố (Hypopigmentation)</item>
+        <item>Đỏ da (Erythema)</item>
+        <item>Tổn thương dạng chàm (Eczema)</item>
+        <item>Nứt kẽ (Fissure)</item>
+        <item>Teo da (Atrophy)</item>
+        <item>Tổn thương dạng vòng (Annular)</item>
+        <item>Khác</item>
+    </string-array>
+
+    <string-array name="lesion_colors">
+        <item>Đỏ</item>
+        <item>Hồng</item>
+        <item>Trắng</item>
+        <item>Nâu</item>
+        <item>Đen</item>
+        <item>Xám</item>
+        <item>Vàng</item>
+        <item>Tím</item>
+        <item>Da màu</item>
+        <item>Khác</item>
+    </string-array>
+
+    <string-array name="lesion_borders">
+        <item>Ranh giới rõ</item>
+        <item>Ranh giới không rõ</item>
+        <item>Bờ đều</item>
+        <item>Bờ không đều</item>
+        <item>Bờ nâng cao</item>
+        <item>Hình bản đồ</item>
+    </string-array>
+
+    <string-array name="lesion_surfaces">
+        <item>Nhẵn</item>
+        <item>Sùi</item>
+        <item>Bóng</item>
+        <item>Đóng vảy</item>
+        <item>Trợt</item>
+        <item>Loét</item>
+        <item>Chảy dịch</item>
+        <item>Dày sừng</item>
+        <item>Bong vảy</item>
+    </string-array>
+
+    <string-array name="lesion_distributions">
+        <item>Không áp dụng</item>
+        <item>Đối xứng</item>
+        <item>Khu trú</item>
+        <item>Toàn thân</item>
+        <item>Một bên</item>
+        <item>Dạng mảng (Patch)</item>
+        <item>Dạng dải (Linear)</item>
+        <item>Vùng da kín</item>
+        <item>Vùng da hở</item>
+        <item>Dọc dây thần kinh (Zosteriform)</item>
+        <item>Ở nếp gấp (Flexural)</item>
+        <item>Ở đầu chi (Acral)</item>
+    </string-array>
+</resources>
