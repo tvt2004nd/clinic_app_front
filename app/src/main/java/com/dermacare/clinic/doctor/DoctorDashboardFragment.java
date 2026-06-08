@@ -25,6 +25,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dermacare.clinic.R;
+import com.dermacare.clinic.adapter.AppointmentAdapter;
+import com.dermacare.clinic.data.MockData;
 import com.dermacare.clinic.data.api.ApiClient;
 import com.dermacare.clinic.data.api.model.AppointmentResponse;
 import com.dermacare.clinic.patient.RecordDetailActivity;
@@ -90,13 +92,6 @@ public class DoctorDashboardFragment extends Fragment {
         rv = view.findViewById(R.id.rvSchedule);
         rv.setLayoutManager(new LinearLayoutManager(requireContext()));
 
-        
-
-        // Cập nhật listener đúng với interface OnExamineClick
-        rv.setAdapter(new AppointmentAdapter(MockData.doctorSchedule(), position -> {
-            String patientName = MockData.doctorSchedule().get(position)[1];
-            Toast.makeText(requireContext(), "Đang chuẩn bị hồ sơ cho: " + patientName, Toast.LENGTH_SHORT).show();
-
         // Cập nhật listener để mở MedicalRecordActivity
         rv.setAdapter(new AppointmentAdapter(MockData.doctorSchedule(), position -> {
             String[] appointment = MockData.doctorSchedule().get(position);
@@ -106,7 +101,6 @@ public class DoctorDashboardFragment extends Fragment {
             intent.putExtra("PATIENT_NAME", patientName);
             // Bạn có thể truyền thêm ID nếu MockData có hỗ trợ
             startActivity(intent);
-
         }));
         
         // Thêm hiệu ứng click cho các thẻ thống kê

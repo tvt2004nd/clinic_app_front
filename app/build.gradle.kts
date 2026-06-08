@@ -18,9 +18,6 @@ android {
 
 
 
-    buildTypes {
-
-
     signingConfigs {
         getByName("debug") {
             storeFile = file("debug.keystore")
@@ -74,13 +71,6 @@ dependencies {
  
     // Google Authentication
     implementation(libs.play.services.auth)
-
-
-
-    // PDF Export
-    implementation(libs.itext7.core)
-    implementation(libs.itext7.kernel)
-    implementation(libs.itext7.layout)
 
 
     // STOMP over WebSocket for Real-time Chat

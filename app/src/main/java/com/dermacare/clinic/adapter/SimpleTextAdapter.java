@@ -11,14 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.dermacare.clinic.R;
 
 
-import java.util.List;
-
-public class SimpleTextAdapter extends RecyclerView.Adapter<SimpleTextAdapter.Holder> {
-    private final List<String> items;
-
-    public SimpleTextAdapter(List<String> items) {
-        this.items = items;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,7 +39,6 @@ public class SimpleTextAdapter extends RecyclerView.Adapter<SimpleTextAdapter.Ho
             }
         }
         notifyDataSetChanged();
->>>>>>> 7363d80 (update)
     }
 
     @NonNull

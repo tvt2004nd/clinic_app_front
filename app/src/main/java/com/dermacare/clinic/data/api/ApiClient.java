@@ -100,9 +100,5 @@ public class ApiClient {
     }
 
 
-    public static MedicalRecordService getMedicalRecordService(Context context) {
-        return getClient(context).create(MedicalRecordService.class);
-    }
-
 
 }

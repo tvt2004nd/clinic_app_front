@@ -16,9 +16,7 @@ retrofit = "2.9.0"
 okhttp = "4.12.0"
 playServicesAuth = "20.7.0"
 googleServices = "4.4.2"
-
-googleServices = "4.4.2"
-
+itext7 = "7.2.5"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -39,12 +37,6 @@ converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", ve
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
 logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
 play-services-auth = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "playServicesAuth" }
-
-
-[plugins]
-android-application = { id = "com.android.application", version.ref = "agp" }
-google-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }
-
 itext7-core = { group = "com.itextpdf", name = "itext7-core", version.ref = "itext7" }
 itext7-kernel = { group = "com.itextpdf", name = "kernel", version.ref = "itext7" }
 itext7-layout = { group = "com.itextpdf", name = "layout", version.ref = "itext7" }
@@ -52,5 +44,3 @@ itext7-layout = { group = "com.itextpdf", name = "layout", version.ref = "itext7
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 google-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }
-
-

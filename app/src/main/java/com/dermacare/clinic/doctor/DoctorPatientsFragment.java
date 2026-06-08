@@ -30,6 +30,8 @@ import com.dermacare.clinic.data.api.model.DoctorPatientResponse;
 
 import com.dermacare.clinic.model.Patient;
 
+import com.dermacare.clinic.data.MockData;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,17 +41,10 @@ import retrofit2.Response;
 
 public class DoctorPatientsFragment extends Fragment {
 
-
-    private SimpleTextAdapter adapter;
-    private RecyclerView rv;
-
-
     private PatientAdapter adapter;
     private View layoutEmpty;
     private RecyclerView rv;
     private TextView tvPatientCount;
-
-
     public static DoctorPatientsFragment newInstance() {
         return new DoctorPatientsFragment();
     }
@@ -69,49 +64,10 @@ public class DoctorPatientsFragment extends Fragment {
 
         tvTitle.setText(R.string.tab_patients);
 
-
         tvPatientCount = view.findViewById(R.id.tvPatientCount);
-        rv = view.findViewById(R.id.recyclerView);
         layoutEmpty = view.findViewById(R.id.layoutEmpty);
-
-        rv.setLayoutManager(new LinearLayoutManager(requireContext()));
-
-        rv.setAdapter(new SimpleTextAdapter(lines));
-
-        tvTitle.setText("Bệnh nhân");
-
         rv = view.findViewById(R.id.recyclerView);
         rv.setLayoutManager(new LinearLayoutManager(requireContext()));
-        
-        refreshList();
-
-        // Nút Thêm bệnh nhân (FAB)
-        view.findViewById(R.id.btnAddPatient).setOnClickListener(v -> {
-            startActivity(new Intent(requireContext(), AddPatientActivity.class));
-        });
-
-        EditText etSearch = view.findViewById(R.id.etSearch);
-        etSearch.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (adapter != null) adapter.filter(s.toString());
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {}
-        });
-    }
-
-    private void refreshList() {
-        List<String> lines = new ArrayList<>();
-        for (Patient p : MockData.doctorPatients()) {
-            lines.add(p.toString());
-        }
-        adapter = new SimpleTextAdapter(lines);
-        rv.setAdapter(adapter);
 
         adapter = new PatientAdapter(new ArrayList<>());
         rv.setAdapter(adapter);
@@ -124,8 +80,7 @@ public class DoctorPatientsFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        // Cập nhật lại danh sách khi quay lại từ màn hình Thêm bệnh nhân
-        refreshList();
+        // Cập nhật lại danh sách
 
         loadPatients();
     }
