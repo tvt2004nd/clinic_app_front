@@ -1,14 +1,22 @@
 package com.dermacare.clinic.doctor;
 
+
 import android.content.Intent;
+
+
+import android.content.Intent;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import android.util.Log;
+
 import android.widget.Toast;
+
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,12 +30,17 @@ import com.dermacare.clinic.data.api.model.AppointmentResponse;
 import com.dermacare.clinic.patient.RecordDetailActivity;
 import com.dermacare.clinic.util.SessionManager;
 
+
+import com.dermacare.clinic.MedicalRecordActivity;
+
+
 import java.time.LocalDate;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+
 
 public class DoctorDashboardFragment extends Fragment {
 
@@ -76,6 +89,29 @@ public class DoctorDashboardFragment extends Fragment {
 
         rv = view.findViewById(R.id.rvSchedule);
         rv.setLayoutManager(new LinearLayoutManager(requireContext()));
+
+        
+
+        // Cập nhật listener đúng với interface OnExamineClick
+        rv.setAdapter(new AppointmentAdapter(MockData.doctorSchedule(), position -> {
+            String patientName = MockData.doctorSchedule().get(position)[1];
+            Toast.makeText(requireContext(), "Đang chuẩn bị hồ sơ cho: " + patientName, Toast.LENGTH_SHORT).show();
+
+        // Cập nhật listener để mở MedicalRecordActivity
+        rv.setAdapter(new AppointmentAdapter(MockData.doctorSchedule(), position -> {
+            String[] appointment = MockData.doctorSchedule().get(position);
+            String patientName = appointment[1];
+            
+            Intent intent = new Intent(requireContext(), MedicalRecordActivity.class);
+            intent.putExtra("PATIENT_NAME", patientName);
+            // Bạn có thể truyền thêm ID nếu MockData có hỗ trợ
+            startActivity(intent);
+
+        }));
+        
+        // Thêm hiệu ứng click cho các thẻ thống kê
+        view.findViewById(R.id.rvSchedule).setNestedScrollingEnabled(false);
+
         rv.setNestedScrollingEnabled(false);
 
         adapter = new DoctorDashboardAppointmentAdapter(new ArrayList<>(),
@@ -276,5 +312,6 @@ public class DoctorDashboardFragment extends Fragment {
                         Toast.makeText(requireContext(), "Lỗi kết nối", Toast.LENGTH_SHORT).show();
                     }
                 });
+
     }
 }
