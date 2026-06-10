@@ -10,8 +10,11 @@
         style="@style/TextAppearance.DermaCare.Subtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/spacing_xl"
-        android:padding="@dimen/spacing_sm"
+        android:layout_margin="@dimen/spacing_lg"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="@dimen/spacing_md"
         android:text="@string/skip"
         android:textColor="@color/primary"
         android:textStyle="bold"
@@ -31,7 +34,7 @@
         android:id="@+id/dotsIndicator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/spacing_lg"
+        android:layout_marginBottom="@dimen/spacing_xl"
         android:gravity="center"
         android:orientation="horizontal"
         app:layout_constraintBottom_toTopOf="@id/btnNext"
@@ -48,6 +51,7 @@
         android:text="@string/next"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintWidth_max="400dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,7 +3,6 @@ package com.dermacare.clinic.patient;
 import android.app.DatePickerDialog;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -25,10 +24,6 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.textfield.TextInputEditText;
 
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -39,6 +34,10 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -69,7 +68,6 @@ public class EditProfileActivity extends AppCompatActivity {
         userService = ApiClient.getUserService(this);
         calendar = Calendar.getInstance();
 
-        // Register Image Picker
         imagePickerLauncher = registerForActivityResult(
                 new ActivityResultContracts.GetContent(),
                 uri -> {
@@ -79,7 +77,6 @@ public class EditProfileActivity extends AppCompatActivity {
                 }
         );
 
-        // Bind Views
         btnBack = findViewById(R.id.btnBack);
         imgEditAvatar = findViewById(R.id.imgEditAvatar);
         layoutChangeAvatar = findViewById(R.id.layoutChangeAvatar);
@@ -93,21 +90,11 @@ public class EditProfileActivity extends AppCompatActivity {
         radioOther = findViewById(R.id.radioOther);
         btnSaveProfile = findViewById(R.id.btnSaveProfile);
 
-        // Click listeners
         btnBack.setOnClickListener(v -> finish());
-        
-        // Date picker for Dob
         editDob.setOnClickListener(v -> showDatePicker());
+        layoutChangeAvatar.setOnClickListener(v -> imagePickerLauncher.launch("image/*"));
 
-        // Change avatar click listener
-        if (layoutChangeAvatar != null) {
-            layoutChangeAvatar.setOnClickListener(v -> imagePickerLauncher.launch("image/*"));
-        }
-
-        // Load initially from SessionManager
         loadProfileFromSession();
-
-        // Fetch latest profile from server
         fetchProfileFromServer();
 
         btnSaveProfile.setOnClickListener(v -> saveProfileChanges());
@@ -142,6 +129,7 @@ public class EditProfileActivity extends AppCompatActivity {
             }
             Glide.with(this)
                     .load(fullUrl)
+                    .centerCrop()
                     .placeholder(R.drawable.ic_nav_profile)
                     .error(R.drawable.ic_nav_profile)
                     .into(imgEditAvatar);
@@ -151,43 +139,49 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     private void uploadAvatarFile(Uri uri) {
+        File tempFile = null;
         try {
-            // Create a temp file in cache directory
-            File cacheDir = getCacheDir();
-            File tempFile = File.createTempFile("avatar_upload", ".jpg", cacheDir);
-            
-            // Copy stream
-            InputStream inputStream = getContentResolver().openInputStream(uri);
-            FileOutputStream outputStream = new FileOutputStream(tempFile);
-            byte[] buffer = new byte[4096];
-            int bytesRead;
-            while ((bytesRead = inputStream.read(buffer)) != -1) {
-                outputStream.write(buffer, 0, bytesRead);
-            }
-            outputStream.close();
-            inputStream.close();
+            tempFile = File.createTempFile("avatar_upload", ".jpg", getCacheDir());
 
-            // Prepare multipart request
+            try (InputStream inputStream = getContentResolver().openInputStream(uri);
+                 FileOutputStream outputStream = new FileOutputStream(tempFile)) {
+                if (inputStream == null) {
+                    Toast.makeText(this, "Không thể mở ảnh đã chọn", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                byte[] buffer = new byte[4096];
+                int bytesRead;
+                while ((bytesRead = inputStream.read(buffer)) != -1) {
+                    outputStream.write(buffer, 0, bytesRead);
+                }
+            }
+
             RequestBody requestFile = RequestBody.create(MediaType.parse("image/*"), tempFile);
             MultipartBody.Part body = MultipartBody.Part.createFormData("file", tempFile.getName(), requestFile);
 
             Toast.makeText(this, "Đang tải ảnh lên...", Toast.LENGTH_SHORT).show();
 
+            File finalTempFile = tempFile;
             userService.uploadAvatar(body).enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    deleteTempFile(finalTempFile);
                     if (response.isSuccessful() && response.body() != null) {
                         try {
-                            String jsonStr = response.body().string();
-                            JSONObject json = new JSONObject(jsonStr);
-                            String uploadedUrl = json.getString("avatarUrl");
-                            
-                            currentAvatarUrl = uploadedUrl;
+                            JSONObject json = new JSONObject(response.body().string());
+                            currentAvatarUrl = json.getString("avatarUrl");
+                            sessionManager.saveProfile(
+                                    sessionManager.getName(),
+                                    sessionManager.getPhone(),
+                                    sessionManager.getGender(),
+                                    sessionManager.getDob(),
+                                    sessionManager.getAddress(),
+                                    currentAvatarUrl
+                            );
                             updateAvatarPreview(currentAvatarUrl);
                             Toast.makeText(EditProfileActivity.this, "Tải ảnh lên thành công", Toast.LENGTH_SHORT).show();
                         } catch (Exception e) {
-                           e.printStackTrace();
-                           Toast.makeText(EditProfileActivity.this, "Lỗi đọc phản hồi upload", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(EditProfileActivity.this, "Lỗi đọc phản hồi upload", Toast.LENGTH_SHORT).show();
                         }
                     } else {
                         Toast.makeText(EditProfileActivity.this, "Tải ảnh lên thất bại", Toast.LENGTH_SHORT).show();
@@ -196,13 +190,19 @@ public class EditProfileActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    deleteTempFile(finalTempFile);
                     Toast.makeText(EditProfileActivity.this, "Lỗi kết nối upload: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
-
         } catch (Exception e) {
-            e.printStackTrace();
+            deleteTempFile(tempFile);
             Toast.makeText(this, "Không thể mở hoặc xử lý tệp tin: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void deleteTempFile(File file) {
+        if (file != null && file.exists()) {
+            file.delete();
         }
     }
 
@@ -211,8 +211,7 @@ public class EditProfileActivity extends AppCompatActivity {
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
 
-        // Try to parse existing DOB if valid
-        String currentDob = editDob.getText().toString();
+        String currentDob = editDob.getText() != null ? editDob.getText().toString() : "";
         if (!currentDob.isEmpty()) {
             try {
                 String[] parts = currentDob.split("-");
@@ -221,8 +220,7 @@ public class EditProfileActivity extends AppCompatActivity {
                     month = Integer.parseInt(parts[1]) - 1;
                     day = Integer.parseInt(parts[2]);
                 }
-            } catch (Exception e) {
-                // Ignore parsing errors and fallback to current calendar date
+            } catch (Exception ignored) {
             }
         }
 
@@ -231,7 +229,7 @@ public class EditProfileActivity extends AppCompatActivity {
                     calendar.set(Calendar.YEAR, selectedYear);
                     calendar.set(Calendar.MONTH, selectedMonth);
                     calendar.set(Calendar.DAY_OF_MONTH, selectedDay);
-                    
+
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
                     editDob.setText(sdf.format(calendar.getTime()));
                 }, year, month, day);
@@ -245,8 +243,6 @@ public class EditProfileActivity extends AppCompatActivity {
             public void onResponse(Call<UserProfileResponse> call, Response<UserProfileResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     UserProfileResponse profile = response.body();
-                    
-                    // Update SessionManager
                     sessionManager.saveProfile(
                             profile.getFullName(),
                             profile.getPhone(),
@@ -255,15 +251,12 @@ public class EditProfileActivity extends AppCompatActivity {
                             profile.getAddress(),
                             profile.getAvatarUrl()
                     );
-                    
-                    // Reload UI from updated session
                     loadProfileFromSession();
                 }
             }
 
             @Override
             public void onFailure(Call<UserProfileResponse> call, Throwable t) {
-                // Silently ignore, since we loaded from local cache session
             }
         });
     }
@@ -299,8 +292,6 @@ public class EditProfileActivity extends AppCompatActivity {
 
                 if (response.isSuccessful() && response.body() != null) {
                     UserProfileResponse profile = response.body();
-                    
-                    // Save to session
                     sessionManager.saveProfile(
                             profile.getFullName(),
                             profile.getPhone(),
@@ -318,8 +309,7 @@ public class EditProfileActivity extends AppCompatActivity {
                         if (response.errorBody() != null) {
                             errorMsg = response.errorBody().string();
                         }
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    } catch (IOException ignored) {
                     }
                     Toast.makeText(EditProfileActivity.this, errorMsg, Toast.LENGTH_LONG).show();
                 }

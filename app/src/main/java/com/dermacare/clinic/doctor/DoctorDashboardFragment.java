@@ -1,22 +1,14 @@
 package com.dermacare.clinic.doctor;
 
-
 import android.content.Intent;
-
-
-import android.content.Intent;
-
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import android.util.Log;
-
 import android.widget.Toast;
-
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,17 +16,14 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+
 import com.dermacare.clinic.R;
-import com.dermacare.clinic.adapter.AppointmentAdapter;
-import com.dermacare.clinic.data.MockData;
+import com.dermacare.clinic.doctor.DoctorDashboardAppointmentAdapter;
 import com.dermacare.clinic.data.api.ApiClient;
 import com.dermacare.clinic.data.api.model.AppointmentResponse;
 import com.dermacare.clinic.patient.RecordDetailActivity;
 import com.dermacare.clinic.util.SessionManager;
-
-
-import com.dermacare.clinic.MedicalRecordActivity;
-
 
 import java.time.LocalDate;
 import java.time.format.TextStyle;
@@ -43,14 +32,15 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-
 public class DoctorDashboardFragment extends Fragment {
 
     private DoctorDashboardAppointmentAdapter adapter;
     private RecyclerView rv;
     private TextView tvTodayCount, tvCompletedCount, tvPendingCount, tvDoctorName, tvGreeting, tvCurrentDate, tvApptCount, tvDoctorInitials;
+    private ImageView ivDoctorAvatar;
     private View layoutEmpty;
     private List<AppointmentResponse> allAppointments = new ArrayList<>();
+    private SessionManager sessionManager;
 
     @Nullable
     @Override
@@ -62,17 +52,13 @@ public class DoctorDashboardFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        SessionManager session = new SessionManager(requireContext());
 
+        sessionManager = new SessionManager(requireContext());
+
+        // Ánh xạ View của Header Bác sĩ
         tvDoctorName = view.findViewById(R.id.tvDoctorName);
-        String doctorName = session.getName();
-        if (doctorName != null && !doctorName.isEmpty() && !doctorName.regionMatches(true, 0, "BS.", 0, 3)) {
-            doctorName = "BS. " + doctorName;
-        }
-        tvDoctorName.setText(doctorName);
-
         tvDoctorInitials = view.findViewById(R.id.tvDoctorInitials);
-        tvDoctorInitials.setText(getInitials(session.getName()));
+        ivDoctorAvatar = view.findViewById(R.id.ivDoctorAvatar);
 
         tvGreeting = view.findViewById(R.id.tvGreeting);
         tvGreeting.setText(getGreeting());
@@ -80,34 +66,23 @@ public class DoctorDashboardFragment extends Fragment {
         tvCurrentDate = view.findViewById(R.id.tvCurrentDate);
         tvCurrentDate.setText(formatVietnameseDate(LocalDate.now()));
 
+        // Ánh xạ View của Thẻ thống kê
         tvTodayCount = bindStatCard(view, R.id.cardStatToday,
                 R.drawable.bg_stat_icon_teal, R.drawable.ic_nav_calendar, 0xFF0D9488, "Hôm nay");
         tvPendingCount = bindStatCard(view, R.id.cardStatPending,
                 R.drawable.bg_stat_icon_amber, R.drawable.ic_clock, 0xFFD97706, "Chờ duyệt");
         tvCompletedCount = bindStatCard(view, R.id.cardStatCompleted,
                 R.drawable.bg_stat_icon_green, R.drawable.ic_check_circle, 0xFF059669, "Hoàn tất");
+
         tvApptCount = view.findViewById(R.id.tvApptCount);
         layoutEmpty = view.findViewById(R.id.layoutEmpty);
 
+        // Setup RecyclerView
         rv = view.findViewById(R.id.rvSchedule);
         rv.setLayoutManager(new LinearLayoutManager(requireContext()));
-
-        // Cập nhật listener để mở MedicalRecordActivity
-        rv.setAdapter(new AppointmentAdapter(MockData.doctorSchedule(), position -> {
-            String[] appointment = MockData.doctorSchedule().get(position);
-            String patientName = appointment[1];
-            
-            Intent intent = new Intent(requireContext(), MedicalRecordActivity.class);
-            intent.putExtra("PATIENT_NAME", patientName);
-            // Bạn có thể truyền thêm ID nếu MockData có hỗ trợ
-            startActivity(intent);
-        }));
-        
-        // Thêm hiệu ứng click cho các thẻ thống kê
-        view.findViewById(R.id.rvSchedule).setNestedScrollingEnabled(false);
-
         rv.setNestedScrollingEnabled(false);
 
+        // Khởi tạo Adapter gọi API thật
         adapter = new DoctorDashboardAppointmentAdapter(new ArrayList<>(),
                 new DoctorDashboardAppointmentAdapter.ActionListener() {
                     @Override
@@ -141,19 +116,12 @@ public class DoctorDashboardFragment extends Fragment {
                 });
         rv.setAdapter(adapter);
 
-        // Wire up quick action buttons
-        view.findViewById(R.id.btnQuickNewExam).setOnClickListener(v -> {
-            showNewPatients();
-        });
+        // Xử lý các nút Tiện ích nhanh
+        view.findViewById(R.id.btnQuickNewExam).setOnClickListener(v -> showNewPatients());
+        view.findViewById(R.id.btnQuickHistory).setOnClickListener(v -> showHistory());
+        view.findViewById(R.id.btnQuickInvoice).setOnClickListener(v -> showInvoices());
 
-        view.findViewById(R.id.btnQuickHistory).setOnClickListener(v -> {
-            showHistory();
-        });
-
-        view.findViewById(R.id.btnQuickInvoice).setOnClickListener(v -> {
-            showInvoices();
-        });
-
+        // Load dữ liệu
         loadData();
     }
 
@@ -161,6 +129,52 @@ public class DoctorDashboardFragment extends Fragment {
     public void onResume() {
         super.onResume();
         loadData();
+        loadDoctorInfo(); // GỌI HÀM NÀY MỖI KHI QUAY LẠI MÀN HÌNH ĐỂ CẬP NHẬT ẢNH
+    }
+
+    // =========================================================
+    // HÀM HIỂN THỊ THÔNG TIN & AVATAR BÁC SĨ (ĐÃ FIX LỖI ẢNH)
+    // =========================================================
+    private void loadDoctorInfo() {
+        String name = sessionManager.getName();
+        String doctorName = name;
+        if (doctorName != null && !doctorName.isEmpty() && !doctorName.regionMatches(true, 0, "BS.", 0, 3)) {
+            doctorName = "BS. " + doctorName;
+        }
+        tvDoctorName.setText(doctorName != null ? doctorName : "BS. Ẩn danh");
+
+        String avatarUrl = sessionManager.getAvatar();
+
+        // Kiểm tra kĩ chuỗi "null" do API đôi khi trả về string "null"
+        if (avatarUrl != null && !avatarUrl.trim().isEmpty() && !avatarUrl.equals("null")) {
+            // Có ảnh -> Hiện ImageView, Ẩn TextView
+            ivDoctorAvatar.setVisibility(View.VISIBLE);
+            tvDoctorInitials.setVisibility(View.GONE);
+
+            String fullUrl = avatarUrl;
+            if (avatarUrl.startsWith("/")) {
+                fullUrl = ApiClient.BASE_URL + avatarUrl.substring(1);
+            } else if (!avatarUrl.startsWith("http")) {
+                fullUrl = ApiClient.BASE_URL + avatarUrl;
+            }
+
+            Glide.with(this)
+                    .load(fullUrl)
+                    .placeholder(R.drawable.ic_nav_profile)
+                    .error(R.drawable.ic_nav_profile)
+                    .circleCrop() // Cắt thành hình tròn chuẩn xác
+                    .into(ivDoctorAvatar);
+        } else {
+            // Không có ảnh -> Ẩn ImageView, Hiện TextView Initials
+            ivDoctorAvatar.setVisibility(View.GONE);
+            tvDoctorInitials.setVisibility(View.VISIBLE);
+            tvDoctorInitials.setText(getInitials(name));
+
+            // Clear Glide để tránh lỗi hiển thị nhầm ảnh nếu đăng xuất/đăng nhập lại
+            if (getContext() != null) {
+                Glide.with(this).clear(ivDoctorAvatar);
+            }
+        }
     }
 
     private String getGreeting() {
@@ -199,8 +213,6 @@ public class DoctorDashboardFragment extends Fragment {
     }
 
     private void showNewPatients() {
-        // Navigate to DoctorPatientsFragment or show bottom sheet with pending appointments
-        // For simplicity, navigate to the patients tab in DoctorMainActivity
         if (getActivity() instanceof DoctorMainActivity) {
             DoctorMainActivity activity = (DoctorMainActivity) getActivity();
             activity.navigateToTab(R.id.nav_schedule);
@@ -210,7 +222,6 @@ public class DoctorDashboardFragment extends Fragment {
     }
 
     private void showHistory() {
-        // Replace current fragment with DoctorHistoryFragment
         if (getActivity() != null) {
             getActivity().getSupportFragmentManager()
                     .beginTransaction()
@@ -221,7 +232,6 @@ public class DoctorDashboardFragment extends Fragment {
     }
 
     private void showInvoices() {
-        // Replace current fragment with DoctorInvoicesFragment
         if (getActivity() != null) {
             getActivity().getSupportFragmentManager()
                     .beginTransaction()
@@ -242,7 +252,6 @@ public class DoctorDashboardFragment extends Fragment {
                         if (response.isSuccessful() && response.body() != null) {
                             allAppointments = response.body();
 
-                            // Show PENDING/CONFIRMED + today's COMPLETED
                             List<AppointmentResponse> confirmedAppts = new ArrayList<>();
                             int todayCount = 0;
                             int pendingCount = 0;
@@ -306,6 +315,5 @@ public class DoctorDashboardFragment extends Fragment {
                         Toast.makeText(requireContext(), "Lỗi kết nối", Toast.LENGTH_SHORT).show();
                     }
                 });
-
     }
 }

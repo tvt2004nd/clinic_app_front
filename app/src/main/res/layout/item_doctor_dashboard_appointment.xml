@@ -1,130 +1,138 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- 2 DÒNG DƯỚI ĐÂY LÀ QUAN TRỌNG NHẤT ĐỂ FIX LỖI BUILD CỦA BẠN -->
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="12dp"
-    android:foreground="?attr/selectableItemBackground"
     app:cardBackgroundColor="@color/white"
-    app:cardCornerRadius="18dp"
+    app:cardCornerRadius="16dp"
     app:cardElevation="2dp"
-    app:strokeColor="#E8EEF4"
-    app:strokeWidth="1dp">
+    app:strokeWidth="0dp">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="72dp"
-        android:paddingVertical="14dp"
-        android:paddingEnd="16dp">
+        android:orientation="horizontal">
 
+        <!-- THÀNH PHẦN 1: Thanh trạng thái dọc (StatusBar) -->
+        <!-- Đổi màu động trong Adapter: Đỏ (khẩn), Cam (chờ), Xanh (xong) -->
         <View
             android:id="@+id/statusBar"
-            android:layout_width="4dp"
-            android:layout_height="0dp"
-            android:background="@drawable/bg_status_bar_pending"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_width="6dp"
+            android:layout_height="match_parent"
+            android:background="#0D9488" />
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardAvatar"
-            android:layout_width="44dp"
-            android:layout_height="44dp"
-            android:layout_marginStart="14dp"
-            app:cardBackgroundColor="#FEE2E2"
-            app:cardCornerRadius="22dp"
-            app:cardElevation="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/statusBar"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <TextView
-                android:id="@+id/tvAvatarInitials"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:fontFamily="@font/momo_trust_sans"
-                android:text="TH"
-                android:textColor="#DC2626"
-                android:textSize="14sp"
-                android:textStyle="bold" />
-        </com.google.android.material.card.MaterialCardView>
-
-        <TextView
-            android:id="@+id/tvPatientName"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginEnd="8dp"
-            android:ellipsize="end"
-            android:fontFamily="@font/momo_trust_sans"
-            android:maxLines="1"
-            android:text="Trần Thị Hoa"
-            android:textColor="#0F172A"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toStartOf="@id/tvTime"
-            app:layout_constraintStart_toEndOf="@id/cardAvatar"
-            app:layout_constraintTop_toTopOf="@id/cardAvatar" />
-
+        <!-- THÀNH PHẦN 2: Nội dung chính -->
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="8dp"
+            android:background="?attr/selectableItemBackground"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            app:layout_constraintEnd_toStartOf="@id/tvTime"
-            app:layout_constraintStart_toEndOf="@id/cardAvatar"
-            app:layout_constraintTop_toBottomOf="@id/tvPatientName">
+            android:padding="16dp">
 
-            <ImageView
-                android:layout_width="14dp"
-                android:layout_height="14dp"
-                android:src="@drawable/ic_stethoscope"
-                app:tint="#94A3B8" />
+            <!-- Khung chứa Avatar -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardAvatar"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="0dp"
+                app:strokeWidth="0dp">
 
-            <TextView
-                android:id="@+id/tvType"
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <!-- Chữ cái đầu (Sẽ tự đổi màu theo thuật toán trong Adapter) -->
+                    <TextView
+                        android:id="@+id/tvAvatarInitials"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <!-- Ảnh đại diện thật từ API (Ban đầu ẩn) -->
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/ivPatientAvatar"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:visibility="gone"
+                        app:shapeAppearanceOverlay="@style/ShapeAppearance.DermaCare.Circle" />
+                </FrameLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Thông tin Bệnh nhân -->
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
+                android:layout_marginStart="14dp"
                 android:layout_weight="1"
-                android:ellipsize="end"
-                android:fontFamily="@font/open_sans"
-                android:maxLines="1"
-                android:text="Da liễu - Khám mới"
-                android:textColor="#64748B"
-                android:textSize="12sp" />
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <!-- Tên bệnh nhân -->
+                    <TextView
+                        android:id="@+id/tvPatientName"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:textColor="#0F172A"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <!-- Giờ khám -->
+                    <TextView
+                        android:id="@+id/tvTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:textColor="#0F172A"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <!-- Loại khám / Lý do -->
+                    <TextView
+                        android:id="@+id/tvType"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:textColor="#64748B"
+                        android:textSize="13sp" />
+
+                    <!-- Badge Trạng thái -->
+                    <TextView
+                        android:id="@+id/tvStatusBadge"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:paddingHorizontal="10dp"
+                        android:paddingVertical="4dp"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
         </LinearLayout>
-
-        <TextView
-            android:id="@+id/tvTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/momo_trust_sans"
-            android:text="08:30"
-            android:textColor="#0F172A"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/cardAvatar" />
-
-        <TextView
-            android:id="@+id/tvStatusBadge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:fontFamily="@font/open_sans"
-            android:paddingHorizontal="10dp"
-            android:paddingVertical="3dp"
-            android:text="Chờ xác nhận"
-            android:textSize="10sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvTime" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

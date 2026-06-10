@@ -3,12 +3,15 @@ package com.dermacare.clinic.doctor;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView; // Import ImageView
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide; // Import Glide
 import com.dermacare.clinic.R;
+import com.dermacare.clinic.data.api.ApiClient;
 import com.dermacare.clinic.data.api.model.AppointmentResponse;
 import com.google.android.material.card.MaterialCardView;
 
@@ -19,9 +22,7 @@ public class DoctorDashboardAppointmentAdapter extends RecyclerView.Adapter<Doct
 
     public interface ActionListener {
         void onConfirm(AppointmentResponse appt);
-
         void onExamine(AppointmentResponse appt);
-
         void onViewRecord(AppointmentResponse appt);
     }
 
@@ -61,11 +62,35 @@ public class DoctorDashboardAppointmentAdapter extends RecyclerView.Adapter<Doct
         holder.tvTime.setText(time);
 
         holder.tvPatientName.setText(appt.patientName != null ? appt.patientName : "--");
-        holder.tvAvatarInitials.setText(getInitials(appt.patientName));
 
-        int[] avatarStyle = AVATAR_STYLES[position % AVATAR_STYLES.length];
-        holder.cardAvatar.setCardBackgroundColor(avatarStyle[0]);
-        holder.tvAvatarInitials.setTextColor(avatarStyle[1]);
+        // ================= XỬ LÝ AVATAR (GLIDE + CHỮ MÀU RANDOM) =================
+        String avatarUrl = appt.avatarUrl; // Đảm bảo Model AppointmentResponse của bạn đã có biến này
+
+        if (avatarUrl != null && !avatarUrl.trim().isEmpty() && !avatarUrl.equals("null")) {
+            // 1. CÓ ẢNH THẬT: Tắt chữ, bật ảnh
+            holder.tvAvatarInitials.setVisibility(View.GONE);
+            holder.ivPatientAvatar.setVisibility(View.VISIBLE);
+
+            String finalUrl = avatarUrl.startsWith("/") ? ApiClient.BASE_URL + avatarUrl.substring(1) : avatarUrl;
+
+            Glide.with(holder.itemView.getContext())
+                    .load(finalUrl)
+                    .centerCrop()
+                    .into(holder.ivPatientAvatar);
+        } else {
+            // 2. KHÔNG CÓ ẢNH: Bật chữ, tắt ảnh, clear bộ nhớ
+            holder.tvAvatarInitials.setVisibility(View.VISIBLE);
+            holder.ivPatientAvatar.setVisibility(View.GONE);
+            Glide.with(holder.itemView.getContext()).clear(holder.ivPatientAvatar);
+
+            holder.tvAvatarInitials.setText(getInitials(appt.patientName));
+
+            // Xử lý đổi màu theo thuật toán tuyệt hay của bạn
+            int[] avatarStyle = AVATAR_STYLES[position % AVATAR_STYLES.length];
+            holder.cardAvatar.setCardBackgroundColor(avatarStyle[0]);
+            holder.tvAvatarInitials.setTextColor(avatarStyle[1]);
+        }
+        // =========================================================================
 
         String specialty = appt.specialty != null && !appt.specialty.isEmpty()
                 ? appt.specialty : "Da liễu";
@@ -132,6 +157,7 @@ public class DoctorDashboardAppointmentAdapter extends RecyclerView.Adapter<Doct
         final View statusBar;
         final MaterialCardView cardAvatar;
         final TextView tvAvatarInitials, tvPatientName, tvType, tvTime, tvStatusBadge;
+        final ImageView ivPatientAvatar; // KAI BÁO IMAGEVIEW MỚI THÊM TỪ XML
 
         Holder(@NonNull View itemView) {
             super(itemView);
@@ -142,6 +168,7 @@ public class DoctorDashboardAppointmentAdapter extends RecyclerView.Adapter<Doct
             tvType = itemView.findViewById(R.id.tvType);
             tvTime = itemView.findViewById(R.id.tvTime);
             tvStatusBadge = itemView.findViewById(R.id.tvStatusBadge);
+            ivPatientAvatar = itemView.findViewById(R.id.ivPatientAvatar); // ÁNH XẠ
         }
     }
 }

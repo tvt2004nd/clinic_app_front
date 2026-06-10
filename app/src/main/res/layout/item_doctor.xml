@@ -9,23 +9,25 @@
     app:cardElevation="3dp"
     app:strokeWidth="0dp">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
         android:padding="14dp">
 
-        <!-- Avatar with initials -->
+        <!-- Avatar Container -->
         <FrameLayout
+            android:id="@+id/avatarContainer"
             android:layout_width="68dp"
-            android:layout_height="68dp">
+            android:layout_height="68dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <!-- Gradient initials background -->
             <TextView
                 android:id="@+id/tvAvatarInitials"
-                android:layout_width="68dp"
-                android:layout_height="68dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:background="@drawable/bg_avatar_gradient"
                 android:gravity="center"
                 android:textColor="@color/white"
@@ -35,8 +37,8 @@
             <!-- Real image on top -->
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/imgAvatar"
-                android:layout_width="68dp"
-                android:layout_height="68dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:scaleType="centerCrop"
                 app:shapeAppearanceOverlay="@style/ShapeAppearance.DermaCare.Medium" />
 
@@ -51,93 +53,103 @@
                 android:visibility="gone" />
         </FrameLayout>
 
-        <!-- Info column -->
-        <LinearLayout
+        <!-- Info Section -->
+        <TextView
+            android:id="@+id/tvDoctorName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="14dp"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:layout_marginEnd="8dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/text_primary"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/btnBook"
+            app:layout_constraintStart_toEndOf="@+id/avatarContainer"
+            app:layout_constraintTop_toTopOf="@+id/avatarContainer" />
 
-            <TextView
-                android:id="@+id/tvDoctorName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:textColor="@color/text_primary"
-                android:textSize="15sp"
-                android:textStyle="bold" />
+        <TextView
+            android:id="@+id/tvSpecialty"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:textColor="@color/text_secondary"
+            android:textSize="13sp"
+            app:layout_constraintEnd_toEndOf="@+id/tvDoctorName"
+            app:layout_constraintStart_toStartOf="@+id/tvDoctorName"
+            app:layout_constraintTop_toBottomOf="@+id/tvDoctorName" />
 
-            <TextView
-                android:id="@+id/tvSpecialty"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:textColor="@color/text_secondary"
-                android:textSize="13sp" />
+        <!-- Rating and Status Row -->
+        <ImageView
+            android:id="@+id/icStar"
+            android:layout_width="13dp"
+            android:layout_height="13dp"
+            android:layout_marginTop="8dp"
+            android:src="@drawable/ic_star"
+            app:layout_constraintStart_toStartOf="@+id/tvDoctorName"
+            app:layout_constraintTop_toBottomOf="@+id/tvSpecialty"
+            app:tint="#F59E0B" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+        <TextView
+            android:id="@+id/tvRating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:textColor="#92400E"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/icStar"
+            app:layout_constraintStart_toEndOf="@+id/icStar"
+            app:layout_constraintTop_toTopOf="@+id/icStar" />
 
-                <!-- Star + Rating -->
-                <ImageView
-                    android:layout_width="13dp"
-                    android:layout_height="13dp"
-                    android:src="@drawable/ic_star"
-                    app:tint="#F59E0B" />
+        <View
+            android:id="@+id/dotSeparator"
+            android:layout_width="4dp"
+            android:layout_height="4dp"
+            android:layout_marginHorizontal="8dp"
+            android:background="@drawable/bg_logo_circle"
+            android:backgroundTint="@color/text_muted"
+            app:layout_constraintBottom_toBottomOf="@+id/tvRating"
+            app:layout_constraintStart_toEndOf="@+id/tvRating"
+            app:layout_constraintTop_toTopOf="@+id/tvRating" />
 
-                <TextView
-                    android:id="@+id/tvRating"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
-                    android:textColor="#92400E"
-                    android:textSize="13sp"
-                    android:textStyle="bold" />
+        <TextView
+            android:id="@+id/tvAvailable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="Còn lịch"
+            android:textColor="#16A34A"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/tvRating"
+            app:layout_constraintStart_toEndOf="@+id/dotSeparator"
+            app:layout_constraintTop_toTopOf="@+id/tvRating" />
 
-                <!-- Dot separator -->
-                <View
-                    android:layout_width="4dp"
-                    android:layout_height="4dp"
-                    android:layout_marginHorizontal="8dp"
-                    android:background="@drawable/bg_logo_circle"
-                    android:backgroundTint="@color/text_muted" />
-
-                <!-- Available text -->
-                <TextView
-                    android:id="@+id/tvAvailable"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Còn lịch"
-                    android:textColor="#16A34A"
-                    android:textSize="12sp"
-                    android:textStyle="bold"
-                    android:visibility="gone" />
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/tvFee"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                android:textColor="@color/primary"
-                android:textSize="14sp"
-                android:textStyle="bold" />
-        </LinearLayout>
+        <TextView
+            android:id="@+id/tvFee"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:textColor="@color/primary"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/tvDoctorName"
+            app:layout_constraintTop_toBottomOf="@+id/icStar" />
 
         <!-- Arrow button -->
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/btnBook"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginStart="8dp"
             app:cardBackgroundColor="@color/primary"
             app:cardCornerRadius="12dp"
             app:cardElevation="2dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:strokeWidth="0dp">
 
             <ImageView
@@ -147,5 +159,5 @@
                 android:src="@drawable/ic_nav_calendar"
                 app:tint="@color/white" />
         </com.google.android.material.card.MaterialCardView>
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

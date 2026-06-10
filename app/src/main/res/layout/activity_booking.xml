@@ -1,469 +1,574 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F7FF"
-    android:orientation="vertical">
+    android:background="@color/background">
 
-    <!-- Header -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bg_header_gradient"
-        android:orientation="vertical"
-        android:paddingTop="52dp"
-        android:paddingBottom="24dp"
-        android:paddingHorizontal="20dp">
-
-        <!-- Back button + Title -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/btnBack"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                app:cardBackgroundColor="#26FFFFFF"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="0dp"
-                app:strokeWidth="0dp">
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_gravity="center"
-                    android:src="@android:drawable/ic_media_previous"
-                    app:tint="@color/white" />
-            </com.google.android.material.card.MaterialCardView>
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="14dp"
-                android:layout_weight="1"
-                android:text="Đặt lịch khám"
-                android:textColor="@color/white"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-        </LinearLayout>
-
-        <!-- Doctor mini card inside header -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:background="#1AFFFFFF"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:padding="14dp">
-
-            <FrameLayout
-                android:layout_width="52dp"
-                android:layout_height="52dp">
-
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/imgDoctorHeader"
-                    android:layout_width="52dp"
-                    android:layout_height="52dp"
-                    android:scaleType="centerCrop"
-                    app:shapeAppearanceOverlay="@style/ShapeAppearance.DermaCare.Medium" />
-
-                <TextView
-                    android:id="@+id/tvDoctorHeaderInitials"
-                    android:layout_width="52dp"
-                    android:layout_height="52dp"
-                    android:background="@drawable/bg_avatar_gradient"
-                    android:gravity="center"
-                    android:textColor="@color/white"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-            </FrameLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="14dp"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/tvBookingDoctorName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tvBookingSpecialty"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:textColor="#CCE0F2F1"
-                    android:textSize="13sp" />
-
-                <TextView
-                    android:id="@+id/tvBookingFee"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:textColor="@color/accent_gold"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-        </LinearLayout>
-    </LinearLayout>
-
-    <!-- Step indicator -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:paddingHorizontal="24dp"
-        android:paddingVertical="16dp">
-
-        <!-- Step 1 -->
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/stepCircle1"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                app:cardBackgroundColor="@color/primary"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="0dp"
-                app:strokeWidth="0dp">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="1"
-                    android:textColor="@color/white"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
-            </com.google.android.material.card.MaterialCardView>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="Chọn lịch"
-                android:textColor="@color/primary"
-                android:textSize="11sp"
-                android:textStyle="bold" />
-        </LinearLayout>
-
-        <View
-            android:id="@+id/stepLine"
-            android:layout_width="40dp"
-            android:layout_height="2dp"
-            android:layout_marginBottom="16dp"
-            android:background="@color/border" />
-
-        <!-- Step 2 -->
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/stepCircle2"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                app:cardBackgroundColor="@color/surface_variant"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="0dp"
-                app:strokeWidth="0dp">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="2"
-                    android:textColor="@color/text_secondary"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
-            </com.google.android.material.card.MaterialCardView>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="Thông tin"
-                android:textColor="@color/text_secondary"
-                android:textSize="11sp" />
-        </LinearLayout>
-    </LinearLayout>
-
-    <!-- Content ViewFlipper: step1 / step2 -->
-    <android.widget.ViewFlipper
-        android:id="@+id/viewFlipper"
-        android:layout_width="match_parent"
+    <!-- Scrollable Content -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:clipToPadding="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <!-- ===== STEP 1: Choose Schedule ===== -->
-        <androidx.core.widget.NestedScrollView
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clipToPadding="false"
-            android:paddingBottom="24dp">
+            android:layout_height="wrap_content">
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <!-- Header Background with Gradient -->
+            <View
+                android:id="@+id/headerBackground"
+                android:layout_width="0dp"
+                android:layout_height="240dp"
+                android:background="@drawable/bg_header_gradient"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!-- Top Toolbar Content -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/headerContent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingHorizontal="20dp">
+                android:paddingHorizontal="16dp"
+                android:paddingTop="48dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_max="600dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="12dp"
-                    android:text="Chọn ca khám"
-                    android:textColor="@color/text_primary"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvSchedules"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:nestedScrollingEnabled="false" />
-            </LinearLayout>
-        </androidx.core.widget.NestedScrollView>
-
-        <!-- ===== STEP 2: Patient Info Form ===== -->
-        <androidx.core.widget.NestedScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clipToPadding="false"
-            android:paddingBottom="24dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingHorizontal="20dp">
-
-                <!-- Selected slot summary -->
                 <com.google.android.material.card.MaterialCardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
-                    app:cardBackgroundColor="@color/primary_soft"
-                    app:cardCornerRadius="16dp"
+                    android:id="@+id/btnBack"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    app:cardBackgroundColor="#26FFFFFF"
+                    app:cardCornerRadius="@dimen/radius_sm"
                     app:cardElevation="0dp"
-                    app:strokeColor="@color/primary"
-                    app:strokeWidth="1dp">
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:strokeWidth="0dp">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:padding="16dp">
-
-                        <ImageView
-                            android:layout_width="22dp"
-                            android:layout_height="22dp"
-                            android:src="@drawable/ic_nav_calendar"
-                            app:tint="@color/primary" />
-
-                        <TextView
-                            android:id="@+id/tvSelectedSlot"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
-                            android:text="Chưa chọn ca"
-                            android:textColor="@color/primary"
-                            android:textSize="14sp"
-                            android:textStyle="bold" />
-                    </LinearLayout>
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_arrow_back"
+                        app:tint="@color/white" />
                 </com.google.android.material.card.MaterialCardView>
 
-                <!-- Full name -->
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:id="@+id/tvTitle"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="6dp"
-                    android:text="Họ và tên *"
-                    android:textColor="@color/text_primary"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    app:boxCornerRadiusBottomEnd="14dp"
-                    app:boxCornerRadiusBottomStart="14dp"
-                    app:boxCornerRadiusTopEnd="14dp"
-                    app:boxCornerRadiusTopStart="14dp"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etPatientName"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Nhập họ và tên"
-                        android:inputType="textPersonName"
-                        android:padding="14dp" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <!-- Phone -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="6dp"
-                    android:text="Số điện thoại *"
-                    android:textColor="@color/text_primary"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    app:boxCornerRadiusBottomEnd="14dp"
-                    app:boxCornerRadiusBottomStart="14dp"
-                    app:boxCornerRadiusTopEnd="14dp"
-                    app:boxCornerRadiusTopStart="14dp"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etPhone"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Nhập số điện thoại"
-                        android:inputType="phone"
-                        android:padding="14dp" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <!-- Birth year -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="6dp"
-                    android:text="Năm sinh"
-                    android:textColor="@color/text_primary"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    app:boxCornerRadiusBottomEnd="14dp"
-                    app:boxCornerRadiusBottomStart="14dp"
-                    app:boxCornerRadiusTopEnd="14dp"
-                    app:boxCornerRadiusTopStart="14dp"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etBirthYear"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="VD: 1990"
-                        android:inputType="number"
-                        android:padding="14dp" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <!-- Symptoms -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="6dp"
-                    android:text="Triệu chứng / Lý do khám"
-                    android:textColor="@color/text_primary"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    app:boxCornerRadiusBottomEnd="14dp"
-                    app:boxCornerRadiusBottomStart="14dp"
-                    app:boxCornerRadiusTopEnd="14dp"
-                    app:boxCornerRadiusTopStart="14dp"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etSymptoms"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Mô tả tình trạng của bạn..."
-                        android:inputType="textMultiLine"
-                        android:minLines="3"
-                        android:gravity="top"
-                        android:padding="14dp" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
-                    android:text="* Thông tin bắt buộc"
-                    android:textColor="@color/text_muted"
-                    android:textSize="12sp" />
-
-                <!-- Confirm button -->
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnConfirmBooking"
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:text="Xác nhận đặt lịch"
+                    android:layout_marginStart="16dp"
+                    android:text="Đặt lịch khám"
                     android:textColor="@color/white"
-                    android:textSize="16sp"
+                    android:textSize="20sp"
                     android:textStyle="bold"
-                    app:backgroundTint="@color/primary"
-                    app:cornerRadius="16dp" />
-            </LinearLayout>
-        </androidx.core.widget.NestedScrollView>
-    </android.widget.ViewFlipper>
+                    app:layout_constraintBottom_toBottomOf="@+id/btnBack"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/btnBack"
+                    app:layout_constraintTop_toTopOf="@+id/btnBack" />
 
-    <!-- Bottom bar with Next button (Step 1) -->
-    <LinearLayout
-        android:id="@+id/bottomBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:elevation="8dp"
-        android:orientation="horizontal"
-        android:paddingHorizontal="20dp"
-        android:paddingVertical="16dp">
+                <!-- Doctor Info Card -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardDoctorHeader"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    app:cardBackgroundColor="#26FFFFFF"
+                    app:cardCornerRadius="@dimen/radius_lg"
+                    app:cardElevation="0dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/btnBack"
+                    app:strokeColor="#33FFFFFF"
+                    app:strokeWidth="1dp">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnPrevStep"
-            style="@style/Widget.Material3.Button.TonalButton"
-            android:layout_width="wrap_content"
-            android:layout_height="52dp"
-            android:layout_marginEnd="12dp"
-            android:text="Quay lại"
-            android:textColor="@color/primary"
-            android:visibility="gone"
-            app:backgroundTint="@color/primary_soft"
-            app:cornerRadius="14dp" />
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnNextStep"
-            android:layout_width="match_parent"
-            android:layout_height="52dp"
-            android:text="Tiếp theo →"
-            android:textColor="@color/white"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            app:backgroundTint="@color/primary"
-            app:cornerRadius="14dp" />
-    </LinearLayout>
-</LinearLayout>
+                        <FrameLayout
+                            android:id="@+id/avatarContainer"
+                            android:layout_width="56dp"
+                            android:layout_height="56dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <com.google.android.material.imageview.ShapeableImageView
+                                android:id="@+id/imgDoctorHeader"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:scaleType="centerCrop"
+                                app:shapeAppearanceOverlay="@style/ShapeAppearance.DermaCare.Medium" />
+
+                            <TextView
+                                android:id="@+id/tvDoctorHeaderInitials"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@drawable/bg_avatar_gradient"
+                                android:gravity="center"
+                                android:textColor="@color/white"
+                                android:textSize="18sp"
+                                android:textStyle="bold"
+                                android:visibility="gone" />
+                        </FrameLayout>
+
+                        <TextView
+                            android:id="@+id/tvBookingDoctorName"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:textColor="@color/white"
+                            android:textSize="17sp"
+                            android:textStyle="bold"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/avatarContainer"
+                            app:layout_constraintTop_toTopOf="parent"
+                            tools:text="BS. Nguyễn Văn A" />
+
+                        <TextView
+                            android:id="@+id/tvBookingSpecialty"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:textColor="#B3FFFFFF"
+                            android:textSize="13sp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="@+id/tvBookingDoctorName"
+                            app:layout_constraintTop_toBottomOf="@+id/tvBookingDoctorName"
+                            tools:text="Chuyên khoa Da liễu" />
+
+                        <TextView
+                            android:id="@+id/tvBookingFee"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:textColor="#BAE6FD"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="@+id/tvBookingDoctorName"
+                            app:layout_constraintTop_toBottomOf="@+id/tvBookingSpecialty"
+                            tools:text="300.000 ₫" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/contentCard"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-32dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="0dp"
+                app:cardElevation="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/headerBackground"
+                app:shapeAppearanceOverlay="@style/ShapeAppearance.DermaCare.Large.Top"
+                app:strokeWidth="0dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <!-- Step Indicator -->
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/stepIndicator"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:paddingVertical="24dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintWidth_max="400dp">
+
+                        <View
+                            android:id="@+id/stepLine"
+                            android:layout_width="64dp"
+                            android:layout_height="2dp"
+                            android:background="@color/border"
+                            app:layout_constraintBottom_toBottomOf="@+id/stepCircle1"
+                            app:layout_constraintEnd_toStartOf="@+id/stepCircle2"
+                            app:layout_constraintStart_toEndOf="@+id/stepCircle1"
+                            app:layout_constraintTop_toTopOf="@+id/stepCircle1" />
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/stepCircle1"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            app:cardBackgroundColor="@color/primary"
+                            app:cardCornerRadius="16dp"
+                            app:cardElevation="0dp"
+                            app:layout_constraintEnd_toStartOf="@+id/stepLine"
+                            app:layout_constraintHorizontal_chainStyle="packed"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:strokeWidth="0dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="1"
+                                android:textColor="@color/white"
+                                android:textSize="14sp"
+                                android:textStyle="bold" />
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <TextView
+                            android:id="@+id/tvStep1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="Chọn lịch"
+                            android:textColor="@color/primary"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            app:layout_constraintEnd_toEndOf="@+id/stepCircle1"
+                            app:layout_constraintStart_toStartOf="@+id/stepCircle1"
+                            app:layout_constraintTop_toBottomOf="@+id/stepCircle1" />
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/stepCircle2"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            app:cardBackgroundColor="@color/surface_variant"
+                            app:cardCornerRadius="16dp"
+                            app:cardElevation="0dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/stepLine"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:strokeWidth="0dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="2"
+                                android:textColor="@color/text_secondary"
+                                android:textSize="14sp"
+                                android:textStyle="bold" />
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <TextView
+                            android:id="@+id/tvStep2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="Thông tin"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="12sp"
+                            app:layout_constraintEnd_toEndOf="@+id/stepCircle2"
+                            app:layout_constraintStart_toStartOf="@+id/stepCircle2"
+                            app:layout_constraintTop_toBottomOf="@+id/stepCircle2" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <ViewFlipper
+                        android:id="@+id/viewFlipper"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        app:layout_constraintBottom_toTopOf="@+id/bottomBar"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/stepIndicator">
+
+                        <!-- STEP 1: Choose Schedule -->
+                        <androidx.core.widget.NestedScrollView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:overScrollMode="never">
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:paddingHorizontal="24dp"
+                                android:paddingBottom="24dp">
+
+                                <TextView
+                                    android:id="@+id/tvLabelSelectSlot"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="12dp"
+                                    android:text="Chọn ca khám khả dụng"
+                                    android:textColor="@color/text_primary"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <androidx.recyclerview.widget.RecyclerView
+                                    android:id="@+id/rvSchedules"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="16dp"
+                                    android:nestedScrollingEnabled="false"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/tvLabelSelectSlot"
+                                    tools:listitem="@android:layout/simple_list_item_1" />
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+                        </androidx.core.widget.NestedScrollView>
+
+                        <!-- STEP 2: Patient Info Form -->
+                        <androidx.core.widget.NestedScrollView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:overScrollMode="never">
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:paddingHorizontal="24dp"
+                                android:paddingBottom="24dp">
+
+                                <com.google.android.material.card.MaterialCardView
+                                    android:id="@+id/cardSelectedSlot"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="12dp"
+                                    app:cardBackgroundColor="@color/primary_soft"
+                                    app:cardCornerRadius="@dimen/radius_md"
+                                    app:cardElevation="0dp"
+                                    app:layout_constrainedWidth="true"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    app:layout_constraintWidth_max="500dp"
+                                    app:strokeColor="@color/primary"
+                                    app:strokeWidth="1dp">
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="center_vertical"
+                                        android:orientation="horizontal"
+                                        android:padding="16dp">
+
+                                        <ImageView
+                                            android:id="@+id/icCalendar"
+                                            android:layout_width="20dp"
+                                            android:layout_height="20dp"
+                                            android:src="@drawable/ic_nav_calendar"
+                                            app:tint="@color/primary" />
+
+                                        <TextView
+                                            android:id="@+id/tvSelectedSlot"
+                                            android:layout_width="0dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginStart="12dp"
+                                            android:layout_weight="1"
+                                            android:textColor="@color/primary"
+                                            android:textSize="14sp"
+                                            android:textStyle="bold"
+                                            tools:text="Thứ 2, 20/05 - 08:30" />
+                                    </LinearLayout>
+                                </com.google.android.material.card.MaterialCardView>
+
+                                <!-- Input Fields Container -->
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="24dp"
+                                    android:orientation="vertical"
+                                    app:layout_constrainedWidth="true"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/cardSelectedSlot"
+                                    app:layout_constraintWidth_max="500dp">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginBottom="8dp"
+                                        android:text="Họ và tên *"
+                                        android:textColor="@color/text_primary"
+                                        android:textSize="14sp"
+                                        android:textStyle="bold" />
+
+                                    <com.google.android.material.textfield.TextInputLayout
+                                        style="@style/Widget.DermaCare.Input"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginBottom="16dp">
+
+                                        <com.google.android.material.textfield.TextInputEditText
+                                            android:id="@+id/etPatientName"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:hint="Nhập họ và tên bệnh nhân"
+                                            android:imeOptions="actionNext"
+                                            android:inputType="textPersonName" />
+                                    </com.google.android.material.textfield.TextInputLayout>
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginBottom="8dp"
+                                        android:text="Số điện thoại *"
+                                        android:textColor="@color/text_primary"
+                                        android:textSize="14sp"
+                                        android:textStyle="bold" />
+
+                                    <com.google.android.material.textfield.TextInputLayout
+                                        style="@style/Widget.DermaCare.Input"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginBottom="16dp">
+
+                                        <com.google.android.material.textfield.TextInputEditText
+                                            android:id="@+id/etPhone"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:hint="Nhập số điện thoại liên hệ"
+                                            android:imeOptions="actionNext"
+                                            android:inputType="phone" />
+                                    </com.google.android.material.textfield.TextInputLayout>
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginBottom="8dp"
+                                        android:text="Năm sinh"
+                                        android:textColor="@color/text_primary"
+                                        android:textSize="14sp"
+                                        android:textStyle="bold" />
+
+                                    <com.google.android.material.textfield.TextInputLayout
+                                        style="@style/Widget.DermaCare.Input"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginBottom="16dp">
+
+                                        <com.google.android.material.textfield.TextInputEditText
+                                            android:id="@+id/etBirthYear"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:hint="Ví dụ: 1995"
+                                            android:imeOptions="actionNext"
+                                            android:inputType="number" />
+                                    </com.google.android.material.textfield.TextInputLayout>
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginBottom="8dp"
+                                        android:text="Triệu chứng / Lý do khám"
+                                        android:textColor="@color/text_primary"
+                                        android:textSize="14sp"
+                                        android:textStyle="bold" />
+
+                                    <com.google.android.material.textfield.TextInputLayout
+                                        style="@style/Widget.DermaCare.Input"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginBottom="8dp">
+
+                                        <com.google.android.material.textfield.TextInputEditText
+                                            android:id="@+id/etSymptoms"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:gravity="top"
+                                            android:hint="Mô tả ngắn gọn tình trạng..."
+                                            android:imeOptions="actionDone"
+                                            android:inputType="textMultiLine"
+                                            android:minLines="3" />
+                                    </com.google.android.material.textfield.TextInputLayout>
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginBottom="24dp"
+                                        android:text="* Thông tin bắt buộc"
+                                        android:textColor="@color/text_muted"
+                                        android:textSize="12sp" />
+
+                                    <com.google.android.material.button.MaterialButton
+                                        android:id="@+id/btnConfirmBooking"
+                                        style="@style/Widget.DermaCare.Button.Primary"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:text="Xác nhận đặt lịch"
+                                        android:textAllCaps="false" />
+
+                                </LinearLayout>
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+                        </androidx.core.widget.NestedScrollView>
+
+                    </ViewFlipper>
+
+                    <!-- Bottom Action Bar -->
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/bottomBar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:cardBackgroundColor="@color/white"
+                        app:cardCornerRadius="0dp"
+                        app:cardElevation="12dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:strokeWidth="0dp">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingHorizontal="24dp"
+                            android:paddingVertical="16dp"
+                            android:paddingBottom="24dp">
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                app:layout_constrainedWidth="true"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintWidth_max="600dp">
+
+                                <com.google.android.material.button.MaterialButton
+                                    android:id="@+id/btnPrevStep"
+                                    style="@style/Widget.Material3.Button.TonalButton"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="@dimen/button_height"
+                                    android:text="Quay lại"
+                                    android:textColor="@color/primary"
+                                    android:visibility="gone"
+                                    app:backgroundTint="@color/primary_soft"
+                                    app:cornerRadius="16dp"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <com.google.android.material.button.MaterialButton
+                                    android:id="@+id/btnNextStep"
+                                    style="@style/Widget.DermaCare.Button.Primary"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="16dp"
+                                    android:text="Tiếp theo →"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toEndOf="@+id/btnPrevStep"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

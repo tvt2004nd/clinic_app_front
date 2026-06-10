@@ -4,33 +4,49 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    android:fillViewport="true">
+    android:fillViewport="true"
+    android:scrollbars="none">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
-        <FrameLayout
-            android:layout_width="match_parent"
+        <!-- Header Background -->
+        <View
+            android:id="@+id/headerBackground"
+            android:layout_width="0dp"
             android:layout_height="@dimen/login_header_height"
-            android:background="@drawable/bg_header_rounded">
+            android:background="@drawable/bg_header_rounded"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:layout_width="56dp"
-                android:layout_height="56dp"
-                android:layout_gravity="center"
-                android:contentDescription="@string/app_name"
-                android:src="@drawable/ic_logo_heart" />
-        </FrameLayout>
+        <ImageView
+            android:id="@+id/imgLogo"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_marginBottom="64dp"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/ic_logo_heart"
+            app:layout_constraintBottom_toBottomOf="@id/headerBackground"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/headerBackground" />
 
+        <!-- Login Card -->
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/loginCard"
             style="@style/Widget.DermaCare.Card"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/spacing_2xl"
-            android:layout_marginTop="-56dp"
-            app:cardCornerRadius="@dimen/radius_xl">
+            android:layout_marginHorizontal="@dimen/spacing_xl"
+            android:layout_marginTop="-60dp"
+            app:cardCornerRadius="@dimen/radius_xl"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/headerBackground"
+            app:layout_constraintWidth_max="450dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -39,12 +55,12 @@
                 android:padding="@dimen/spacing_2xl">
 
                 <TextView
+                    android:id="@+id/tvWelcome"
                     style="@style/TextAppearance.DermaCare.Headline"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/welcome_back"
-                    android:textSize="28sp"
-                    android:letterSpacing="-0.02" />
+                    android:textSize="28sp" />
 
                 <TextView
                     style="@style/TextAppearance.DermaCare.Subtitle"
@@ -52,39 +68,43 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/spacing_xs"
                     android:text="@string/login_subtitle"
-                    android:alpha="0.8" />
+                    android:alpha="0.7" />
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layoutEmail"
                     style="@style/Widget.DermaCare.Input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/spacing_xl"
                     android:hint="@string/email"
-                    app:startIconDrawable="@android:drawable/ic_dialog_email"
-                    app:startIconTint="@color/text_muted">
+                    app:startIconDrawable="@android:drawable/ic_dialog_email">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/inputEmail"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="textEmailAddress" />
+                        android:inputType="textEmailAddress"
+                        android:imeOptions="actionNext"
+                        android:maxLines="1" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layoutPassword"
                     style="@style/Widget.DermaCare.Input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/spacing_md"
                     android:hint="@string/password"
                     app:endIconMode="password_toggle"
-                    app:startIconDrawable="@android:drawable/ic_lock_idle_lock"
-                    app:startIconTint="@color/text_muted">
+                    app:startIconDrawable="@android:drawable/ic_lock_idle_lock">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/inputPassword"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="textPassword" />
+                        android:inputType="textPassword"
+                        android:imeOptions="actionDone"
+                        android:maxLines="1" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
@@ -93,6 +113,9 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
                     android:layout_marginTop="@dimen/spacing_sm"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:padding="@dimen/spacing_xs"
                     android:text="@string/forgot_password"
                     android:textColor="@color/primary"
@@ -110,7 +133,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/spacing_xl"
-                    android:gravity="center_vertical"
+                    android:gravity="center"
                     android:orientation="horizontal">
 
                     <View
@@ -124,7 +147,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/spacing_lg"
-                        android:text="@string/or_continue_with" />
+                        android:text="@string/or_continue_with"
+                        android:textAllCaps="true"
+                        android:alpha="0.5" />
 
                     <View
                         android:layout_width="0dp"
@@ -144,34 +169,40 @@
                     app:iconGravity="textStart"
                     app:iconPadding="@dimen/spacing_md" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/spacing_lg"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        style="@style/TextAppearance.DermaCare.Subtitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/no_account" />
-
-                    <TextView
-                        android:id="@+id/btnRegister"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/spacing_xs"
-                        android:padding="@dimen/spacing_xs"
-                        android:text="@string/register"
-                        android:textColor="@color/primary"
-                        android:textStyle="bold" />
-                </LinearLayout>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/spacing_3xl" />
-    </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_xl"
+            android:layout_marginBottom="@dimen/spacing_3xl"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/loginCard">
+
+            <TextView
+                style="@style/TextAppearance.DermaCare.Subtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/no_account" />
+
+            <TextView
+                android:id="@+id/btnRegister"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_xs"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="@dimen/spacing_xs"
+                android:text="@string/register"
+                android:textColor="@color/primary"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

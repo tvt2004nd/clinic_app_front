@@ -1,160 +1,144 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background">
-
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        app:elevation="0dp">
-
-        <com.google.android.material.appbar.CollapsingToolbarLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="220dp"
-                        android:background="@drawable/bg_header_gradient" />
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingHorizontal="24dp"
-                        android:paddingTop="56dp"
-                        android:paddingBottom="40dp">
-
-                        <com.google.android.material.imageview.ShapeableImageView
-                            android:id="@+id/ivUserAvatar"
-                            android:layout_width="56dp"
-                            android:layout_height="56dp"
-                            android:padding="2dp"
-                            android:src="@drawable/ic_nav_profile"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:shapeAppearanceOverlay="@style/ShapeAppearance.DermaCare.Circle"
-                            app:strokeColor="#66FFFFFF"
-                            app:strokeWidth="2dp" />
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
-                            android:orientation="vertical"
-                            app:layout_constraintBottom_toBottomOf="@id/ivUserAvatar"
-                            app:layout_constraintEnd_toStartOf="@id/btnNotification"
-                            app:layout_constraintStart_toEndOf="@id/ivUserAvatar"
-                            app:layout_constraintTop_toTopOf="@id/ivUserAvatar">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/hello"
-                                android:textColor="#B3FFFFFF"
-                                android:textSize="14sp" />
-
-                            <TextView
-                                android:id="@+id/tvUserName"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Nguyễn Thị Mai"
-                                android:textColor="@color/white"
-                                android:textSize="22sp"
-                                android:textStyle="bold" />
-                        </LinearLayout>
-
-                        <com.google.android.material.card.MaterialCardView
-                            android:id="@+id/btnNotification"
-                            android:layout_width="48dp"
-                            android:layout_height="48dp"
-                            app:cardBackgroundColor="#26FFFFFF"
-                            app:cardCornerRadius="16dp"
-                            app:cardElevation="0dp"
-                            app:layout_constraintBottom_toBottomOf="@id/ivUserAvatar"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="@id/ivUserAvatar"
-                            app:strokeColor="#33FFFFFF"
-                            app:strokeWidth="1dp">
-
-                            <ImageView
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
-                                android:layout_gravity="center"
-                                android:src="@drawable/ic_notification"
-                                app:tint="@color/white" />
-                        </com.google.android.material.card.MaterialCardView>
-
-                        <com.google.android.material.card.MaterialCardView
-                            android:id="@+id/searchBar"
-                            android:layout_width="match_parent"
-                            android:layout_height="60dp"
-                            android:layout_marginTop="32dp"
-                            app:cardBackgroundColor="@color/white"
-                            app:cardCornerRadius="20dp"
-                            app:cardElevation="16dp"
-                            app:layout_constraintTop_toBottomOf="@id/ivUserAvatar"
-                            app:strokeWidth="0dp">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:gravity="center_vertical"
-                                android:paddingHorizontal="20dp">
-
-                                <ImageView
-                                    android:layout_width="24dp"
-                                    android:layout_height="24dp"
-                                    android:src="@drawable/ic_search"
-                                    app:tint="@color/primary" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginStart="12dp"
-                                    android:text="@string/search_doctor"
-                                    android:textColor="@color/text_muted"
-                                    android:textSize="15sp" />
-                            </LinearLayout>
-                        </com.google.android.material.card.MaterialCardView>
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-                </FrameLayout>
-            </LinearLayout>
-        </com.google.android.material.appbar.CollapsingToolbarLayout>
-    </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
-        android:paddingBottom="100dp"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:overScrollMode="never"
+        android:paddingBottom="100dp">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingTop="12dp">
+            android:layout_height="wrap_content">
 
+            <!-- Header Background -->
+            <View
+                android:id="@+id/headerView"
+                android:layout_width="match_parent"
+                android:layout_height="220dp"
+                android:background="@drawable/bg_header_gradient"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!-- Profile Info -->
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/ivUserAvatar"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="56dp"
+                android:padding="2dp"
+                android:src="@drawable/ic_nav_profile"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:shapeAppearanceOverlay="@style/ShapeAppearance.DermaCare.Circle"
+                app:strokeColor="#66FFFFFF"
+                app:strokeWidth="2dp" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="@id/ivUserAvatar"
+                app:layout_constraintEnd_toStartOf="@id/btnNotification"
+                app:layout_constraintStart_toEndOf="@id/ivUserAvatar"
+                app:layout_constraintTop_toTopOf="@id/ivUserAvatar">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/hello"
+                    android:textColor="#B3FFFFFF"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/tvUserName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Nguyễn Thị Mai"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/btnNotification"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:layout_marginEnd="24dp"
+                app:cardBackgroundColor="#26FFFFFF"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp"
+                app:layout_constraintBottom_toBottomOf="@id/ivUserAvatar"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/ivUserAvatar"
+                app:strokeColor="#33FFFFFF"
+                app:strokeWidth="1dp">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_notification"
+                    app:tint="@color/white" />
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Search Bar -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/searchBar"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginHorizontal="24dp"
+                android:layout_marginTop="28dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="@dimen/radius_l"
+                app:cardElevation="8dp"
+                app:layout_constraintTop_toBottomOf="@id/ivUserAvatar"
+                app:strokeWidth="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:paddingHorizontal="20dp">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_search"
+                        app:tint="@color/primary" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:text="@string/search_doctor"
+                        android:textColor="@color/text_muted"
+                        android:textSize="15sp" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Calendar Section -->
             <TextView
-                style="@style/TextAppearance.DermaCare.Section"
+                android:id="@+id/tvCalendarTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
+                android:layout_marginTop="32dp"
                 android:text="@string/calendar_this_week"
-                android:textSize="18sp" />
+                android:textColor="@color/text_primary"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/searchBar" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvCalendar"
@@ -162,16 +146,22 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:clipToPadding="false"
-                android:paddingHorizontal="24dp" />
+                android:paddingHorizontal="24dp"
+                app:layout_constraintTop_toBottomOf="@id/tvCalendarTitle" />
 
+            <!-- Specialties Section -->
             <TextView
-                style="@style/TextAppearance.DermaCare.Section"
+                android:id="@+id/tvSpecialtiesTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="32dp"
                 android:text="@string/specialties"
-                android:textSize="18sp" />
+                android:textColor="@color/text_primary"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rvCalendar" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvSpecialties"
@@ -179,36 +169,40 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:clipToPadding="false"
-                android:paddingHorizontal="24dp" />
+                android:paddingHorizontal="24dp"
+                app:layout_constraintTop_toBottomOf="@id/tvSpecialtiesTitle" />
 
-            <!-- Quick Actions -->
+            <!-- Quick Utilities -->
             <TextView
-                style="@style/TextAppearance.DermaCare.Section"
+                android:id="@+id/tvQuickActionsTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="32dp"
                 android:text="Tiện ích nhanh"
-                android:textSize="18sp" />
+                android:textColor="@color/text_primary"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rvSpecialties" />
 
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/quickActionsCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="24dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="16dp"
                 app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="20dp"
+                app:cardCornerRadius="@dimen/radius_l"
                 app:cardElevation="2dp"
-                app:strokeColor="#E8EEF4"
-                app:strokeWidth="1dp">
+                app:layout_constraintTop_toBottomOf="@id/tvQuickActionsTitle"
+                app:strokeWidth="0dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/white"
-                    android:baselineAligned="false"
                     android:orientation="horizontal"
-                    android:paddingVertical="18dp">
+                    android:paddingVertical="16dp">
 
                     <LinearLayout
                         android:id="@+id/btnQuickAppointments"
@@ -219,29 +213,24 @@
                         android:clickable="true"
                         android:focusable="true"
                         android:gravity="center_horizontal"
-                        android:orientation="vertical"
-                        android:paddingHorizontal="4dp">
+                        android:orientation="vertical">
 
-                        <FrameLayout
-                            android:layout_width="52dp"
-                            android:layout_height="52dp"
-                            android:background="@drawable/bg_quick_icon_teal">
+                        <View
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:background="@drawable/bg_quick_icon_teal" />
 
-                            <ImageView
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
-                                android:layout_gravity="center"
-                                android:contentDescription="@null"
-                                android:src="@drawable/ic_nav_calendar"
-                                app:tint="@color/primary" />
-                        </FrameLayout>
+                        <ImageView
+                            android:layout_width="22dp"
+                            android:layout_height="22dp"
+                            android:layout_marginTop="-35dp"
+                            android:src="@drawable/ic_nav_calendar"
+                            app:tint="@color/primary" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:fontFamily="@font/open_sans"
-                            android:gravity="center"
+                            android:layout_marginTop="12dp"
                             android:text="Lịch hẹn"
                             android:textColor="@color/text_secondary"
                             android:textSize="12sp" />
@@ -256,29 +245,24 @@
                         android:clickable="true"
                         android:focusable="true"
                         android:gravity="center_horizontal"
-                        android:orientation="vertical"
-                        android:paddingHorizontal="4dp">
+                        android:orientation="vertical">
 
-                        <FrameLayout
-                            android:layout_width="52dp"
-                            android:layout_height="52dp"
-                            android:background="@drawable/bg_quick_icon_orange">
+                        <View
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:background="@drawable/bg_quick_icon_orange" />
 
-                            <ImageView
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
-                                android:layout_gravity="center"
-                                android:contentDescription="@null"
-                                android:src="@drawable/ic_receipt"
-                                app:tint="#EA580C" />
-                        </FrameLayout>
+                        <ImageView
+                            android:layout_width="22dp"
+                            android:layout_height="22dp"
+                            android:layout_marginTop="-35dp"
+                            android:src="@drawable/ic_receipt"
+                            app:tint="#EA580C" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:fontFamily="@font/open_sans"
-                            android:gravity="center"
+                            android:layout_marginTop="12dp"
                             android:text="Hóa đơn"
                             android:textColor="@color/text_secondary"
                             android:textSize="12sp" />
@@ -293,29 +277,24 @@
                         android:clickable="true"
                         android:focusable="true"
                         android:gravity="center_horizontal"
-                        android:orientation="vertical"
-                        android:paddingHorizontal="4dp">
+                        android:orientation="vertical">
 
-                        <FrameLayout
-                            android:layout_width="52dp"
-                            android:layout_height="52dp"
-                            android:background="@drawable/bg_quick_icon_red">
+                        <View
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:background="@drawable/bg_quick_icon_red" />
 
-                            <ImageView
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
-                                android:layout_gravity="center"
-                                android:contentDescription="@null"
-                                android:src="@drawable/ic_nav_ai"
-                                app:tint="#DC2626" />
-                        </FrameLayout>
+                        <ImageView
+                            android:layout_width="22dp"
+                            android:layout_height="22dp"
+                            android:layout_marginTop="-35dp"
+                            android:src="@drawable/ic_nav_ai"
+                            app:tint="#DC2626" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:fontFamily="@font/open_sans"
-                            android:gravity="center"
+                            android:layout_marginTop="12dp"
                             android:text="Tư vấn AI"
                             android:textColor="@color/text_secondary"
                             android:textSize="12sp" />
@@ -323,20 +302,24 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
+            <!-- Upcoming Appointment Section -->
             <LinearLayout
+                android:id="@+id/upcomingHeader"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="24dp"
                 android:layout_marginTop="32dp"
-                android:gravity="center_vertical">
+                android:gravity="center_vertical"
+                app:layout_constraintTop_toBottomOf="@id/quickActionsCard">
 
                 <TextView
-                    style="@style/TextAppearance.DermaCare.Section"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/upcoming_appointment"
-                    android:textSize="18sp" />
+                    android:textColor="@color/text_primary"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -352,8 +335,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="24dp"
                 android:layout_marginTop="16dp"
-                app:cardCornerRadius="28dp"
-                app:cardElevation="8dp"
+                app:cardCornerRadius="@dimen/radius_xl"
+                app:cardElevation="4dp"
+                app:layout_constraintTop_toBottomOf="@id/upcomingHeader"
                 app:strokeWidth="0dp">
 
                 <LinearLayout
@@ -361,7 +345,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/bg_upcoming_card"
                     android:orientation="vertical"
-                    android:padding="24dp">
+                    android:padding="20dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -370,8 +354,9 @@
                         android:orientation="horizontal">
 
                         <com.google.android.material.imageview.ShapeableImageView
-                            android:layout_width="64dp"
-                            android:layout_height="64dp"
+                            android:id="@+id/ivDoctorAvatar"
+                            android:layout_width="56dp"
+                            android:layout_height="56dp"
                             android:scaleType="centerCrop"
                             android:src="@drawable/ic_nav_profile"
                             app:shapeAppearanceOverlay="@style/ShapeAppearance.DermaCare.Medium" />
@@ -379,35 +364,37 @@
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
+                            android:layout_marginStart="14dp"
                             android:layout_weight="1"
                             android:orientation="vertical">
 
                             <TextView
+                                android:id="@+id/tvUpcomingDoctorName"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="BS. Nguyễn Minh Anh"
                                 android:textColor="@color/white"
-                                android:textSize="18sp"
+                                android:textSize="17sp"
                                 android:textStyle="bold" />
 
                             <TextView
+                                android:id="@+id/tvUpcomingSpecialty"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Da liễu tổng quát"
                                 android:textColor="#E0F2F1"
-                                android:textSize="14sp" />
+                                android:textSize="13sp" />
                         </LinearLayout>
 
                         <com.google.android.material.card.MaterialCardView
-                            android:layout_width="48dp"
-                            android:layout_height="48dp"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
                             app:cardBackgroundColor="#33FFFFFF"
-                            app:cardCornerRadius="14dp"
+                            app:cardCornerRadius="12dp"
                             app:cardElevation="0dp">
                             <ImageView
-                                android:layout_width="22dp"
-                                android:layout_height="22dp"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
                                 android:layout_gravity="center"
                                 android:src="@android:drawable/ic_menu_call"
                                 app:tint="@color/white" />
@@ -418,24 +405,49 @@
                         android:id="@+id/btnBook"
                         style="@style/Widget.Material3.Button.TonalButton"
                         android:layout_width="match_parent"
-                        android:layout_height="54dp"
-                        android:layout_marginTop="24dp"
+                        android:layout_height="52dp"
+                        android:layout_marginTop="20dp"
                         android:text="Xem chi tiết lịch hẹn"
                         android:textColor="@color/primary"
                         android:textStyle="bold"
                         app:backgroundTint="@color/white"
-                        app:cornerRadius="16dp" />
+                        app:cornerRadius="14dp" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <TextView
-                style="@style/TextAppearance.DermaCare.Section"
-                android:layout_width="wrap_content"
+            <!-- Top Doctors Section -->
+            <LinearLayout
+                android:id="@+id/doctorsHeader"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
+                android:layout_marginHorizontal="24dp"
                 android:layout_marginTop="32dp"
-                android:text="@string/top_doctors"
-                android:textSize="18sp" />
+                android:gravity="center_vertical"
+                app:layout_constraintTop_toBottomOf="@id/upcomingCard">
+
+                <TextView
+                    android:id="@+id/tvDoctorsTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Bác sĩ nổi bật"
+                    android:textColor="@color/text_primary"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvSeeAllDoctors"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Xem tất cả"
+                    android:textColor="@color/primary"
+                    android:textStyle="bold"
+                    android:paddingVertical="4dp"
+                    android:paddingStart="8dp"
+                    android:background="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"/>
+            </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvDoctors"
@@ -444,8 +456,10 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="32dp"
                 android:nestedScrollingEnabled="false"
-                android:paddingHorizontal="24dp" />
-        </LinearLayout>
+                android:paddingHorizontal="24dp"
+                app:layout_constraintTop_toBottomOf="@id/doctorsHeader" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
