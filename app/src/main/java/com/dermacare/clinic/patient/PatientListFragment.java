@@ -29,6 +29,15 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import ua.naiksoftware.stomp.Stomp;
+import ua.naiksoftware.stomp.StompClient;
+import android.util.Log;
+import org.json.JSONObject;
+
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -77,6 +86,11 @@ public class PatientListFragment extends Fragment {
     private boolean appointmentsLoaded = false;
     private boolean recordsLoaded = false;
 
+    private StompClient stompClient;
+    private CompositeDisposable compositeDisposable;
+    private Long currentUserId;
+    private String token;
+
     public static PatientListFragment newInstance(String title, String type) {
         PatientListFragment f = new PatientListFragment();
         Bundle args = new Bundle();
@@ -89,7 +103,7 @@ public class PatientListFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+            @Nullable Bundle savedInstanceState) {
         Bundle args = getArguments();
         String type = args != null ? args.getString(ARG_TYPE, TYPE_APPOINTMENTS) : TYPE_APPOINTMENTS;
 
@@ -113,7 +127,93 @@ public class PatientListFragment extends Fragment {
             setupAppointmentsView(view);
             showLoading();
             fetchAppointmentsAndRecords();
+            // Initialize STOMP subscription to receive appointment updates
+            com.dermacare.clinic.util.SessionManager session = new com.dermacare.clinic.util.SessionManager(
+                    requireContext());
+            currentUserId = session.getUserId();
+            token = session.getToken();
+            initStompClient();
         }
+    }
+
+    private void initStompClient() {
+        if (currentUserId == null || currentUserId == -1L)
+            return;
+
+        final String WEBSOCKET_URL = "ws://10.0.2.2:8080/ws-raw";
+
+        List<ua.naiksoftware.stomp.dto.StompHeader> headers = new java.util.ArrayList<>();
+        if (token != null && !token.isBlank()) {
+            headers.add(new ua.naiksoftware.stomp.dto.StompHeader("Authorization", "Bearer " + token));
+        }
+
+        stompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, WEBSOCKET_URL);
+        compositeDisposable = new CompositeDisposable();
+
+        Disposable dispLifecycle = stompClient.lifecycle()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(lifecycleEvent -> {
+                    switch (lifecycleEvent.getType()) {
+                        case OPENED:
+                            Log.d("PatientListFragment", "Stomp opened");
+                            break;
+                        case ERROR:
+                            Log.e("PatientListFragment", "Stomp error", lifecycleEvent.getException());
+                            break;
+                        case CLOSED:
+                            Log.d("PatientListFragment", "Stomp closed");
+                            break;
+                    }
+                });
+        compositeDisposable.add(dispLifecycle);
+
+        Disposable dispTopic = stompClient.topic("/topic/appointments/patient-" + currentUserId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(topicMessage -> {
+                    try {
+                        JSONObject json = new JSONObject(topicMessage.getPayload());
+                        if (json.has("appointmentId")) {
+                            long apptId = json.getLong("appointmentId");
+                            String status = json.has("status") ? json.getString("status") : null;
+                            Long scheduleId = json.has("scheduleId") ? json.optLong("scheduleId") : null;
+                            Long roomId = json.has("roomId") ? json.optLong("roomId") : null;
+                            // Update local list if present
+                            boolean changed = false;
+                            for (int i = 0; i < upcomingList.size(); i++) {
+                                com.dermacare.clinic.data.api.model.AppointmentResponse a = upcomingList.get(i);
+                                if (a.appointmentId != null && a.appointmentId.longValue() == apptId) {
+                                    if (status != null)
+                                        a.status = status;
+                                    if (scheduleId != null && scheduleId != 0)
+                                        a.scheduleId = scheduleId;
+                                    if (roomId != null && roomId != 0)
+                                        a.roomId = roomId;
+                                    changed = true;
+                                }
+                            }
+                            if (changed && getActivity() != null) {
+                                upcomingAdapter.notifyDataSetChanged();
+                            }
+                        }
+                    } catch (Exception e) {
+                        Log.e("PatientListFragment", "Failed to parse stomp message", e);
+                    }
+                }, throwable -> Log.e("PatientListFragment", "Stomp topic error", throwable));
+
+        compositeDisposable.add(dispTopic);
+
+        stompClient.connect(headers);
+    }
+
+    @Override
+    public void onDestroyView() {
+        if (stompClient != null)
+            stompClient.disconnect();
+        if (compositeDisposable != null)
+            compositeDisposable.dispose();
+        super.onDestroyView();
     }
 
     // ===================== HEALTH PROFILE VIEW =====================
@@ -122,9 +222,15 @@ public class PatientListFragment extends Fragment {
         layoutLoading = view.findViewById(R.id.layoutLoading);
         layoutError = view.findViewById(R.id.layoutError);
         btnRetry = view.findViewById(R.id.btnRetry);
+
+        scrollContent = view.findViewById(R.id.scrollContent); // The nested scroll view
+
+        etBloodType = view.findViewById(R.id.etBloodType);
+
         scrollContent = view.findViewById(R.id.scrollContent);
 
         actvBloodType = view.findViewById(R.id.actvBloodType);
+
         etMedicalHistory = view.findViewById(R.id.etMedicalHistory);
         etInsuranceNumber = view.findViewById(R.id.etInsuranceNumber);
         etEmergencyContact = view.findViewById(R.id.etEmergencyContact);
@@ -160,7 +266,8 @@ public class PatientListFragment extends Fragment {
                 .enqueue(new Callback<HealthProfileResponse>() {
                     @Override
                     public void onResponse(Call<HealthProfileResponse> call, Response<HealthProfileResponse> response) {
-                        if (!isAdded()) return;
+                        if (!isAdded())
+                            return;
                         if (response.isSuccessful() && response.body() != null) {
                             currentProfile = response.body();
                             populateProfileForm();
@@ -172,7 +279,8 @@ public class PatientListFragment extends Fragment {
 
                     @Override
                     public void onFailure(Call<HealthProfileResponse> call, Throwable t) {
-                        if (!isAdded()) return;
+                        if (!isAdded())
+                            return;
                         showRecordsError();
                         Toast.makeText(requireContext(), "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                     }
@@ -180,6 +288,25 @@ public class PatientListFragment extends Fragment {
     }
 
     private void populateProfileForm() {
+
+        if (currentProfile == null)
+            return;
+        if (etBloodType != null)
+            etBloodType.setText(currentProfile.bloodType != null ? currentProfile.bloodType : "");
+        if (etMedicalHistory != null)
+            etMedicalHistory.setText(currentProfile.medicalHistory != null ? currentProfile.medicalHistory : "");
+        if (etInsuranceNumber != null)
+            etInsuranceNumber.setText(currentProfile.insuranceNumber != null ? currentProfile.insuranceNumber : "");
+        if (etEmergencyContact != null)
+            etEmergencyContact.setText(currentProfile.emergencyContact != null ? currentProfile.emergencyContact : "");
+        if (etEmergencyPhone != null)
+            etEmergencyPhone.setText(currentProfile.emergencyPhone != null ? currentProfile.emergencyPhone : "");
+    }
+
+    private void saveHealthProfile() {
+        if (currentProfile == null)
+            return;
+
         if (currentProfile == null) return;
 
         // Xử lý nhóm máu: Đổi "Unknown" thành "Chưa rõ" cho người dùng dễ hiểu
@@ -208,6 +335,7 @@ public class PatientListFragment extends Fragment {
             selectedBlood = "Unknown";
         }
 
+
         HealthProfileRequest request = new HealthProfileRequest(
                 selectedBlood,
                 etMedicalHistory.getText().toString().trim(),
@@ -222,21 +350,25 @@ public class PatientListFragment extends Fragment {
                 .enqueue(new Callback<HealthProfileResponse>() {
                     @Override
                     public void onResponse(Call<HealthProfileResponse> call, Response<HealthProfileResponse> response) {
-                        if (!isAdded()) return;
+                        if (!isAdded())
+                            return;
                         if (response.isSuccessful() && response.body() != null) {
                             currentProfile = response.body();
                             populateProfileForm();
                             showRecordsContent();
-                            Toast.makeText(requireContext(), "Đã lưu thông tin sức khỏe thành công", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(requireContext(), "Đã lưu thông tin sức khỏe thành công", Toast.LENGTH_SHORT)
+                                    .show();
                         } else {
                             showRecordsContent();
-                            Toast.makeText(requireContext(), "Lỗi khi lưu thông tin: " + response.message(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(requireContext(), "Lỗi khi lưu thông tin: " + response.message(),
+                                    Toast.LENGTH_SHORT).show();
                         }
                     }
 
                     @Override
                     public void onFailure(Call<HealthProfileResponse> call, Throwable t) {
-                        if (!isAdded()) return;
+                        if (!isAdded())
+                            return;
                         showRecordsContent();
                         Toast.makeText(requireContext(), "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                     }
@@ -244,21 +376,30 @@ public class PatientListFragment extends Fragment {
     }
 
     private void showRecordsLoading() {
-        if (layoutLoading != null) layoutLoading.setVisibility(View.VISIBLE);
-        if (layoutError != null) layoutError.setVisibility(View.GONE);
-        if (scrollContent != null) scrollContent.setVisibility(View.GONE);
+        if (layoutLoading != null)
+            layoutLoading.setVisibility(View.VISIBLE);
+        if (layoutError != null)
+            layoutError.setVisibility(View.GONE);
+        if (scrollContent != null)
+            scrollContent.setVisibility(View.GONE);
     }
 
     private void showRecordsContent() {
-        if (layoutLoading != null) layoutLoading.setVisibility(View.GONE);
-        if (layoutError != null) layoutError.setVisibility(View.GONE);
-        if (scrollContent != null) scrollContent.setVisibility(View.VISIBLE);
+        if (layoutLoading != null)
+            layoutLoading.setVisibility(View.GONE);
+        if (layoutError != null)
+            layoutError.setVisibility(View.GONE);
+        if (scrollContent != null)
+            scrollContent.setVisibility(View.VISIBLE);
     }
 
     private void showRecordsError() {
-        if (layoutLoading != null) layoutLoading.setVisibility(View.GONE);
-        if (layoutError != null) layoutError.setVisibility(View.VISIBLE);
-        if (scrollContent != null) scrollContent.setVisibility(View.GONE);
+        if (layoutLoading != null)
+            layoutLoading.setVisibility(View.GONE);
+        if (layoutError != null)
+            layoutError.setVisibility(View.VISIBLE);
+        if (scrollContent != null)
+            scrollContent.setVisibility(View.GONE);
     }
 
     // ===================== APPOINTMENTS VIEW =====================
@@ -283,7 +424,8 @@ public class PatientListFragment extends Fragment {
         // Medical history (records) adapter for the history section
         rvHistory.setLayoutManager(new LinearLayoutManager(requireContext()));
         historyRecordsAdapter = new PatientRecordsAdapter(historyRecords, recordId -> {
-            if (recordId == null) return;
+            if (recordId == null)
+                return;
             Intent intent = new Intent(requireContext(), RecordDetailActivity.class);
             intent.putExtra("recordId", recordId.longValue());
             startActivity(intent);
@@ -306,8 +448,10 @@ public class PatientListFragment extends Fragment {
         ApiClient.getAppointmentService(requireContext()).getMyAppointments()
                 .enqueue(new Callback<List<AppointmentResponse>>() {
                     @Override
-                    public void onResponse(Call<List<AppointmentResponse>> call, Response<List<AppointmentResponse>> response) {
-                        if (!isAdded()) return;
+                    public void onResponse(Call<List<AppointmentResponse>> call,
+                            Response<List<AppointmentResponse>> response) {
+                        if (!isAdded())
+                            return;
                         if (response.isSuccessful() && response.body() != null) {
                             splitAppointments(response.body());
                         }
@@ -317,7 +461,8 @@ public class PatientListFragment extends Fragment {
 
                     @Override
                     public void onFailure(Call<List<AppointmentResponse>> call, Throwable t) {
-                        if (!isAdded()) return;
+                        if (!isAdded())
+                            return;
                         appointmentsLoaded = true;
                         showError();
                         Toast.makeText(requireContext(), "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_SHORT).show();
@@ -329,10 +474,12 @@ public class PatientListFragment extends Fragment {
                 .enqueue(new Callback<List<JsonObject>>() {
                     @Override
                     public void onResponse(Call<List<JsonObject>> call, Response<List<JsonObject>> response) {
-                        if (!isAdded()) return;
+                        if (!isAdded())
+                            return;
                         if (response.isSuccessful() && response.body() != null) {
                             Gson gson = new Gson();
-                            Type listType = new TypeToken<List<PatientRecordSummaryResponse>>() {}.getType();
+                            Type listType = new TypeToken<List<PatientRecordSummaryResponse>>() {
+                            }.getType();
                             List<PatientRecordSummaryResponse> fetched = gson.fromJson(
                                     gson.toJsonTree(response.body()), listType);
                             records.clear();
@@ -344,7 +491,8 @@ public class PatientListFragment extends Fragment {
 
                     @Override
                     public void onFailure(Call<List<JsonObject>> call, Throwable t) {
-                        if (!isAdded()) return;
+                        if (!isAdded())
+                            return;
                         recordsLoaded = true;
                         checkBothLoaded();
                     }
@@ -366,8 +514,10 @@ public class PatientListFragment extends Fragment {
     }
 
     private void checkBothLoaded() {
-        if (!appointmentsLoaded || !recordsLoaded) return;
-        if (!isAdded()) return;
+        if (!appointmentsLoaded || !recordsLoaded)
+            return;
+        if (!isAdded())
+            return;
 
         // Update adapters
         upcomingAdapter.notifyDataSetChanged();
@@ -402,20 +552,29 @@ public class PatientListFragment extends Fragment {
     }
 
     private void showLoading() {
-        if (layoutLoading != null) layoutLoading.setVisibility(View.VISIBLE);
-        if (layoutError != null) layoutError.setVisibility(View.GONE);
-        if (scrollContent != null) scrollContent.setVisibility(View.GONE);
+        if (layoutLoading != null)
+            layoutLoading.setVisibility(View.VISIBLE);
+        if (layoutError != null)
+            layoutError.setVisibility(View.GONE);
+        if (scrollContent != null)
+            scrollContent.setVisibility(View.GONE);
     }
 
     private void showContent() {
-        if (layoutLoading != null) layoutLoading.setVisibility(View.GONE);
-        if (layoutError != null) layoutError.setVisibility(View.GONE);
-        if (scrollContent != null) scrollContent.setVisibility(View.VISIBLE);
+        if (layoutLoading != null)
+            layoutLoading.setVisibility(View.GONE);
+        if (layoutError != null)
+            layoutError.setVisibility(View.GONE);
+        if (scrollContent != null)
+            scrollContent.setVisibility(View.VISIBLE);
     }
 
     private void showError() {
-        if (layoutLoading != null) layoutLoading.setVisibility(View.GONE);
-        if (layoutError != null) layoutError.setVisibility(View.VISIBLE);
-        if (scrollContent != null) scrollContent.setVisibility(View.GONE);
+        if (layoutLoading != null)
+            layoutLoading.setVisibility(View.GONE);
+        if (layoutError != null)
+            layoutError.setVisibility(View.VISIBLE);
+        if (scrollContent != null)
+            scrollContent.setVisibility(View.GONE);
     }
 }

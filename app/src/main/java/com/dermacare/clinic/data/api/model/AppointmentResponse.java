@@ -3,6 +3,7 @@ package com.dermacare.clinic.data.api.model;
 public class AppointmentResponse {
     public Long appointmentId;
     public Long patientId;
+    public Long doctorId;
     public String appointmentCode;
     public String doctorName;
     public String patientName;
@@ -13,5 +14,10 @@ public class AppointmentResponse {
     public String status;
     public String reason;
     public Long recordId;
+
+    public Long scheduleId;
+    public Long roomId;
+
     public String avatarUrl;
+
 }

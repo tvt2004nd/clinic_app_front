@@ -91,7 +91,10 @@ public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.Holder> {
         }
 
         holder.itemView.setOnClickListener(v -> {
-            if (listener != null) listener.onDoctorClick(d);
+            int currentPos = holder.getBindingAdapterPosition();
+            if (currentPos != RecyclerView.NO_POSITION && listener != null) {
+                listener.onDoctorClick(doctors.get(currentPos));
+            }
         });
     }
 
