@@ -2,7 +2,9 @@
 <resources>
     <dimen name="spacing_xs">4dp</dimen>
     <dimen name="spacing_sm">8dp</dimen>
+    <dimen name="spacing_m">12dp</dimen>
     <dimen name="spacing_md">12dp</dimen>
+    <dimen name="spacing_l">16dp</dimen>
     <dimen name="spacing_lg">16dp</dimen>
     <dimen name="spacing_xl">24dp</dimen>
     <dimen name="spacing_2xl">32dp</dimen>
@@ -10,6 +12,7 @@
 
     <dimen name="radius_sm">12dp</dimen>
     <dimen name="radius_md">20dp</dimen>
+    <dimen name="radius_l">28dp</dimen>
     <dimen name="radius_lg">28dp</dimen>
     <dimen name="radius_xl">32dp</dimen>
     <dimen name="radius_pill">100dp</dimen>

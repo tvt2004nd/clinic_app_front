@@ -7,4 +7,5 @@ public class DoctorResponse {
     public Integer experienceYears;
     public Double rating;
     public Double fee;
+    public String avatarUrl;
 }

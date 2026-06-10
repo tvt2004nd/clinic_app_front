@@ -6,4 +6,6 @@ public class DoctorPatientResponse {
     public String fullName;
     public String phone;
     public String lastVisitDate;
+    public Long lastRecordId;
+    public String avatarUrl;
 }

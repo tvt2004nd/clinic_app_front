@@ -1,9 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Màu nền xám nhạt nguyên bản của bạn -->
     <solid android:color="#F3F4F6" />
+
+    <!-- Thêm viền siêu mỏng (nhạt hơn nền 1 chút) giúp khung AI sắc nét, sang trọng hơn -->
+    <stroke
+        android:width="1dp"
+        android:color="#E5E7EB" />
+
+    <!-- Giữ nguyên thiết kế góc bo đuôi nhọn ở dưới bên trái -->
     <corners
         android:topLeftRadius="16dp"
         android:topRightRadius="16dp"
         android:bottomRightRadius="16dp"
         android:bottomLeftRadius="4dp" />
+
+    <!-- Thêm Padding thẳng vào đây: Chữ bên trong sẽ tự động cách đều các cạnh,
+         bạn không cần phải viết padding lại ở file Layout nữa -->
+    <padding
+        android:left="16dp"
+        android:top="12dp"
+        android:right="16dp"
+        android:bottom="12dp" />
+
 </shape>

@@ -21,6 +21,7 @@
             android:layout_width="54dp"
             android:layout_height="54dp">
 
+            <!-- Chữ cái đầu -->
             <TextView
                 android:id="@+id/tvAvatar"
                 android:layout_width="54dp"
@@ -30,6 +31,15 @@
                 android:textColor="@color/white"
                 android:textSize="22sp"
                 android:textStyle="bold" />
+
+            <!-- THÊM ẢNH THẬT VÀO ĐÂY (Mặc định ẩn) -->
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/ivAvatarReal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:visibility="gone"
+                app:shapeAppearanceOverlay="@style/ShapeAppearance.DermaCare.Circle" />
 
             <View
                 android:id="@+id/badgeOnline"
@@ -98,8 +108,6 @@
                     android:background="@drawable/badge_online"
                     android:visibility="gone" />
             </LinearLayout>
-
         </LinearLayout>
     </LinearLayout>
-
 </com.google.android.material.card.MaterialCardView>

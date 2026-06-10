@@ -36,6 +36,14 @@ public class DoctorHistoryFragment extends Fragment {
         return new DoctorHistoryFragment();
     }
 
+    public static DoctorHistoryFragment newInstance(Long patientId) {
+        DoctorHistoryFragment fragment = new DoctorHistoryFragment();
+        Bundle args = new Bundle();
+        args.putLong("patientId", patientId);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -52,7 +60,8 @@ public class DoctorHistoryFragment extends Fragment {
         layoutLoading = view.findViewById(R.id.layoutLoading);
 
         rv.setLayoutManager(new LinearLayoutManager(requireContext()));
-        adapter = new HistoryAdapter(items, item -> {
+        boolean isSimpleMode = getArguments() != null && getArguments().getLong("patientId", -1) != -1;
+        adapter = new HistoryAdapter(items, isSimpleMode, item -> {
             if (item.recordId == null) return;
             Intent intent = new Intent(requireContext(), RecordDetailActivity.class);
             intent.putExtra("recordId", item.recordId.longValue());
@@ -87,7 +96,16 @@ public class DoctorHistoryFragment extends Fragment {
                             Type listType = new TypeToken<List<HistoryItem>>() {}.getType();
                             List<HistoryItem> data = gson.fromJson(gson.toJsonTree(response.body()), listType);
                             items.clear();
-                            items.addAll(data);
+                            Long targetPatientId = getArguments() != null ? getArguments().getLong("patientId", -1) : -1;
+                            if (targetPatientId != -1) {
+                                for (HistoryItem item : data) {
+                                    if (item.patientId != null && item.patientId.equals(targetPatientId)) {
+                                        items.add(item);
+                                    }
+                                }
+                            } else {
+                                items.addAll(data);
+                            }
                             adapter.notifyDataSetChanged();
 
                             if (items.isEmpty()) {
@@ -124,16 +142,18 @@ public class DoctorHistoryFragment extends Fragment {
         public String invoiceStatus;
     }
 
-    static class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.Holder> {
+    public static class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.Holder> {
         public interface OnItemClick {
             void onClick(HistoryItem item);
         }
 
         private final List<HistoryItem> items;
+        private final boolean isSimpleMode;
         private final OnItemClick listener;
 
-        HistoryAdapter(List<HistoryItem> items, OnItemClick listener) {
+        public HistoryAdapter(List<HistoryItem> items, boolean isSimpleMode, OnItemClick listener) {
             this.items = items;
+            this.isSimpleMode = isSimpleMode;
             this.listener = listener;
         }
 
@@ -153,6 +173,18 @@ public class DoctorHistoryFragment extends Fragment {
 
             String initials = name.length() > 0 ? name.substring(0, 1).toUpperCase() : "?";
             holder.tvAvatarText.setText(initials);
+            
+            if (isSimpleMode) {
+                holder.tvPatientName.setVisibility(View.GONE);
+                if (holder.cardAvatar != null) {
+                    holder.cardAvatar.setVisibility(View.GONE);
+                }
+            } else {
+                holder.tvPatientName.setVisibility(View.VISIBLE);
+                if (holder.cardAvatar != null) {
+                    holder.cardAvatar.setVisibility(View.VISIBLE);
+                }
+            }
 
             String diag = item.diagnosis != null && !item.diagnosis.isEmpty()
                     ? item.diagnosis : (item.diseaseName != null ? item.diseaseName : "Khám bệnh");
@@ -188,6 +220,7 @@ public class DoctorHistoryFragment extends Fragment {
 
         static class Holder extends RecyclerView.ViewHolder {
             final TextView tvPatientName, tvDiagnosis, tvExaminedDate, tvInvoiceStatus, tvAvatarText;
+            final View cardAvatar;
 
             Holder(@NonNull View itemView) {
                 super(itemView);
@@ -196,6 +229,7 @@ public class DoctorHistoryFragment extends Fragment {
                 tvExaminedDate = itemView.findViewById(R.id.tvExaminedDate);
                 tvInvoiceStatus = itemView.findViewById(R.id.tvInvoiceStatus);
                 tvAvatarText = itemView.findViewById(R.id.tvAvatarText);
+                cardAvatar = itemView.findViewById(R.id.cardAvatar);
             }
         }
     }

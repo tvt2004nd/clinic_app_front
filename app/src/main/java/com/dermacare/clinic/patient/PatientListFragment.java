@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -66,7 +68,8 @@ public class PatientListFragment extends Fragment {
     private final List<PatientRecordSummaryResponse> records = new ArrayList<>();
 
     // Health Profile screen views
-    private TextInputEditText etBloodType, etMedicalHistory, etInsuranceNumber, etEmergencyContact, etEmergencyPhone;
+    private AutoCompleteTextView actvBloodType;
+    private TextInputEditText etMedicalHistory, etInsuranceNumber, etEmergencyContact, etEmergencyPhone;
     private View btnSave;
     private HealthProfileResponse currentProfile;
 
@@ -119,14 +122,25 @@ public class PatientListFragment extends Fragment {
         layoutLoading = view.findViewById(R.id.layoutLoading);
         layoutError = view.findViewById(R.id.layoutError);
         btnRetry = view.findViewById(R.id.btnRetry);
-        scrollContent = view.findViewById(R.id.scrollContent); // The nested scroll view
-        
-        etBloodType = view.findViewById(R.id.etBloodType);
+        scrollContent = view.findViewById(R.id.scrollContent);
+
+        actvBloodType = view.findViewById(R.id.actvBloodType);
         etMedicalHistory = view.findViewById(R.id.etMedicalHistory);
         etInsuranceNumber = view.findViewById(R.id.etInsuranceNumber);
         etEmergencyContact = view.findViewById(R.id.etEmergencyContact);
         etEmergencyPhone = view.findViewById(R.id.etEmergencyPhone);
         btnSave = view.findViewById(R.id.btnSave);
+
+        // Khởi tạo Adapter cho Dropdown Nhóm máu
+        if (actvBloodType != null) {
+            String[] bloodTypes = {"A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-", "Chưa rõ"};
+            // Dùng simple_list_item_1 để hiển thị từng hàng to rõ đẹp hơn cho Dropdown
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_list_item_1, bloodTypes);
+            actvBloodType.setAdapter(adapter);
+
+            // Set giá trị mặc định là "Chưa rõ" (cờ false để không bung list ra)
+            actvBloodType.setText("Chưa rõ", false);
+        }
 
         if (btnRetry != null) {
             btnRetry.setOnClickListener(v -> {
@@ -134,7 +148,7 @@ public class PatientListFragment extends Fragment {
                 fetchRecords();
             });
         }
-        
+
         if (btnSave != null) {
             btnSave.setOnClickListener(v -> saveHealthProfile());
         }
@@ -167,7 +181,16 @@ public class PatientListFragment extends Fragment {
 
     private void populateProfileForm() {
         if (currentProfile == null) return;
-        if (etBloodType != null) etBloodType.setText(currentProfile.bloodType != null ? currentProfile.bloodType : "");
+
+        // Xử lý nhóm máu: Đổi "Unknown" thành "Chưa rõ" cho người dùng dễ hiểu
+        if (actvBloodType != null) {
+            String bType = currentProfile.bloodType;
+            if (bType == null || bType.trim().isEmpty() || bType.equalsIgnoreCase("Unknown")) {
+                bType = "Chưa rõ";
+            }
+            actvBloodType.setText(bType, false);
+        }
+
         if (etMedicalHistory != null) etMedicalHistory.setText(currentProfile.medicalHistory != null ? currentProfile.medicalHistory : "");
         if (etInsuranceNumber != null) etInsuranceNumber.setText(currentProfile.insuranceNumber != null ? currentProfile.insuranceNumber : "");
         if (etEmergencyContact != null) etEmergencyContact.setText(currentProfile.emergencyContact != null ? currentProfile.emergencyContact : "");
@@ -176,16 +199,24 @@ public class PatientListFragment extends Fragment {
 
     private void saveHealthProfile() {
         if (currentProfile == null) return;
-        
+
+        // Lấy nhóm máu người dùng đang chọn
+        String selectedBlood = actvBloodType.getText().toString().trim();
+
+        // Nếu là "Chưa rõ", thì gửi từ khóa "Unknown" về server để khớp định dạng
+        if (selectedBlood.equals("Chưa rõ")) {
+            selectedBlood = "Unknown";
+        }
+
         HealthProfileRequest request = new HealthProfileRequest(
-                etBloodType.getText().toString().trim(),
+                selectedBlood,
                 etMedicalHistory.getText().toString().trim(),
                 etInsuranceNumber.getText().toString().trim(),
                 etEmergencyContact.getText().toString().trim(),
                 etEmergencyPhone.getText().toString().trim(),
                 currentProfile.allergies // Keep allergies as is for MVP
         );
-        
+
         showRecordsLoading();
         ApiClient.getPatientService(requireContext()).updateHealthProfile(request)
                 .enqueue(new Callback<HealthProfileResponse>() {

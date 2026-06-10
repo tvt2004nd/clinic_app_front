@@ -23,6 +23,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+
 import com.dermacare.clinic.R;
 import com.dermacare.clinic.data.api.ApiClient;
 import com.dermacare.clinic.data.api.model.DoctorPatientResponse;
@@ -40,7 +41,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class DoctorPatientsFragment extends Fragment {
-
+    private PatientAdapter patientAdapter;
     private PatientAdapter adapter;
     private View layoutEmpty;
     private RecyclerView rv;
@@ -60,16 +61,17 @@ public class DoctorPatientsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        TextView tvTitle = view.findViewById(R.id.tvTitle);
-
-        tvTitle.setText(R.string.tab_patients);
+        // Title is already set in the XML layout (fragment_doctor_patients.xml)
 
         tvPatientCount = view.findViewById(R.id.tvPatientCount);
         layoutEmpty = view.findViewById(R.id.layoutEmpty);
         rv = view.findViewById(R.id.recyclerView);
         rv.setLayoutManager(new LinearLayoutManager(requireContext()));
 
-        adapter = new PatientAdapter(new ArrayList<>());
+        adapter = new PatientAdapter(new ArrayList<>(), patient -> {
+            PatientHistoryBottomSheet bottomSheet = PatientHistoryBottomSheet.newInstance(patient.patientId, patient.fullName);
+            bottomSheet.show(requireActivity().getSupportFragmentManager(), "PatientHistoryBottomSheet");
+        });
         rv.setAdapter(adapter);
 
         loadPatients();
