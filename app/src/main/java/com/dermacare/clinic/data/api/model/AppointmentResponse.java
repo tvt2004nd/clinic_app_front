@@ -14,6 +14,10 @@ public class AppointmentResponse {
     public String status;
     public String reason;
     public Long recordId;
+
     public Long scheduleId;
     public Long roomId;
+
+    public String avatarUrl;
+
 }

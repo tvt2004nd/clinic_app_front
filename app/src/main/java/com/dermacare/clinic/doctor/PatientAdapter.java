@@ -1,13 +1,15 @@
-package com.dermacare.clinic.doctor;
+package com.dermacare.clinic.doctor; // Hoặc package adapter của bạn
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.dermacare.clinic.R;
 import com.dermacare.clinic.data.api.ApiClient;
 import com.dermacare.clinic.data.api.model.DoctorPatientResponse;
@@ -17,9 +19,17 @@ import java.util.List;
 public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.Holder> {
 
     private List<DoctorPatientResponse> items;
+    private OnPatientClickListener listener; // THÊM BIẾN LẮNG NGHE SỰ KIỆN
 
-    public PatientAdapter(List<DoctorPatientResponse> items) {
+    // TẠO INTERFACE ĐỂ BẮT SỰ KIỆN CLICK VÀO BỆNH NHÂN
+    public interface OnPatientClickListener {
+        void onPatientClick(DoctorPatientResponse patient);
+    }
+
+    // CẬP NHẬT LẠI HÀM KHỞI TẠO ĐỂ NHẬN SỰ KIỆN
+    public PatientAdapter(List<DoctorPatientResponse> items, OnPatientClickListener listener) {
         this.items = items;
+        this.listener = listener;
     }
 
     public void setData(List<DoctorPatientResponse> data) {
@@ -47,17 +57,42 @@ public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.Holder> 
 
         holder.tvRecentVisit.setText(patient.lastVisitDate != null ? patient.lastVisitDate : "--");
 
-        String initials = "";
-        String[] parts = name.trim().split("\\s+");
-        if (parts.length >= 2) {
-            initials = String.valueOf(parts[parts.length - 2].charAt(0)) + parts[parts.length - 1].charAt(0);
-        } else if (name.length() >= 2) {
-            initials = name.substring(0, 2);
-        } else if (!name.isEmpty()) {
-            initials = name;
-        }
-        holder.tvInitials.setText(initials.toUpperCase());
+        // ================= XỬ LÝ ẢNH BẰNG GLIDE =================
+        if (patient.avatarUrl != null && !patient.avatarUrl.trim().isEmpty()) {
+            holder.tvInitials.setVisibility(View.GONE);
+            holder.ivAvatar.setVisibility(View.VISIBLE);
 
+            String finalUrl = patient.avatarUrl;
+            if (finalUrl.startsWith("/")) {
+                finalUrl = ApiClient.BASE_URL + finalUrl.substring(1);
+            }
+
+            Glide.with(holder.itemView.getContext())
+                    .load(finalUrl)
+                    .placeholder(R.drawable.ic_nav_profile)
+                    .error(R.drawable.ic_nav_profile)
+                    .circleCrop()
+                    .into(holder.ivAvatar);
+        } else {
+            holder.ivAvatar.setVisibility(View.GONE);
+            holder.tvInitials.setVisibility(View.VISIBLE);
+            Glide.with(holder.itemView.getContext()).clear(holder.ivAvatar);
+
+            String initials = "";
+            String[] parts = name.trim().split("\\s+");
+            if (parts.length >= 2) {
+                initials = String.valueOf(parts[parts.length - 2].charAt(0)) + parts[parts.length - 1].charAt(0);
+            } else if (name.length() >= 2) {
+                initials = name.substring(0, 2);
+            } else if (!name.isEmpty()) {
+                initials = name;
+            }
+            holder.tvInitials.setText(initials.toUpperCase());
+        }
+
+        // ================= SỰ KIỆN CLICK =================
+
+        // 1. CLICK VÀO NÚT CHAT BÊN PHẢI -> MỞ MÀN HÌNH CHAT
         holder.btnChat.setOnClickListener(v -> {
             ApiClient.getAppointmentService(v.getContext())
                     .getConversation(null, patient.patientId)
@@ -77,6 +112,13 @@ public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.Holder> 
                         public void onFailure(retrofit2.Call<java.util.Map<String, Object>> call, Throwable t) {}
                     });
         });
+
+        // 2. CLICK VÀO TOÀN BỘ THẺ BỆNH NHÂN -> XEM LỊCH SỬ KHÁM
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onPatientClick(patient);
+            }
+        });
     }
 
     @Override
@@ -86,6 +128,7 @@ public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.Holder> 
 
     static class Holder extends RecyclerView.ViewHolder {
         final TextView tvName, tvPhone, tvRecentVisit, tvInitials;
+        final ImageView ivAvatar;
         final View btnChat;
 
         Holder(@NonNull View itemView) {
@@ -94,6 +137,7 @@ public class PatientAdapter extends RecyclerView.Adapter<PatientAdapter.Holder> 
             tvPhone = itemView.findViewById(R.id.tvPatientPhone);
             tvRecentVisit = itemView.findViewById(R.id.tvRecentVisit);
             tvInitials = itemView.findViewById(R.id.tvPatientInitials);
+            ivAvatar = itemView.findViewById(R.id.imgPatientAvatar);
             btnChat = itemView.findViewById(R.id.btnChat);
         }
     }

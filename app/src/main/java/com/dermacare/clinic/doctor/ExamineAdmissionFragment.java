@@ -194,10 +194,12 @@ public class ExamineAdmissionFragment extends Fragment implements ExamineStep {
         TextView tvDate = card.findViewById(R.id.tvExaminedDate);
         TextView tvStatus = card.findViewById(R.id.tvInvoiceStatus);
         TextView tvAvatar = card.findViewById(R.id.tvAvatarText);
+        View cardAvatar = card.findViewById(R.id.cardAvatar);
 
-        String name = item.patientName != null ? item.patientName : "BN";
-        tvName.setText(name);
-        tvAvatar.setText(name.length() > 0 ? name.substring(0, 1).toUpperCase() : "?");
+        tvName.setVisibility(View.GONE);
+        if (cardAvatar != null) {
+            cardAvatar.setVisibility(View.GONE);
+        }
 
         String diag = item.diagnosis != null && !item.diagnosis.isEmpty()
                 ? item.diagnosis : (item.diseaseName != null ? item.diseaseName : "Khám bệnh");

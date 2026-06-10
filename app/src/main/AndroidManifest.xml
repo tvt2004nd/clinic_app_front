@@ -52,7 +52,15 @@
             android:name=".patient.BookingActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
+        <activity
 
+            android:name=".patient.DoctorProfileActivity"
+            android:exported="false"
+            android:theme="@style/Theme.DermaCare" />
+        <activity
+            android:name=".patient.AllDoctorsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.DermaCare" />
         <activity
             android:name=".doctor.DoctorMainActivity"
             android:exported="false" />
@@ -81,10 +89,6 @@
 
 
         <activity
-            android:name=".MedicalRecordActivity"
-            android:exported="false" />
-
-        <activity
             android:name=".doctor.AddPatientActivity"
             android:exported="false"
             android:label="Thêm bệnh nhân" />
@@ -100,7 +104,12 @@
         </provider>
 
 
-            
+
+        <activity
+            android:name=".patient.ChatActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
         <activity
             android:name=".chat.ChatActivity"
             android:exported="false"

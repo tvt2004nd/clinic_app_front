@@ -3,12 +3,15 @@ package com.dermacare.clinic.adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.dermacare.clinic.R;
+import com.dermacare.clinic.data.api.ApiClient;
 
 import java.util.List;
 import java.util.Map;
@@ -76,6 +79,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         String timeStr = (String) msg.get("createdAt");
         String time = timeStr != null && timeStr.length() >= 16 ? timeStr.substring(11, 16) : timeStr != null ? timeStr : "";
 
+        // ================= TIN NHẮN GỬI ĐI =================
         if (holder.getItemViewType() == TYPE_SENT) {
             SentMessageHolder sentHolder = (SentMessageHolder) holder;
             sentHolder.tvMessage.setText(content);
@@ -83,6 +87,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             return;
         }
 
+        // ================= TIN NHẮN NHẬN ĐƯỢC =================
         ReceivedMessageHolder receivedHolder = (ReceivedMessageHolder) holder;
         receivedHolder.tvMessage.setText(content);
         receivedHolder.tvTime.setText(time);
@@ -91,8 +96,30 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         String name = nameObj != null ? String.valueOf(nameObj) : "";
         receivedHolder.tvSenderName.setText(name);
 
-        String initial = !name.isEmpty() ? name.substring(0, 1).toUpperCase() : "?";
-        receivedHolder.tvAvatarInitial.setText(initial);
+        // XỬ LÝ AVATAR (GLIDE)
+        Object avatarObj = msg.get("avatarUrl");
+        String avatarUrl = avatarObj != null ? String.valueOf(avatarObj) : "";
+
+        if (avatarUrl != null && !avatarUrl.trim().isEmpty() && !avatarUrl.equals("null")) {
+            // Có ảnh -> Ẩn Text chữ cái, Hiện ImageView
+            receivedHolder.tvAvatarInitial.setVisibility(View.GONE);
+            receivedHolder.ivAvatar.setVisibility(View.VISIBLE);
+
+            String finalUrl = avatarUrl.startsWith("/") ? ApiClient.BASE_URL + avatarUrl.substring(1) : avatarUrl;
+
+            Glide.with(receivedHolder.itemView.getContext())
+                    .load(finalUrl)
+                    .centerCrop()
+                    .into(receivedHolder.ivAvatar);
+        } else {
+            // Không có ảnh -> Hiện Text chữ cái, Ẩn ImageView
+            receivedHolder.tvAvatarInitial.setVisibility(View.VISIBLE);
+            receivedHolder.ivAvatar.setVisibility(View.GONE);
+            Glide.with(receivedHolder.itemView.getContext()).clear(receivedHolder.ivAvatar);
+
+            String initial = !name.isEmpty() ? name.substring(0, 1).toUpperCase() : "?";
+            receivedHolder.tvAvatarInitial.setText(initial);
+        }
     }
 
     @Override
@@ -112,6 +139,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     static class ReceivedMessageHolder extends RecyclerView.ViewHolder {
         TextView tvMessage, tvTime, tvSenderName, tvAvatarInitial;
+        ImageView ivAvatar; // Ảnh thật
 
         ReceivedMessageHolder(View itemView) {
             super(itemView);
@@ -119,6 +147,9 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             tvTime = itemView.findViewById(R.id.tvTime);
             tvSenderName = itemView.findViewById(R.id.tvSenderName);
             tvAvatarInitial = itemView.findViewById(R.id.tvAvatarInitial);
+
+            // Ánh xạ ImageView từ XML
+            ivAvatar = itemView.findViewById(R.id.ivAvatar);
         }
     }
 }

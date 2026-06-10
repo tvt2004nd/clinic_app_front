@@ -18,6 +18,7 @@ import com.dermacare.clinic.data.api.model.GoogleLoginRequest;
 import com.dermacare.clinic.data.api.model.JwtResponse;
 import com.dermacare.clinic.data.api.model.LoginRequest;
 import com.dermacare.clinic.data.api.model.UserProfileResponse;
+
 import com.dermacare.clinic.doctor.DoctorMainActivity;
 import com.dermacare.clinic.patient.PatientMainActivity;
 import com.dermacare.clinic.util.SessionManager;

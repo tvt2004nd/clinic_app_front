@@ -8,6 +8,7 @@
     <color name="accent_gold">#F59E0B</color>
     <color name="accent_gold_soft">#FFFBEB</color>
     <color name="background">#F8FAFC</color>
+    <color name="background_light">#F8FAFC</color>
     <color name="surface">#FFFFFF</color>
     <color name="text_primary">#0F172A</color>
     <color name="text_secondary">#475569</color>

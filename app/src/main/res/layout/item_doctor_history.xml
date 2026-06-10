@@ -17,6 +17,7 @@
         android:padding="16dp">
 
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardAvatar"
             android:layout_width="48dp"
             android:layout_height="48dp"
             app:cardCornerRadius="14dp"

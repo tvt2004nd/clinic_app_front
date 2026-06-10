@@ -19,12 +19,12 @@ public class PatientMainActivity extends AppCompatActivity {
 
         BottomNavigationView bottomNav = findViewById(R.id.bottomNavPatient);
         FloatingActionButton fabChat = findViewById(R.id.fabChat);
-        
+
         if (savedInstanceState == null) {
             showFragment(new PatientHomeFragment());
         }
 
-        // Launch ChatActivity when FAB is clicked
+        // Bấm vào FAB chuyển sang màn hình ChatActivity (đang ở cùng thư mục patient)
         fabChat.setOnClickListener(v -> {
             Intent intent = new Intent(PatientMainActivity.this, ChatActivity.class);
             startActivity(intent);

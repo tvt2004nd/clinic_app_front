@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.dermacare.clinic.R;
+import com.dermacare.clinic.data.api.ApiClient; // Nếu cần dùng BASE_URL cho link local
 import com.dermacare.clinic.model.Doctor;
 
 import java.util.List;
@@ -52,7 +53,7 @@ public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.Holder> {
         holder.badgeAvailable.setVisibility(d.availableToday ? View.VISIBLE : View.GONE);
         holder.tvFee.setText(String.format("%,.0f₫", d.fee));
 
-        // Build initials from name
+        // 1. Tạo chữ cái đầu (Initials)
         String initials = "";
         if (d.name != null && !d.name.isEmpty()) {
             String[] parts = d.name.trim().split("\\s+");
@@ -64,32 +65,29 @@ public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.Holder> {
             }
         }
         holder.tvAvatarInitials.setText(initials.toUpperCase());
-        holder.tvAvatarInitials.setVisibility(View.VISIBLE);
 
-        if (d.avatarUrl != null && !d.avatarUrl.isEmpty()) {
-            Glide.with(holder.imgAvatar.getContext())
-                    .load(d.avatarUrl)
+        // 2. Xử lý hiển thị Ảnh hoặc Chữ cái
+        if (d.avatarUrl != null && !d.avatarUrl.trim().isEmpty()) {
+            // CÓ ẢNH: Ẩn chữ, Hiện hình
+            holder.tvAvatarInitials.setVisibility(View.GONE);
+            holder.imgAvatar.setVisibility(View.VISIBLE);
+
+            // Xử lý nếu link là link relative (ví dụ /uploads/...)
+            String finalUrl = d.avatarUrl;
+            if (finalUrl.startsWith("/")) {
+                finalUrl = ApiClient.BASE_URL + finalUrl.substring(1);
+            }
+
+            Glide.with(holder.itemView.getContext())
+                    .load(finalUrl)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .circleCrop()
-                    .listener(new com.bumptech.glide.request.RequestListener<android.graphics.drawable.Drawable>() {
-                        @Override
-                        public boolean onLoadFailed(com.bumptech.glide.load.engine.GlideException e,
-                                Object model, com.bumptech.glide.request.target.Target<android.graphics.drawable.Drawable> target,
-                                boolean isFirstResource) {
-                            holder.tvAvatarInitials.setVisibility(View.VISIBLE);
-                            return false;
-                        }
-                        @Override
-                        public boolean onResourceReady(android.graphics.drawable.Drawable resource,
-                                Object model, com.bumptech.glide.request.target.Target<android.graphics.drawable.Drawable> target,
-                                com.bumptech.glide.load.DataSource dataSource, boolean isFirstResource) {
-                            holder.tvAvatarInitials.setVisibility(View.GONE);
-                            return false;
-                        }
-                    })
+                    .centerCrop()
                     .into(holder.imgAvatar);
         } else {
+            // KHÔNG CÓ ẢNH: Hiện chữ, Ẩn hình, Xóa bộ nhớ Glide cũ
             holder.tvAvatarInitials.setVisibility(View.VISIBLE);
+            holder.imgAvatar.setVisibility(View.GONE);
+            Glide.with(holder.itemView.getContext()).clear(holder.imgAvatar); // QUAN TRỌNG ĐỂ TRÁNH LỖI CUỘN
         }
 
         holder.itemView.setOnClickListener(v -> {
@@ -128,4 +126,3 @@ public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.Holder> {
         }
     }
 }
-

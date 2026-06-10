@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Intent;
-import com.dermacare.clinic.MedicalRecordActivity;
+
 
 public class SimpleTextAdapter extends RecyclerView.Adapter<SimpleTextAdapter.Holder> {
     private List<String> items;
@@ -53,12 +53,6 @@ public class SimpleTextAdapter extends RecyclerView.Adapter<SimpleTextAdapter.Ho
     public void onBindViewHolder(@NonNull Holder holder, int position) {
         holder.tvContent.setText(items.get(position));
 
-        
-        // Thêm sự kiện Click để mở màn hình chi tiết
-        holder.itemView.setOnClickListener(v -> {
-            Intent intent = new Intent(v.getContext(), MedicalRecordActivity.class);
-            v.getContext().startActivity(intent);
-        });
 
     }
 

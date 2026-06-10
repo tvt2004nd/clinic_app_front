@@ -5,6 +5,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout android:layout_width="match_parent" android:layout_height="wrap_content">
 
         <!-- Left status bar indicator -->
+
         <View android:id="@+id/statusBar" android:layout_width="6dp" android:layout_height="0dp" android:background="@drawable/bg_status_bar_pending" app:layout_constraintTop_toTopOf="parent" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toStartOf="parent" />
 
         <androidx.constraintlayout.widget.ConstraintLayout android:layout_width="0dp" android:layout_height="wrap_content" android:padding="12dp" app:layout_constraintStart_toEndOf="@id/statusBar" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent" app:layout_constraintBottom_toBottomOf="parent">
@@ -48,5 +49,162 @@
                 </LinearLayout>
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+            android:id="@+id/statusBar"
+            android:layout_width="6dp"
+            android:layout_height="0dp"
+            android:background="@drawable/bg_status_bar_pending"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Time block -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/timeBlock"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="12dp"
+            app:cardBackgroundColor="#F8FAFC"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/statusBar"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.22">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:paddingVertical="10dp">
+
+                <TextView
+                    android:id="@+id/tvTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-black"
+                    android:text="08:30"
+                    android:textColor="@color/primary"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tvTimePeriod"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:alpha="0.7"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="SA"
+                    android:textColor="@color/primary"
+                    android:textSize="10sp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Main Content -->
+        <TextView
+            android:id="@+id/tvPatientName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="8dp"
+            android:ellipsize="end"
+            android:fontFamily="sans-serif-bold"
+            android:maxLines="1"
+            android:text="Nguyễn Văn A"
+            android:textColor="#1E293B"
+            android:textSize="17sp"
+            app:layout_constraintEnd_toStartOf="@+id/tvStatusBadge"
+            app:layout_constraintStart_toEndOf="@id/timeBlock"
+            app:layout_constraintTop_toTopOf="@+id/timeBlock" />
+
+        <TextView
+            android:id="@+id/tvStatusBadge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
+            android:background="@drawable/bg_badge_amber_soft"
+            android:fontFamily="sans-serif-black"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="4dp"
+            android:text="CHỜ KHÁM"
+            android:textColor="#B45309"
+            android:textSize="10sp"
+            app:layout_constraintBottom_toBottomOf="@+id/tvPatientName"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvPatientName" />
+
+        <TextView
+            android:id="@+id/tvType"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:ellipsize="end"
+            android:fontFamily="sans-serif"
+            android:maxLines="1"
+            android:text="Khám da liễu - Mụn trứng cá"
+            android:textColor="#64748B"
+            android:textSize="13sp"
+            app:layout_constraintEnd_toEndOf="@+id/tvStatusBadge"
+            app:layout_constraintStart_toStartOf="@+id/tvPatientName"
+            app:layout_constraintTop_toBottomOf="@+id/tvPatientName" />
+
+        <View
+            android:id="@+id/innerDivider"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="12dp"
+            android:background="#F1F5F9"
+            app:layout_constraintEnd_toEndOf="@+id/tvStatusBadge"
+            app:layout_constraintStart_toStartOf="@+id/tvPatientName"
+            app:layout_constraintTop_toBottomOf="@+id/tvType" />
+
+        <ImageView
+            android:id="@+id/icCalendar"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:layout_marginTop="12dp"
+            android:src="@drawable/ic_nav_calendar"
+            app:layout_constraintStart_toStartOf="@+id/tvPatientName"
+            app:layout_constraintTop_toBottomOf="@+id/innerDivider"
+            app:tint="#94A3B8" />
+
+        <TextView
+            android:id="@+id/tvPriority"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:text="Ưu tiên: Cao"
+            android:textColor="#94A3B8"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/icCalendar"
+            app:layout_constraintEnd_toStartOf="@+id/btnExamine"
+            app:layout_constraintStart_toEndOf="@+id/icCalendar"
+            app:layout_constraintTop_toTopOf="@+id/icCalendar" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnExamine"
+            style="@style/Widget.Material3.Button.TonalButton"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:layout_marginEnd="12dp"
+            android:fontFamily="sans-serif-bold"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:minHeight="0dp"
+            android:text="Bắt đầu khám"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            app:backgroundTint="@color/primary"
+            app:cornerRadius="12dp"
+            app:icon="@drawable/ic_nav_patients"
+            app:iconSize="14dp"
+            app:iconTint="@color/white"
+            app:layout_constraintBottom_toBottomOf="@+id/icCalendar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/icCalendar" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

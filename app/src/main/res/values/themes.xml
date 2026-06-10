@@ -38,6 +38,14 @@
         <item name="cornerSize">@dimen/radius_lg</item>
     </style>
 
+    <style name="ShapeAppearance.DermaCare.Large.Top" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopLeft">@dimen/radius_xl</item>
+        <item name="cornerSizeTopRight">@dimen/radius_xl</item>
+        <item name="cornerSizeBottomLeft">0dp</item>
+        <item name="cornerSizeBottomRight">0dp</item>
+    </style>
+
     <!-- Widgets -->
     <style name="Widget.DermaCare.Button.Primary" parent="Widget.Material3.Button">
         <item name="android:minHeight">@dimen/button_height</item>
