@@ -189,7 +189,7 @@
                             android:layout_width="20dp"
                             android:layout_height="20dp"
                             android:layout_gravity="center"
-                            android:src="@drawable/ic_nav_records"
+                            android:src="@drawable/ic_nav_calendar"
                             app:tint="@color/secondary" />
                     </com.google.android.material.card.MaterialCardView>
 
@@ -198,7 +198,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
                         android:layout_weight="1"
-                        android:text="Lịch sử khám"
+                        android:text="Lịch sử cuộc hẹn"
                         android:textColor="@color/text_primary"
                         android:textSize="18sp"
                         android:textStyle="bold" />
@@ -227,7 +227,7 @@
                             android:layout_width="32dp"
                             android:layout_height="32dp"
                             android:layout_gravity="center"
-                            android:src="@drawable/ic_nav_records"
+                            android:src="@drawable/ic_nav_calendar"
                             app:tint="@color/secondary" />
                     </com.google.android.material.card.MaterialCardView>
 
@@ -236,7 +236,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
                         android:gravity="center"
-                        android:text="Chưa có lịch sử khám"
+                        android:text="Không có lịch sử cuộc hẹn"
                         android:textColor="@color/text_secondary"
                         android:textSize="14sp" />
                 </LinearLayout>

@@ -71,9 +71,11 @@ public class PatientListFragment extends Fragment {
     private final List<AppointmentResponse> upcomingList = new ArrayList<>();
     private PatientAppointmentAdapter upcomingAdapter;
 
-    // Records used in BOTH the appointments history section AND the records tab
-    private PatientRecordsAdapter historyRecordsAdapter;
-    private final List<PatientRecordSummaryResponse> historyRecords = new ArrayList<>();
+    // Past appointments
+    private final List<AppointmentResponse> pastList = new ArrayList<>();
+    private PatientAppointmentAdapter pastAdapter;
+
+    // Records used in the records tab
     private final List<PatientRecordSummaryResponse> records = new ArrayList<>();
 
     // Health Profile screen views
@@ -126,7 +128,7 @@ public class PatientListFragment extends Fragment {
         } else {
             setupAppointmentsView(view);
             showLoading();
-            fetchAppointmentsAndRecords();
+            fetchAppointments();
             // Initialize STOMP subscription to receive appointment updates
             com.dermacare.clinic.util.SessionManager session = new com.dermacare.clinic.util.SessionManager(
                     requireContext());
@@ -225,8 +227,6 @@ public class PatientListFragment extends Fragment {
 
         scrollContent = view.findViewById(R.id.scrollContent); // The nested scroll view
 
-        etBloodType = view.findViewById(R.id.etBloodType);
-
         scrollContent = view.findViewById(R.id.scrollContent);
 
         actvBloodType = view.findViewById(R.id.actvBloodType);
@@ -291,23 +291,6 @@ public class PatientListFragment extends Fragment {
 
         if (currentProfile == null)
             return;
-        if (etBloodType != null)
-            etBloodType.setText(currentProfile.bloodType != null ? currentProfile.bloodType : "");
-        if (etMedicalHistory != null)
-            etMedicalHistory.setText(currentProfile.medicalHistory != null ? currentProfile.medicalHistory : "");
-        if (etInsuranceNumber != null)
-            etInsuranceNumber.setText(currentProfile.insuranceNumber != null ? currentProfile.insuranceNumber : "");
-        if (etEmergencyContact != null)
-            etEmergencyContact.setText(currentProfile.emergencyContact != null ? currentProfile.emergencyContact : "");
-        if (etEmergencyPhone != null)
-            etEmergencyPhone.setText(currentProfile.emergencyPhone != null ? currentProfile.emergencyPhone : "");
-    }
-
-    private void saveHealthProfile() {
-        if (currentProfile == null)
-            return;
-
-        if (currentProfile == null) return;
 
         // Xử lý nhóm máu: Đổi "Unknown" thành "Chưa rõ" cho người dùng dễ hiểu
         if (actvBloodType != null) {
@@ -318,10 +301,14 @@ public class PatientListFragment extends Fragment {
             actvBloodType.setText(bType, false);
         }
 
-        if (etMedicalHistory != null) etMedicalHistory.setText(currentProfile.medicalHistory != null ? currentProfile.medicalHistory : "");
-        if (etInsuranceNumber != null) etInsuranceNumber.setText(currentProfile.insuranceNumber != null ? currentProfile.insuranceNumber : "");
-        if (etEmergencyContact != null) etEmergencyContact.setText(currentProfile.emergencyContact != null ? currentProfile.emergencyContact : "");
-        if (etEmergencyPhone != null) etEmergencyPhone.setText(currentProfile.emergencyPhone != null ? currentProfile.emergencyPhone : "");
+        if (etMedicalHistory != null)
+            etMedicalHistory.setText(currentProfile.medicalHistory != null ? currentProfile.medicalHistory : "");
+        if (etInsuranceNumber != null)
+            etInsuranceNumber.setText(currentProfile.insuranceNumber != null ? currentProfile.insuranceNumber : "");
+        if (etEmergencyContact != null)
+            etEmergencyContact.setText(currentProfile.emergencyContact != null ? currentProfile.emergencyContact : "");
+        if (etEmergencyPhone != null)
+            etEmergencyPhone.setText(currentProfile.emergencyPhone != null ? currentProfile.emergencyPhone : "");
     }
 
     private void saveHealthProfile() {
@@ -421,28 +408,21 @@ public class PatientListFragment extends Fragment {
         upcomingAdapter = new PatientAppointmentAdapter(upcomingList);
         rvUpcoming.setAdapter(upcomingAdapter);
 
-        // Medical history (records) adapter for the history section
+        // Past appointments adapter for the history section
         rvHistory.setLayoutManager(new LinearLayoutManager(requireContext()));
-        historyRecordsAdapter = new PatientRecordsAdapter(historyRecords, recordId -> {
-            if (recordId == null)
-                return;
-            Intent intent = new Intent(requireContext(), RecordDetailActivity.class);
-            intent.putExtra("recordId", recordId.longValue());
-            startActivity(intent);
-        });
-        rvHistory.setAdapter(historyRecordsAdapter);
+        pastAdapter = new PatientAppointmentAdapter(pastList);
+        rvHistory.setAdapter(pastAdapter);
 
         if (btnRetry != null) {
             btnRetry.setOnClickListener(v -> {
                 showLoading();
-                fetchAppointmentsAndRecords();
+                fetchAppointments();
             });
         }
     }
 
-    private void fetchAppointmentsAndRecords() {
+    private void fetchAppointments() {
         appointmentsLoaded = false;
-        recordsLoaded = false;
 
         // Fetch appointments
         ApiClient.getAppointmentService(requireContext()).getMyAppointments()
@@ -456,7 +436,7 @@ public class PatientListFragment extends Fragment {
                             splitAppointments(response.body());
                         }
                         appointmentsLoaded = true;
-                        checkBothLoaded();
+                        checkAppointmentsLoaded();
                     }
 
                     @Override
@@ -468,64 +448,52 @@ public class PatientListFragment extends Fragment {
                         Toast.makeText(requireContext(), "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
-
-        // Fetch records (medical history)
-        ApiClient.getExaminationService(requireContext()).getMyRecords()
-                .enqueue(new Callback<List<JsonObject>>() {
-                    @Override
-                    public void onResponse(Call<List<JsonObject>> call, Response<List<JsonObject>> response) {
-                        if (!isAdded())
-                            return;
-                        if (response.isSuccessful() && response.body() != null) {
-                            Gson gson = new Gson();
-                            Type listType = new TypeToken<List<PatientRecordSummaryResponse>>() {
-                            }.getType();
-                            List<PatientRecordSummaryResponse> fetched = gson.fromJson(
-                                    gson.toJsonTree(response.body()), listType);
-                            records.clear();
-                            records.addAll(fetched);
-                        }
-                        recordsLoaded = true;
-                        checkBothLoaded();
-                    }
-
-                    @Override
-                    public void onFailure(Call<List<JsonObject>> call, Throwable t) {
-                        if (!isAdded())
-                            return;
-                        recordsLoaded = true;
-                        checkBothLoaded();
-                    }
-                });
     }
 
     private void splitAppointments(List<AppointmentResponse> all) {
         String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
 
         upcomingList.clear();
+        pastList.clear();
 
         for (AppointmentResponse appt : all) {
             boolean isUpcoming = ("PENDING".equals(appt.status) || "CONFIRMED".equals(appt.status))
                     && appt.date != null && appt.date.compareTo(today) >= 0;
             if (isUpcoming) {
                 upcomingList.add(appt);
+            } else {
+                pastList.add(appt);
             }
         }
+        
+        // Sort past list descending (most recent first)
+        pastList.sort((a, b) -> {
+            if (a.date == null || b.date == null) return 0;
+            int dateCmp = b.date.compareTo(a.date);
+            if (dateCmp != 0) return dateCmp;
+            if (a.time == null || b.time == null) return 0;
+            return b.time.compareTo(a.time);
+        });
+        
+        // Sort upcoming ascending
+        upcomingList.sort((a, b) -> {
+            if (a.date == null || b.date == null) return 0;
+            int dateCmp = a.date.compareTo(b.date);
+            if (dateCmp != 0) return dateCmp;
+            if (a.time == null || b.time == null) return 0;
+            return a.time.compareTo(b.time);
+        });
     }
 
-    private void checkBothLoaded() {
-        if (!appointmentsLoaded || !recordsLoaded)
+    private void checkAppointmentsLoaded() {
+        if (!appointmentsLoaded)
             return;
         if (!isAdded())
             return;
 
         // Update adapters
         upcomingAdapter.notifyDataSetChanged();
-
-        // Populate history records from the fetched records list
-        historyRecords.clear();
-        historyRecords.addAll(records);
-        historyRecordsAdapter.notifyDataSetChanged();
+        pastAdapter.notifyDataSetChanged();
 
         // Show/hide upcoming section
         if (upcomingList.isEmpty()) {
@@ -539,8 +507,8 @@ public class PatientListFragment extends Fragment {
             tvUpcomingCount.setText(String.valueOf(upcomingList.size()));
         }
 
-        // Show/hide history section (medical records)
-        if (historyRecords.isEmpty()) {
+        // Show/hide past section
+        if (pastList.isEmpty()) {
             rvHistory.setVisibility(View.GONE);
             layoutHistoryEmpty.setVisibility(View.VISIBLE);
         } else {

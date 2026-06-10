@@ -145,6 +145,14 @@ public class BookingActivity extends AppCompatActivity {
                     });
         }
 
+        // Handle UI if it's a reschedule
+        if (existingApptId > 0) {
+            findViewById(R.id.stepIndicator).setVisibility(View.GONE);
+            btnNext.setText("Xác nhận đổi lịch");
+        } else {
+            btnNext.setText("Tiếp theo →");
+        }
+
         // Next / Prev buttons
         btnNext.setOnClickListener(v -> {
             if (viewFlipper.getDisplayedChild() == 0) {
@@ -152,7 +160,11 @@ public class BookingActivity extends AppCompatActivity {
                     Toast.makeText(this, "Vui lòng chọn một ca khám", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                goToStep2();
+                if (existingApptId > 0) {
+                    submitBooking();
+                } else {
+                    goToStep2();
+                }
             } else {
                 submitBooking();
             }
@@ -201,16 +213,19 @@ public class BookingActivity extends AppCompatActivity {
         String phone = etPhone.getText() != null ? etPhone.getText().toString().trim() : "";
         String symptoms = etSymptoms.getText() != null ? etSymptoms.getText().toString().trim() : "";
 
-        if (name.isEmpty()) {
-            etName.setError("Vui lòng nhập họ tên");
-            return;
-        }
-        if (phone.isEmpty()) {
-            etPhone.setError("Vui lòng nhập số điện thoại");
-            return;
+        long existingApptId = getIntent().getLongExtra(EXTRA_APPOINTMENT_ID, -1);
+
+        if (existingApptId == -1) {
+            if (name.isEmpty()) {
+                etName.setError("Vui lòng nhập họ tên");
+                return;
+            }
+            if (phone.isEmpty()) {
+                etPhone.setError("Vui lòng nhập số điện thoại");
+                return;
+            }
         }
 
-        long existingApptId = getIntent().getLongExtra(EXTRA_APPOINTMENT_ID, -1);
         String title = existingApptId > 0 ? "Xác nhận đổi lịch" : "Xác nhận đặt lịch";
         String message = existingApptId > 0 ? "Bạn có chắc chắn muốn đổi sang lịch khám mới này không?" : "Bạn có chắc chắn muốn đặt lịch khám này không?";
 

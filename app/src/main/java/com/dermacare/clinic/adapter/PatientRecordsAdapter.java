@@ -46,12 +46,6 @@ public class PatientRecordsAdapter extends RecyclerView.Adapter<PatientRecordsAd
         String disease = r.diseaseName != null ? r.diseaseName : "Khám bệnh";
         holder.tvDiagnosis.setText(disease);
 
-        String doctorInfo = r.doctorName;
-        if (r.doctorTitle != null && !r.doctorTitle.isEmpty()) {
-            doctorInfo = r.doctorTitle + ". " + r.doctorName;
-        }
-        holder.tvDoctor.setText(doctorInfo);
-
         String dateStr = r.examinedAt;
         if (dateStr != null && dateStr.length() >= 10) {
             holder.tvDate.setText(dateStr.substring(0, 10));
@@ -90,21 +84,17 @@ public class PatientRecordsAdapter extends RecyclerView.Adapter<PatientRecordsAd
     static class Holder extends RecyclerView.ViewHolder {
         final MaterialCardView card;
         final TextView tvDiagnosis;
-        final TextView tvDoctor;
         final TextView tvDate;
         final TextView tvMedication;
         final View medicationStrip;
-        final ImageView iconView;
 
         Holder(@NonNull View itemView) {
             super(itemView);
             card = itemView.findViewById(R.id.cardRecord);
             tvDiagnosis = itemView.findViewById(R.id.tvDiagnosis);
-            tvDoctor = itemView.findViewById(R.id.tvDoctor);
             tvDate = itemView.findViewById(R.id.tvDate);
             tvMedication = itemView.findViewById(R.id.tvMedication);
             medicationStrip = itemView.findViewById(R.id.medicationStrip);
-            iconView = itemView.findViewById(R.id.ivRecordIcon);
         }
     }
 }
