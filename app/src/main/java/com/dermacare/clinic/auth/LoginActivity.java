@@ -224,17 +224,17 @@ public class LoginActivity extends AppCompatActivity {
 
     private void onLoginSuccess(JwtResponse jwtResponse) {
         // Save token and basics
-        boolean hasDoctorRole = false;
+        String role = SessionManager.ROLE_PATIENT;
         if (jwtResponse.getRoles() != null) {
             for (String r : jwtResponse.getRoles()) {
                 if ("ROLE_DOCTOR".equalsIgnoreCase(r)) {
-                    hasDoctorRole = true;
+                    role = SessionManager.ROLE_DOCTOR;
                     break;
                 }
             }
         }
 
-        String role = hasDoctorRole ? SessionManager.ROLE_DOCTOR : SessionManager.ROLE_PATIENT;
+        final String finalRole = role;
         
         // Log in to SessionManager
         sessionManager.login(
@@ -246,7 +246,6 @@ public class LoginActivity extends AppCompatActivity {
         );
 
         // Fetch detailed profile to save detailed fields in SessionManager
-        final boolean finalHasDoctorRole = hasDoctorRole;
         userService.getProfile().enqueue(new Callback<UserProfileResponse>() {
             @Override
             public void onResponse(Call<UserProfileResponse> call, Response<UserProfileResponse> response) {
@@ -263,22 +262,22 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 
                 // Proceed to navigate
-                navigateToMain(finalHasDoctorRole);
+                navigateToMain(finalRole);
             }
 
             @Override
             public void onFailure(Call<UserProfileResponse> call, Throwable t) {
                 // Proceed to navigate even if detail fetch fails
-                navigateToMain(finalHasDoctorRole);
+                navigateToMain(finalRole);
             }
         });
     }
 
-    private void navigateToMain(boolean hasDoctorRole) {
+    private void navigateToMain(String role) {
         Toast.makeText(this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
         
         Intent intent;
-        if (hasDoctorRole) {
+        if (SessionManager.ROLE_DOCTOR.equals(role)) {
             intent = new Intent(LoginActivity.this, DoctorMainActivity.class);
         } else {
             intent = new Intent(LoginActivity.this, PatientMainActivity.class);

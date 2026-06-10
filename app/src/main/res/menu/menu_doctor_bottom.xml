@@ -13,6 +13,10 @@
         android:icon="@drawable/ic_nav_patients"
         android:title="@string/tab_patients" />
     <item
+        android:id="@+id/nav_chat"
+        android:icon="@drawable/ic_nav_chat"
+        android:title="@string/tab_chat" />
+    <item
         android:id="@+id/nav_profile"
         android:icon="@drawable/ic_nav_profile"
         android:title="@string/tab_profile" />

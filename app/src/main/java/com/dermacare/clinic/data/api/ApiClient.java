@@ -35,7 +35,7 @@ public class ApiClient {
  
             // Logging Interceptor for HTTP Traffic inspection
             HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-            logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+            logging.setLevel(HttpLoggingInterceptor.Level.BASIC);
             httpClient.addInterceptor(logging);
  
             retrofit = new Retrofit.Builder()
@@ -54,4 +54,51 @@ public class ApiClient {
     public static UserService getUserService(Context context) {
         return getClient(context).create(UserService.class);
     }
+
+
+    public static AiDiagnosisService getAiDiagnosisService(Context context) {
+        return getClient(context).create(AiDiagnosisService.class);
+    }
+
+    public static AiChatService getAiChatService(Context context) {
+        return getClient(context).create(AiChatService.class);
+    }
+
+
+    public static MedicalRecordService getMedicalRecordService(Context context) {
+        return getClient(context).create(MedicalRecordService.class);
+    }
+
+
+
+    public static ExaminationService getExaminationService(Context context) {
+        return getClient(context).create(ExaminationService.class);
+    }
+
+    public static InvoiceService getInvoiceService(Context context) {
+        return getClient(context).create(InvoiceService.class);
+    }
+
+    public static PublicService getPublicService(Context context) {
+        return getClient(context).create(PublicService.class);
+    }
+
+    public static AppointmentService getAppointmentService(Context context) {
+        return getClient(context).create(AppointmentService.class);
+    }
+
+    public static ChatService getChatService(Context context) {
+        return getClient(context).create(ChatService.class);
+    }
+
+    public static DoctorService getDoctorService(Context context) {
+        return getClient(context).create(DoctorService.class);
+    }
+
+    public static PatientService getPatientService(Context context) {
+        return getClient(context).create(PatientService.class);
+    }
+
+
+
 }

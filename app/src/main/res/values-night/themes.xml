@@ -9,5 +9,6 @@
         <item name="android:statusBarColor">@color/primary</item>
         <item name="android:navigationBarColor">@color/surface</item>
         <item name="android:windowBackground">@color/background</item>
+        <item name="android:fontFamily">@font/momo_trust_sans</item>
     </style>
 </resources>
