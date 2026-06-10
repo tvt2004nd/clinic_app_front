@@ -146,6 +146,19 @@ public class PatientAppointmentAdapter extends RecyclerView.Adapter<PatientAppoi
                     .setNegativeButton("Đóng", null)
                     .show();
         });
+
+        // Xử lý sự kiện Xem bệnh án
+        holder.btnViewRecord.setOnClickListener(v -> {
+            int currentPos = holder.getBindingAdapterPosition();
+            if (currentPos == RecyclerView.NO_POSITION) return;
+            AppointmentResponse currentAppt = items.get(currentPos);
+            
+            if (currentAppt.recordId != null) {
+                android.content.Intent intent = new android.content.Intent(v.getContext(), com.dermacare.clinic.patient.RecordDetailActivity.class);
+                intent.putExtra("recordId", currentAppt.recordId.longValue());
+                v.getContext().startActivity(intent);
+            }
+        });
     }
 
     private void updateUIByStatus(Holder holder, AppointmentResponse appt) {
@@ -158,6 +171,7 @@ public class PatientAppointmentAdapter extends RecyclerView.Adapter<PatientAppoi
             holder.tvStatusBadge.setTextColor(0xFFD97706);
             holder.tvStatusBadge.setBackgroundResource(R.drawable.bg_badge_amber);
             holder.btnExamine.setVisibility(View.GONE);
+            holder.btnViewRecord.setVisibility(View.GONE);
         } else if ("CONFIRMED".equals(appt.status)) {
             holder.statusBar.setBackgroundResource(R.drawable.bg_status_bar_teal);
             holder.timeBlock.setCardBackgroundColor(0xFFE0F2F1);
@@ -167,6 +181,7 @@ public class PatientAppointmentAdapter extends RecyclerView.Adapter<PatientAppoi
             holder.tvStatusBadge.setTextColor(0xFF0D9488);
             holder.tvStatusBadge.setBackgroundResource(R.drawable.bg_badge_teal);
             holder.btnExamine.setVisibility(View.GONE);
+            holder.btnViewRecord.setVisibility(View.GONE);
         } else if ("COMPLETED".equals(appt.status)) {
             holder.statusBar.setBackgroundColor(0xFF4CAF50);
             holder.timeBlock.setCardBackgroundColor(0xFFE8F5E9);
@@ -175,6 +190,11 @@ public class PatientAppointmentAdapter extends RecyclerView.Adapter<PatientAppoi
             holder.tvStatusBadge.setText("Đã khám");
             holder.tvStatusBadge.setTextColor(0xFF4CAF50);
             holder.btnExamine.setVisibility(View.GONE);
+            if (appt.recordId != null) {
+                holder.btnViewRecord.setVisibility(View.VISIBLE);
+            } else {
+                holder.btnViewRecord.setVisibility(View.GONE);
+            }
         } else if ("CANCELLED".equals(appt.status)) {
             holder.statusBar.setBackgroundColor(0xFF9E9E9E);
             holder.timeBlock.setCardBackgroundColor(0xFFF5F5F5);
@@ -183,6 +203,7 @@ public class PatientAppointmentAdapter extends RecyclerView.Adapter<PatientAppoi
             holder.tvStatusBadge.setText("Đã hủy");
             holder.tvStatusBadge.setTextColor(0xFF9E9E9E);
             holder.btnExamine.setVisibility(View.GONE);
+            holder.btnViewRecord.setVisibility(View.GONE);
         } else {
             holder.statusBar.setBackgroundColor(0xFF9E9E9E);
             holder.timeBlock.setCardBackgroundColor(0xFFF5F5F5);
@@ -191,6 +212,7 @@ public class PatientAppointmentAdapter extends RecyclerView.Adapter<PatientAppoi
             holder.tvStatusBadge.setText(appt.status);
             holder.tvStatusBadge.setTextColor(0xFF9E9E9E);
             holder.btnExamine.setVisibility(View.GONE);
+            holder.btnViewRecord.setVisibility(View.GONE);
         }
     }
 
@@ -204,8 +226,7 @@ public class PatientAppointmentAdapter extends RecyclerView.Adapter<PatientAppoi
         final com.google.android.material.card.MaterialCardView timeBlock;
         final TextView tvTime, tvTimePeriod, tvPatientName, tvType, tvStatusBadge;
         final com.google.android.material.button.MaterialButton btnExamine;
-        final com.google.android.material.button.MaterialButton btnCancel;
-        final com.google.android.material.button.MaterialButton btnReschedule;
+        final com.google.android.material.button.MaterialButton btnCancel, btnReschedule, btnViewRecord;
 
         public Holder(@NonNull View itemView) {
             super(itemView);
@@ -219,6 +240,7 @@ public class PatientAppointmentAdapter extends RecyclerView.Adapter<PatientAppoi
             btnExamine = itemView.findViewById(R.id.btnExamine);
             btnCancel = itemView.findViewById(R.id.btnCancel);
             btnReschedule = itemView.findViewById(R.id.btnReschedule);
+            btnViewRecord = itemView.findViewById(R.id.btnViewRecord);
         }
     }
 }
