@@ -112,7 +112,7 @@ public class PatientHomeFragment extends Fragment {
                                 DoctorResponse dr = allDoctors.get(i);
 
                                 String finalAvatarUrl = "";
-                                if (dr.avatarUrl != null && !dr.avatarUrl.trim().isEmpty()) {
+                                if (dr.avatarUrl != null && !dr.avatarUrl.trim().isEmpty() && !dr.avatarUrl.equals("null")) {
                                     if (dr.avatarUrl.startsWith("http")) {
                                         finalAvatarUrl = dr.avatarUrl;
                                     } else if (dr.avatarUrl.startsWith("/")) {
@@ -120,9 +120,6 @@ public class PatientHomeFragment extends Fragment {
                                     } else {
                                         finalAvatarUrl = ApiClient.BASE_URL + dr.avatarUrl;
                                     }
-                                } else {
-                                    String safeName = dr.fullName != null && !dr.fullName.isEmpty() ? dr.fullName.substring(0, 1) : "D";
-                                    finalAvatarUrl = "https://ui-avatars.com/api/?name=" + safeName + "&background=random&color=fff";
                                 }
 
                                 mappedDoctors.add(new Doctor(

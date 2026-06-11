@@ -1,91 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="16dp" android:layout_marginHorizontal="0dp" android:foreground="?attr/selectableItemBackground" app:cardCornerRadius="24dp" app:cardElevation="3dp" app:cardBackgroundColor="@color/white" app:strokeWidth="1dp" app:strokeColor="#F1F5F9">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="16dp"
+    android:foreground="?attr/selectableItemBackground"
+    app:cardBackgroundColor="@color/surface"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="2dp"
+    app:strokeColor="@color/border"
+    app:strokeWidth="1dp">
 
-    <androidx.constraintlayout.widget.ConstraintLayout android:layout_width="match_parent" android:layout_height="wrap_content">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="20dp">
 
-        <View
-            android:id="@+id/statusBar"
-            android:layout_width="6dp"
-            android:layout_height="0dp"
-            android:background="@drawable/bg_status_bar_pending"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <!-- Time block -->
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/timeBlock"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="12dp"
-            android:layout_marginBottom="12dp"
-            app:cardBackgroundColor="#F8FAFC"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/statusBar"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent="0.22">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:paddingVertical="10dp">
-
-                <TextView
-                    android:id="@+id/tvTime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-black"
-                    android:text="08:30"
-                    android:textColor="@color/primary"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:id="@+id/tvTimePeriod"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:alpha="0.7"
-                    android:fontFamily="sans-serif-medium"
-                    android:text="SA"
-                    android:textColor="@color/primary"
-                    android:textSize="10sp" />
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-        <!-- Main Content -->
+        <!-- Top Row: Name and Status Badge -->
         <TextView
             android:id="@+id/tvPatientName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginEnd="12dp"
             android:ellipsize="end"
-            android:fontFamily="sans-serif-bold"
             android:maxLines="1"
             android:text="Nguyễn Văn A"
-            android:textColor="#1E293B"
-            android:textSize="17sp"
+            android:textColor="@color/text_primary"
+            android:textSize="18sp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@+id/tvStatusBadge"
-            app:layout_constraintStart_toEndOf="@id/timeBlock"
-            app:layout_constraintTop_toTopOf="@+id/timeBlock" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tvStatusBadge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="12dp"
-            android:background="@drawable/bg_badge_amber_soft"
-            android:fontFamily="sans-serif-black"
+            android:background="@drawable/bg_badge_teal"
             android:paddingHorizontal="12dp"
-            android:paddingVertical="4dp"
+            android:paddingVertical="6dp"
             android:text="CHỜ KHÁM"
-            android:textColor="#B45309"
-            android:textSize="10sp"
+            android:textColor="@color/primary"
+            android:textSize="12sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/tvPatientName"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tvPatientName" />
@@ -94,135 +51,147 @@
             android:id="@+id/tvType"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="6dp"
             android:ellipsize="end"
-            android:fontFamily="sans-serif"
             android:maxLines="1"
-            android:text="Khám da liễu - Mụn trứng cá"
-            android:textColor="#64748B"
-            android:textSize="13sp"
-            app:layout_constraintEnd_toEndOf="@+id/tvStatusBadge"
-            app:layout_constraintStart_toStartOf="@+id/tvPatientName"
+            android:text="Khám da liễu"
+            android:textColor="@color/text_secondary"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvPatientName" />
 
         <View
-            android:id="@+id/innerDivider"
-            android:layout_width="0dp"
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginTop="12dp"
-            android:background="#F1F5F9"
-            app:layout_constraintEnd_toEndOf="@+id/tvStatusBadge"
-            app:layout_constraintStart_toStartOf="@+id/tvPatientName"
+            android:layout_marginTop="16dp"
+            android:background="@color/border"
             app:layout_constraintTop_toBottomOf="@+id/tvType" />
 
-        <ImageView
-            android:id="@+id/icCalendar"
-            android:layout_width="14dp"
-            android:layout_height="14dp"
-            android:layout_marginTop="12dp"
-            android:src="@drawable/ic_nav_calendar"
-            app:layout_constraintStart_toStartOf="@+id/tvPatientName"
-            app:layout_constraintTop_toBottomOf="@+id/innerDivider"
-            app:tint="#94A3B8" />
-
-        <androidx.constraintlayout.widget.Barrier
-            android:id="@+id/btnBarrier"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:barrierDirection="start"
-            app:constraint_referenced_ids="btnExamine,btnCancel,btnReschedule,btnViewRecord" />
-
-        <TextView
-            android:id="@+id/tvPriority"
+        <!-- Middle Row: Calendar and Time Block -->
+        <LinearLayout
+            android:id="@+id/timeBlock"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="6dp"
-            android:layout_marginEnd="8dp"
-            android:text="Ưu tiên: Cao"
-            android:textColor="#94A3B8"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="@+id/icCalendar"
-            app:layout_constraintEnd_toStartOf="@+id/btnBarrier"
-            app:layout_constraintStart_toEndOf="@+id/icCalendar"
-            app:layout_constraintTop_toTopOf="@+id/icCalendar" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnCancel"
-            style="@style/Widget.Material3.Button.OutlinedButton"
-            android:layout_width="wrap_content"
-            android:layout_height="36dp"
-            android:layout_marginEnd="12dp"
-            android:fontFamily="sans-serif-medium"
-            android:insetTop="0dp"
-            android:insetBottom="0dp"
-            android:minHeight="0dp"
-            android:text="Hủy"
-            android:textSize="12sp"
-            app:cornerRadius="12dp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/icCalendar"
+            android:layout_marginTop="16dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/icCalendar" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/divider">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnReschedule"
-            style="@style/Widget.Material3.Button.OutlinedButton"
-            android:layout_width="wrap_content"
-            android:layout_height="36dp"
-            android:layout_marginEnd="8dp"
-            android:fontFamily="sans-serif-medium"
-            android:insetTop="0dp"
-            android:insetBottom="0dp"
-            android:minHeight="0dp"
-            android:text="Đổi lịch"
-            android:textSize="12sp"
-            app:cornerRadius="12dp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/icCalendar"
-            app:layout_constraintEnd_toStartOf="@+id/btnCancel"
-            app:layout_constraintTop_toTopOf="@+id/icCalendar" />
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                app:cardBackgroundColor="@color/secondary_soft"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="0dp"
+                app:strokeWidth="0dp">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnExamine"
-            style="@style/Widget.Material3.Button.TonalButton"
-            android:layout_width="wrap_content"
-            android:layout_height="36dp"
-            android:layout_marginEnd="12dp"
-            android:fontFamily="sans-serif-bold"
-            android:insetTop="0dp"
-            android:insetBottom="0dp"
-            android:minHeight="0dp"
-            android:text="Bắt đầu khám"
-            android:textColor="@color/white"
-            android:textSize="12sp"
-            app:backgroundTint="@color/primary"
-            app:cornerRadius="12dp"
-            app:icon="@drawable/ic_nav_patients"
-            app:iconSize="14dp"
-            app:iconTint="@color/white"
-            app:layout_constraintBottom_toBottomOf="@+id/icCalendar"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/icCalendar" />
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_nav_calendar"
+                    app:tint="@color/primary" />
+            </com.google.android.material.card.MaterialCardView>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnViewRecord"
-            style="@style/Widget.Material3.Button.TonalButton"
-            android:layout_width="wrap_content"
-            android:layout_height="36dp"
-            android:layout_marginEnd="12dp"
-            android:fontFamily="sans-serif-bold"
-            android:insetTop="0dp"
-            android:insetBottom="0dp"
-            android:minHeight="0dp"
-            android:text="Xem bệnh án"
-            android:textColor="@color/primary"
-            android:textSize="12sp"
-            app:backgroundTint="#E8F4FF"
-            app:cornerRadius="12dp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/icCalendar"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/icCalendar" />
+            <TextView
+                android:id="@+id/tvDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:text="--/--/----"
+                android:textColor="@color/text_primary"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:text="•"
+                android:textColor="@color/text_muted"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="08:30"
+                android:textColor="@color/text_primary"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvTimePeriod"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:text="SA"
+                android:textColor="@color/text_secondary"
+                android:textSize="13sp" />
+        </LinearLayout>
+
+        <!-- Bottom Row: Buttons -->
+        <LinearLayout
+            android:id="@+id/actionButtonsContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="end"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@+id/timeBlock">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnReschedule"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginEnd="12dp"
+                android:text="Đổi lịch"
+                android:textColor="@color/primary"
+                android:visibility="gone"
+                app:cornerRadius="20dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnCancel"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginEnd="12dp"
+                android:text="Hủy"
+                android:textColor="@color/error"
+                android:visibility="gone"
+                app:cornerRadius="20dp"
+                app:strokeColor="@color/error" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnExamine"
+                style="@style/Widget.Material3.Button"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:text="Khám ngay"
+                android:visibility="gone"
+                app:cornerRadius="20dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnViewRecord"
+                style="@style/Widget.Material3.Button.TonalButton"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:text="Xem bệnh án"
+                android:visibility="gone"
+                app:cornerRadius="20dp" />
+        </LinearLayout>
+
+        <View
+            android:id="@+id/statusBar"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

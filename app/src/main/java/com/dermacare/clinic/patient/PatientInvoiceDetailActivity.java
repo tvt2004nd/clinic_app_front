@@ -99,12 +99,12 @@ public class PatientInvoiceDetailActivity extends AppCompatActivity {
         btnPay.setEnabled(false);
         btnPay.setText("Đang xử lý...");
 
-        ApiClient.getInvoiceService(this).createPaymentIntent(invoiceId).enqueue(new Callback<JsonObject>() {
+        ApiClient.getInvoiceService(this).createPaymentIntent(invoiceId, new JsonObject()).enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     String clientSecret = response.body().get("clientSecret").getAsString();
-                    PaymentSheet.Configuration config = new PaymentSheet.Configuration("DermaCare");
+                    PaymentSheet.Configuration config = new PaymentSheet.Configuration.Builder("DermaCare").build();
                     paymentSheet.presentWithPaymentIntent(clientSecret, config);
                 } else {
                     btnPay.setEnabled(true);

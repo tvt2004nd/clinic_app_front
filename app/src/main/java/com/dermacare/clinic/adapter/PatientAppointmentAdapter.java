@@ -51,6 +51,21 @@ public class PatientAppointmentAdapter extends RecyclerView.Adapter<PatientAppoi
                 : 8;
         holder.tvTimePeriod.setText(hour < 12 ? "SA" : "CH");
 
+        if (appt.date != null && appt.date.length() >= 10) {
+            try {
+                String[] parts = appt.date.split("-");
+                if (parts.length == 3) {
+                    holder.tvDate.setText(parts[2] + "/" + parts[1] + "/" + parts[0]);
+                } else {
+                    holder.tvDate.setText(appt.date);
+                }
+            } catch (Exception e) {
+                holder.tvDate.setText(appt.date);
+            }
+        } else {
+            holder.tvDate.setText(appt.date != null ? appt.date : "--/--/----");
+        }
+
         holder.tvPatientName.setText(appt.doctorName != null ? appt.doctorName : "--");
 
         String reason = appt.specialty != null ? appt.specialty : "Khám da liễu";
@@ -163,8 +178,6 @@ public class PatientAppointmentAdapter extends RecyclerView.Adapter<PatientAppoi
 
     private void updateUIByStatus(Holder holder, AppointmentResponse appt) {
         if ("PENDING".equals(appt.status)) {
-            holder.statusBar.setBackgroundResource(R.drawable.bg_status_bar_pending);
-            holder.timeBlock.setCardBackgroundColor(0xFFFEF3C7);
             holder.tvTime.setTextColor(0xFFD97706);
             holder.tvTimePeriod.setTextColor(0xFFD97706);
             holder.tvStatusBadge.setText("Chờ xác nhận");
@@ -173,8 +186,6 @@ public class PatientAppointmentAdapter extends RecyclerView.Adapter<PatientAppoi
             holder.btnExamine.setVisibility(View.GONE);
             holder.btnViewRecord.setVisibility(View.GONE);
         } else if ("CONFIRMED".equals(appt.status)) {
-            holder.statusBar.setBackgroundResource(R.drawable.bg_status_bar_teal);
-            holder.timeBlock.setCardBackgroundColor(0xFFE0F2F1);
             holder.tvTime.setTextColor(0xFF0D9488);
             holder.tvTimePeriod.setTextColor(0xFF0D9488);
             holder.tvStatusBadge.setText("Đã xác nhận");
@@ -183,12 +194,11 @@ public class PatientAppointmentAdapter extends RecyclerView.Adapter<PatientAppoi
             holder.btnExamine.setVisibility(View.GONE);
             holder.btnViewRecord.setVisibility(View.GONE);
         } else if ("COMPLETED".equals(appt.status)) {
-            holder.statusBar.setBackgroundColor(0xFF4CAF50);
-            holder.timeBlock.setCardBackgroundColor(0xFFE8F5E9);
             holder.tvTime.setTextColor(0xFF4CAF50);
             holder.tvTimePeriod.setTextColor(0xFF4CAF50);
             holder.tvStatusBadge.setText("Đã khám");
             holder.tvStatusBadge.setTextColor(0xFF4CAF50);
+            holder.tvStatusBadge.setBackgroundResource(R.drawable.bg_badge_teal);
             holder.btnExamine.setVisibility(View.GONE);
             if (appt.recordId != null) {
                 holder.btnViewRecord.setVisibility(View.VISIBLE);
@@ -196,17 +206,14 @@ public class PatientAppointmentAdapter extends RecyclerView.Adapter<PatientAppoi
                 holder.btnViewRecord.setVisibility(View.GONE);
             }
         } else if ("CANCELLED".equals(appt.status)) {
-            holder.statusBar.setBackgroundColor(0xFF9E9E9E);
-            holder.timeBlock.setCardBackgroundColor(0xFFF5F5F5);
             holder.tvTime.setTextColor(0xFF9E9E9E);
             holder.tvTimePeriod.setTextColor(0xFF9E9E9E);
             holder.tvStatusBadge.setText("Đã hủy");
             holder.tvStatusBadge.setTextColor(0xFF9E9E9E);
+            holder.tvStatusBadge.setBackgroundResource(R.drawable.bg_badge_amber);
             holder.btnExamine.setVisibility(View.GONE);
             holder.btnViewRecord.setVisibility(View.GONE);
         } else {
-            holder.statusBar.setBackgroundColor(0xFF9E9E9E);
-            holder.timeBlock.setCardBackgroundColor(0xFFF5F5F5);
             holder.tvTime.setTextColor(0xFF9E9E9E);
             holder.tvTimePeriod.setTextColor(0xFF9E9E9E);
             holder.tvStatusBadge.setText(appt.status);
@@ -223,8 +230,8 @@ public class PatientAppointmentAdapter extends RecyclerView.Adapter<PatientAppoi
 
     public static class Holder extends RecyclerView.ViewHolder {
         final View statusBar;
-        final com.google.android.material.card.MaterialCardView timeBlock;
-        final TextView tvTime, tvTimePeriod, tvPatientName, tvType, tvStatusBadge;
+        final android.widget.LinearLayout timeBlock;
+        final TextView tvDate, tvTime, tvTimePeriod, tvPatientName, tvType, tvStatusBadge;
         final com.google.android.material.button.MaterialButton btnExamine;
         final com.google.android.material.button.MaterialButton btnCancel, btnReschedule, btnViewRecord;
 
@@ -232,6 +239,7 @@ public class PatientAppointmentAdapter extends RecyclerView.Adapter<PatientAppoi
             super(itemView);
             statusBar = itemView.findViewById(R.id.statusBar);
             timeBlock = itemView.findViewById(R.id.timeBlock);
+            tvDate = itemView.findViewById(R.id.tvDate);
             tvTime = itemView.findViewById(R.id.tvTime);
             tvTimePeriod = itemView.findViewById(R.id.tvTimePeriod);
             tvPatientName = itemView.findViewById(R.id.tvPatientName);
