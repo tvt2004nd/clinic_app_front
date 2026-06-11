@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.dermacare.clinic.R;
 import com.dermacare.clinic.data.api.ApiClient;
 import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.tabs.TabLayout;
 import com.google.gson.JsonObject;
 
 import java.text.NumberFormat;
@@ -32,8 +33,9 @@ public class PatientInvoicesFragment extends Fragment {
 
     private RecyclerView rvInvoices;
     private InvoiceAdapter adapter;
-
     private TextView tvInvoiceCount;
+    private TabLayout tabLayout;
+    private List<JsonObject> allInvoices = new ArrayList<>();
 
     @Nullable
     @Override
@@ -41,9 +43,25 @@ public class PatientInvoicesFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_patient_invoices, container, false);
         rvInvoices = view.findViewById(R.id.rvInvoices);
         tvInvoiceCount = view.findViewById(R.id.tvInvoiceCount);
+        tabLayout = view.findViewById(R.id.tabLayout);
+        
         rvInvoices.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new InvoiceAdapter();
         rvInvoices.setAdapter(adapter);
+        
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                filterInvoices();
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {}
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {}
+        });
+        
         loadInvoices();
         return view;
     }
@@ -53,11 +71,8 @@ public class PatientInvoicesFragment extends Fragment {
             @Override
             public void onResponse(Call<List<JsonObject>> call, Response<List<JsonObject>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    List<JsonObject> data = response.body();
-                    adapter.setData(data);
-                    if (tvInvoiceCount != null) {
-                        tvInvoiceCount.setText(data.size() + " hóa đơn");
-                    }
+                    allInvoices = response.body();
+                    filterInvoices();
                 } else {
                     Toast.makeText(getContext(), "Không thể tải hóa đơn", Toast.LENGTH_SHORT).show();
                 }
@@ -68,6 +83,21 @@ public class PatientInvoicesFragment extends Fragment {
                 Toast.makeText(getContext(), "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void filterInvoices() {
+        List<JsonObject> filtered = new ArrayList<>();
+        boolean showPaid = tabLayout.getSelectedTabPosition() == 1;
+        for (JsonObject inv : allInvoices) {
+            boolean isPaid = inv.has("paymentStatus") && "PAID".equals(inv.get("paymentStatus").getAsString());
+            if (showPaid == isPaid) {
+                filtered.add(inv);
+            }
+        }
+        adapter.setData(filtered);
+        if (tvInvoiceCount != null) {
+            tvInvoiceCount.setText(filtered.size() + " hóa đơn");
+        }
     }
 
     private class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.VH> {

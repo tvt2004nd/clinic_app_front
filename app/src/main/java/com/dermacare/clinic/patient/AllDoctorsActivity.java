@@ -72,7 +72,7 @@ public class AllDoctorsActivity extends AppCompatActivity {
                             // KHÔNG LIMIT - DUYỆT QUA TẤT CẢ DANH SÁCH
                             for (DoctorResponse dr : allDoctors) {
                                 String finalAvatarUrl = "";
-                                if (dr.avatarUrl != null && !dr.avatarUrl.trim().isEmpty()) {
+                                if (dr.avatarUrl != null && !dr.avatarUrl.trim().isEmpty() && !dr.avatarUrl.equals("null")) {
                                     if (dr.avatarUrl.startsWith("http")) {
                                         finalAvatarUrl = dr.avatarUrl;
                                     } else if (dr.avatarUrl.startsWith("/")) {
@@ -80,9 +80,6 @@ public class AllDoctorsActivity extends AppCompatActivity {
                                     } else {
                                         finalAvatarUrl = ApiClient.BASE_URL + dr.avatarUrl;
                                     }
-                                } else {
-                                    String safeName = dr.fullName != null && !dr.fullName.isEmpty() ? dr.fullName.substring(0, 1) : "D";
-                                    finalAvatarUrl = "https://ui-avatars.com/api/?name=" + safeName + "&background=random&color=fff";
                                 }
 
                                 mappedDoctors.add(new Doctor(

@@ -26,7 +26,7 @@ public interface InvoiceService {
     Call<JsonObject> getInvoiceByRecord(@Path("recordId") Long recordId);
 
     @POST("api/invoices/{invoiceId}/create-payment-intent")
-    Call<JsonObject> createPaymentIntent(@Path("invoiceId") Long invoiceId);
+    Call<JsonObject> createPaymentIntent(@Path("invoiceId") Long invoiceId, @Body JsonObject body);
 
     @PUT("api/invoices/{invoiceId}/pay")
     Call<JsonObject> payInvoice(@Path("invoiceId") Long invoiceId, @Body JsonObject request);

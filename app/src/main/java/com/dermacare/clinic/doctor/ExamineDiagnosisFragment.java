@@ -19,7 +19,7 @@ import com.google.android.material.textfield.TextInputEditText;
 public class ExamineDiagnosisFragment extends Fragment implements ExamineStep {
 
     private TextInputEditText edtDiseaseName, edtTreatmentPlan, edtDiagnosisNote;
-    private MaterialAutoCompleteTextView actDiagnosisType;
+    private MaterialAutoCompleteTextView actDiagnosisType, actSeverity;
 
     @Nullable
     @Override
@@ -30,11 +30,17 @@ public class ExamineDiagnosisFragment extends Fragment implements ExamineStep {
         edtTreatmentPlan = view.findViewById(R.id.edtTreatmentPlan);
         edtDiagnosisNote = view.findViewById(R.id.edtDiagnosisNote);
         actDiagnosisType = view.findViewById(R.id.actDiagnosisType);
+        actSeverity = view.findViewById(R.id.actSeverity);
 
         actDiagnosisType.setAdapter(new ArrayAdapter<>(
                 requireContext(),
                 android.R.layout.simple_dropdown_item_1line,
                 getResources().getStringArray(R.array.diagnosis_types)));
+                
+        actSeverity.setAdapter(new ArrayAdapter<>(
+                requireContext(),
+                android.R.layout.simple_dropdown_item_1line,
+                getResources().getStringArray(R.array.diagnosis_severity)));
         return view;
     }
 
@@ -50,6 +56,10 @@ public class ExamineDiagnosisFragment extends Fragment implements ExamineStep {
         String type = textOf(actDiagnosisType);
         if (!TextUtils.isEmpty(type)) {
             sb.append("\nLoại: ").append(type);
+        }
+        String severity = textOf(actSeverity);
+        if (!TextUtils.isEmpty(severity)) {
+            sb.append("\nMức độ: ").append(severity);
         }
         String note = textOf(edtDiagnosisNote);
         if (!TextUtils.isEmpty(note)) {
